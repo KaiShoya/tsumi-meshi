@@ -1,4 +1,5 @@
-import { defineStore } from 'pinia'
+// @ts-ignore
+import { defineStore } from 'pinia' // @ts-ignore
 import type { Recipe, RecipeInput, RecipeUpdate } from '~/repositories/recipes'
 
 export const useRecipesStore = defineStore('recipes', () => {

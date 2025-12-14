@@ -1,4 +1,5 @@
-import { defineStore } from 'pinia'
+// @ts-ignore
+import { defineStore } from 'pinia' // @ts-ignore
 import { useRecipesStore } from '~/stores/data/recipes'
 import { useToast } from '~/composables/useToast'
 import type { RecipeInput, RecipeUpdate } from '~/repositories/recipes'
@@ -6,7 +7,7 @@ import type { RecipeInput, RecipeUpdate } from '~/repositories/recipes'
 export const useRecipesPageStore = defineStore('recipesPage', () => {
   const recipesStore = useRecipesStore()
   const { showSuccessToast, showDangerToast } = useToast()
-  const { $logger } = useNuxtApp()
+  const logger = useLogger()
 
   const createRecipe = async (recipe: RecipeInput) => {
     try {
@@ -18,7 +19,7 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
       if (error instanceof CustomError) {
         showDangerToast(error.getMessage())
       }
-      $logger.error('Failed to create recipe', { module: 'recipesPageStore' }, error)
+      logger.error('Failed to create recipe', { module: 'recipesPageStore' }, error instanceof Error ? error : new Error(String(error)))
     } finally {
       hideLoading()
     }
@@ -34,7 +35,7 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
       if (error instanceof CustomError) {
         showDangerToast(error.getMessage())
       }
-      $logger.error('Failed to update recipe', { module: 'recipesPageStore', recipeId: id }, error)
+      logger.error('Failed to update recipe', { module: 'recipesPageStore', recipeId: id }, error instanceof Error ? error : undefined)
     } finally {
       hideLoading()
     }
@@ -50,7 +51,7 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
       if (error instanceof CustomError) {
         showDangerToast(error.getMessage())
       }
-      $logger.error('Failed to delete recipe', { module: 'recipesPageStore', recipeId: id }, error)
+      logger.error('Failed to delete recipe', { module: 'recipesPageStore', recipeId: id }, error instanceof Error ? error : undefined)
     } finally {
       hideLoading()
     }
@@ -64,7 +65,7 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
       if (error instanceof CustomError) {
         showDangerToast(error.getMessage())
       }
-      $logger.error('Failed to search recipes', { module: 'recipesPageStore', query }, error)
+      logger.error('Failed to search recipes', { module: 'recipesPageStore', query }, error instanceof Error ? error : undefined)
     } finally {
       hideLoading()
     }
@@ -76,7 +77,7 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
       await recipesStore.fetchRecipes()
     } catch (error) {
       showDangerToast('レシピの読み込みに失敗しました')
-      $logger.error('Failed to fetch recipes', { module: 'recipesPageStore' }, error)
+      logger.error('Failed to fetch recipes', { module: 'recipesPageStore' }, error instanceof Error ? error : new Error(String(error)))
     }
   }
 

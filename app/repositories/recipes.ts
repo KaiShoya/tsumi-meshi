@@ -1,4 +1,4 @@
-import type { Database } from 'sqlite3'
+import type { D1Database } from '@cloudflare/workers-types'
 import { CustomError } from '~/utils/error'
 
 export interface Recipe {
@@ -45,18 +45,18 @@ export interface RecipeCheck {
 }
 
 export class RecipesRepository {
-  constructor(private db: Database) {}
+  constructor(private db: any) {}
 
   async fetchAll(userId: number): Promise<Recipe[]> {
     try {
-      const recipes = await this.db.all<Recipe[]>(
+      const recipes = await this.db.all(
         `SELECT * FROM recipes WHERE user_id = ? ORDER BY created_at DESC`,
         [userId]
       )
 
       // Load tags and checks for each recipe
       const recipesWithDetails = await Promise.all(
-        recipes.map(recipe => this.loadRecipeDetails(recipe))
+        recipes.map((recipe: Recipe) => this.loadRecipeDetails(recipe))
       )
 
       return recipesWithDetails
@@ -67,7 +67,7 @@ export class RecipesRepository {
 
   async fetchById(id: number, userId: number): Promise<Recipe | null> {
     try {
-      const recipe = await this.db.get<Recipe>(
+      const recipe = await this.db.get(
         `SELECT * FROM recipes WHERE id = ? AND user_id = ?`,
         [id, userId]
       )
@@ -117,7 +117,7 @@ export class RecipesRepository {
       if (!updatedRecipe) throw CustomError.databaseError('Failed to update recipe')
 
       return updatedRecipe
-    } catch {
+    } catch (error) {
       if (error instanceof CustomError) throw error
       throw CustomError.databaseError('Failed to update recipe')
     }
@@ -131,7 +131,7 @@ export class RecipesRepository {
       )
 
       if (result.changes === 0) throw CustomError.notFound('Recipe not found')
-    } catch {
+    } catch (error) {
       if (error instanceof CustomError) throw error
       throw CustomError.databaseError('Failed to delete recipe')
     }
@@ -139,13 +139,13 @@ export class RecipesRepository {
 
   async search(query: string, userId: number): Promise<Recipe[]> {
     try {
-      const recipes = await this.db.all<Recipe[]>(
+      const recipes = await this.db.all(
         `SELECT * FROM recipes WHERE user_id = ? AND (title LIKE ? OR description LIKE ?)
          ORDER BY created_at DESC`,
         [userId, `%${query}%`, `%${query}%`]
       )
 
-      return await Promise.all(recipes.map(recipe => this.loadRecipeDetails(recipe)))
+      return await Promise.all(recipes.map((recipe: Recipe) => this.loadRecipeDetails(recipe)))
     } catch {
       throw CustomError.databaseError('Failed to search recipes')
     }
@@ -153,12 +153,12 @@ export class RecipesRepository {
 
   async filterByFolder(folderId: number, userId: number): Promise<Recipe[]> {
     try {
-      const recipes = await this.db.all<Recipe[]>(
+      const recipes = await this.db.all(
         `SELECT * FROM recipes WHERE user_id = ? AND folder_id = ? ORDER BY created_at DESC`,
         [userId, folderId]
       )
 
-      return await Promise.all(recipes.map(recipe => this.loadRecipeDetails(recipe)))
+      return await Promise.all(recipes.map((recipe: Recipe) => this.loadRecipeDetails(recipe)))
     } catch {
       throw CustomError.databaseError('Failed to filter recipes by folder')
     }
@@ -167,7 +167,7 @@ export class RecipesRepository {
   async filterByTags(tagIds: number[], userId: number): Promise<Recipe[]> {
     try {
       const placeholders = tagIds.map(() => '?').join(',')
-      const recipes = await this.db.all<Recipe[]>(
+      const recipes = await this.db.all(
         `SELECT DISTINCT r.* FROM recipes r
          JOIN recipe_tags rt ON r.id = rt.recipe_id
          WHERE r.user_id = ? AND rt.tag_id IN (${placeholders})
@@ -175,7 +175,7 @@ export class RecipesRepository {
         [userId, ...tagIds]
       )
 
-      return await Promise.all(recipes.map(recipe => this.loadRecipeDetails(recipe)))
+      return await Promise.all(recipes.map((recipe: Recipe) => this.loadRecipeDetails(recipe)))
     } catch {
       throw CustomError.databaseError('Failed to filter recipes by tags')
     }
@@ -195,7 +195,7 @@ export class RecipesRepository {
   }
 
   private async loadRecipeTags(recipeId: number): Promise<Tag[]> {
-    return await this.db.all<Tag[]>(
+    return await this.db.all(
       `SELECT t.* FROM tags t
        JOIN recipe_tags rt ON t.id = rt.tag_id
        WHERE rt.recipe_id = ?`,
@@ -204,7 +204,7 @@ export class RecipesRepository {
   }
 
   private async loadRecipeChecks(recipeId: number): Promise<RecipeCheck[]> {
-    return await this.db.all<RecipeCheck[]>(
+    return await this.db.all(
       `SELECT * FROM recipe_checks WHERE recipe_id = ? ORDER BY checked_at DESC`,
       [recipeId]
     )

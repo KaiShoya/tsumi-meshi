@@ -1,4 +1,4 @@
-import type { Database } from 'sqlite3'
+import type { D1Database } from '@cloudflare/workers-types'
 import { CustomError } from '~/utils/error'
 
 export interface Folder {
@@ -26,11 +26,11 @@ export interface FolderTree extends Folder {
 }
 
 export class FoldersRepository {
-  constructor(private db: Database) {}
+  constructor(private db: any) {}
 
   async fetchAll(userId: number): Promise<Folder[]> {
     try {
-      return await this.db.all<Folder[]>(
+      return await this.db.all(
         `SELECT * FROM folders WHERE user_id = ? ORDER BY name`,
         [userId]
       )
@@ -41,7 +41,7 @@ export class FoldersRepository {
 
   async fetchById(id: number, userId: number): Promise<Folder | null> {
     try {
-      return await this.db.get<Folder>(
+      return await this.db.get(
         `SELECT * FROM folders WHERE id = ? AND user_id = ?`,
         [id, userId]
       )

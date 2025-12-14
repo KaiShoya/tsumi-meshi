@@ -1,4 +1,4 @@
-import type { Database } from 'sqlite3'
+import type { D1Database } from '@cloudflare/workers-types'
 import { CustomError } from '~/utils/error'
 
 export interface User {
@@ -20,11 +20,11 @@ export interface UserUpdate {
 }
 
 export class UsersRepository {
-  constructor(private db: Database) {}
+  constructor(private db: any) {}
 
   async findByEmail(email: string): Promise<User | null> {
     try {
-      return await this.db.get<User>(
+      return await this.db.get(
         `SELECT * FROM users WHERE email = ?`,
         [email]
       )
@@ -40,7 +40,7 @@ export class UsersRepository {
         [user.email, user.name]
       )
 
-      const newUser = await this.db.get<User>(
+      const newUser = await this.db.get(
         `SELECT * FROM users WHERE id = ?`,
         [result.lastID]
       )
@@ -66,7 +66,7 @@ export class UsersRepository {
 
       if (result.changes === 0) throw CustomError.notFound('User not found')
 
-      const updatedUser = await this.db.get<User>(
+      const updatedUser = await this.db.get(
         `SELECT * FROM users WHERE id = ?`,
         [id]
       )
@@ -74,7 +74,7 @@ export class UsersRepository {
       if (!updatedUser) throw CustomError.databaseError('Failed to update user')
 
       return updatedUser
-    } catch {
+    } catch (error) {
       if (error instanceof CustomError) throw error
       throw CustomError.databaseError('Failed to update user')
     }

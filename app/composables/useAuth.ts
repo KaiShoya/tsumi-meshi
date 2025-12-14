@@ -4,6 +4,11 @@ export interface User {
   name: string
 }
 
+export interface AuthResponse {
+  user: User
+  token: string
+}
+
 export interface AuthState {
   user: User | null
   token: string | null
@@ -41,7 +46,7 @@ export const useAuth = () => {
     state.loading = true
     try {
       // TODO: Implement API call to Cloudflare Workers
-      const response = await $fetch('/api/auth/login', {
+      const response = await $fetch<AuthResponse>('/api/auth/login', {
         method: 'POST',
         body: { email, password }
       })
@@ -69,7 +74,7 @@ export const useAuth = () => {
     state.loading = true
     try {
       // TODO: Implement API call to Cloudflare Workers
-      const response = await $fetch('/api/auth/register', {
+      const response = await $fetch<AuthResponse>('/api/auth/register', {
         method: 'POST',
         body: { name, email, password }
       })

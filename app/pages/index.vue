@@ -138,7 +138,7 @@
             <div class="flex gap-2">
               <UButton
                 icon="i-lucide-check-circle"
-                :color="recipe.checks.length > 0 ? 'green' : 'gray'"
+                :color="recipe.checks.length > 0 ? 'success' : 'neutral'"
                 variant="ghost"
                 size="sm"
                 @click.stop="toggleCheck(recipe)"
@@ -197,6 +197,8 @@
 <script setup lang="ts">
 import { useRecipesPageStore } from '~/stores/pages/recipes'
 import type { Recipe } from '~/repositories/recipes'
+import type { SelectMenuItem } from '@nuxt/ui'
+import { useDebounceFn } from '@vueuse/core'
 
 // Data
 const recipes = ref<Recipe[]>([])
@@ -220,12 +222,14 @@ const handleSearch = useDebounceFn(async () => {
   }
 }, 300)
 
-const handleFolderFilter = async (folderId: number | null) => {
+const handleFolderFilter = async (value: SelectMenuItem) => {
+  const folderId = typeof value === 'number' ? value : null
   // TODO: Implement folder filtering
   console.log('Filter by folder:', folderId)
 }
 
-const handleTagFilter = async (tagIds: number[]) => {
+const handleTagFilter = async (value: SelectMenuItem[]) => {
+  const tagIds = value.filter((item): item is number => typeof item === 'number')
   // TODO: Implement tag filtering
   console.log('Filter by tags:', tagIds)
 }

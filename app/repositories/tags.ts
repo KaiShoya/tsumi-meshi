@@ -1,4 +1,4 @@
-import type { Database } from 'sqlite3'
+import type { D1Database } from '@cloudflare/workers-types'
 import { CustomError } from '~/utils/error'
 
 export interface Tag {
@@ -17,11 +17,11 @@ export interface TagUpdate {
 }
 
 export class TagsRepository {
-  constructor(private db: Database) {}
+  constructor(private db: any) {}
 
   async fetchAll(userId: number): Promise<Tag[]> {
     try {
-      return await this.db.all<Tag[]>(
+      return await this.db.all(
         `SELECT * FROM tags WHERE user_id = ? ORDER BY name`,
         [userId]
       )
@@ -32,7 +32,7 @@ export class TagsRepository {
 
   async fetchById(id: number, userId: number): Promise<Tag | null> {
     try {
-      return await this.db.get<Tag>(
+      return await this.db.get(
         `SELECT * FROM tags WHERE id = ? AND user_id = ?`,
         [id, userId]
       )
@@ -70,7 +70,7 @@ export class TagsRepository {
       if (!updatedTag) throw CustomError.databaseError('Failed to update tag')
 
       return updatedTag
-    } catch {
+    } catch (error) {
       if (error instanceof CustomError) throw error
       throw CustomError.databaseError('Failed to update tag')
     }
@@ -84,7 +84,7 @@ export class TagsRepository {
       )
 
       if (result.changes === 0) throw CustomError.notFound('Tag not found')
-    } catch {
+    } catch (error) {
       if (error instanceof CustomError) throw error
       throw CustomError.databaseError('Failed to delete tag')
     }
@@ -93,7 +93,7 @@ export class TagsRepository {
   async findOrCreate(name: string, userId: number): Promise<Tag> {
     try {
       // Try to find existing tag
-      const tag = await this.db.get<Tag>(
+      const tag = await this.db.get(
         `SELECT * FROM tags WHERE user_id = ? AND name = ?`,
         [userId, name]
       )

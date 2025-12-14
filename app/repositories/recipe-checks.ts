@@ -1,4 +1,4 @@
-import type { Database } from 'sqlite3'
+import type { D1Database } from '@cloudflare/workers-types'
 import { CustomError } from '~/utils/error'
 
 export interface RecipeCheck {
@@ -14,7 +14,7 @@ export interface CheckStats {
 }
 
 export class RecipeChecksRepository {
-  constructor(private db: Database) {}
+  constructor(private db: any) {}
 
   async fetchByRecipe(recipeId: number, userId: number): Promise<RecipeCheck[]> {
     try {
@@ -25,7 +25,7 @@ export class RecipeChecksRepository {
       )
       if (!recipe) throw CustomError.notFound('Recipe not found')
 
-      return await this.db.all<RecipeCheck[]>(
+      return await this.db.all(
         `SELECT * FROM recipe_checks WHERE recipe_id = ? ORDER BY checked_at DESC`,
         [recipeId]
       )
@@ -49,7 +49,7 @@ export class RecipeChecksRepository {
         [recipeId]
       )
 
-      const newCheck = await this.db.get<RecipeCheck>(
+      const newCheck = await this.db.get(
         `SELECT * FROM recipe_checks WHERE id = ?`,
         [result.lastID]
       )
@@ -70,13 +70,13 @@ export class RecipeChecksRepository {
         : 'date(\'now\', \'-7 days\')'
 
       const [totalResult, periodResult] = await Promise.all([
-        this.db.get<{ count: number }>(
+        this.db.get(
           `SELECT COUNT(*) as count FROM recipe_checks rc
            JOIN recipes r ON rc.recipe_id = r.id
            WHERE r.user_id = ?`,
           [userId]
         ),
-        this.db.get<{ count: number }>(
+        this.db.get(
           `SELECT COUNT(*) as count FROM recipe_checks rc
            JOIN recipes r ON rc.recipe_id = r.id
            WHERE r.user_id = ? AND rc.checked_at >= ${dateFilter}`,
