@@ -1,5 +1,5 @@
-import type { D1Database } from '@cloudflare/workers-types'
 import { CustomError } from '~/utils/error'
+import type { D1Like } from '~/utils/types'
 
 export interface Folder {
   id: number
@@ -26,7 +26,7 @@ export interface FolderTree extends Folder {
 }
 
 export class FoldersRepository {
-  constructor(private db: any) {}
+  constructor(private db: D1Like) {}
 
   async fetchAll(userId: number): Promise<Folder[]> {
     try {

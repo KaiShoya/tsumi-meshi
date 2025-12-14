@@ -142,7 +142,6 @@
 <script setup lang="ts">
 import { z } from 'zod'
 import { useAuth } from '~/composables/useAuth'
-import type { FormSubmitEvent } from '@nuxt/ui'
 
 definePageMeta({
   layout: false
@@ -172,8 +171,8 @@ const error = ref('')
 
 const { register } = useAuth()
 
-const onSubmit = async (event: any) => {
-  const data = event.data
+const onSubmit = async (event: unknown) => {
+  const data = (event as { data: typeof schema._output }).data
   loading.value = true
   error.value = ''
 

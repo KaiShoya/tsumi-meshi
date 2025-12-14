@@ -1,5 +1,5 @@
-import type { D1Database } from '@cloudflare/workers-types'
 import { CustomError } from '~/utils/error'
+import type { D1Like } from '~/utils/types'
 
 export interface User {
   id: number
@@ -20,11 +20,11 @@ export interface UserUpdate {
 }
 
 export class UsersRepository {
-  constructor(private db: any) {}
+  constructor(private db: D1Like) {}
 
   async findByEmail(email: string): Promise<User | null> {
     try {
-      return await this.db.get(
+      return await this.db.get<User | null>(
         `SELECT * FROM users WHERE email = ?`,
         [email]
       )
@@ -40,7 +40,7 @@ export class UsersRepository {
         [user.email, user.name]
       )
 
-      const newUser = await this.db.get(
+      const newUser = await this.db.get<User | null>(
         `SELECT * FROM users WHERE id = ?`,
         [result.lastID]
       )
@@ -66,7 +66,7 @@ export class UsersRepository {
 
       if (result.changes === 0) throw CustomError.notFound('User not found')
 
-      const updatedUser = await this.db.get(
+      const updatedUser = await this.db.get<User | null>(
         `SELECT * FROM users WHERE id = ?`,
         [id]
       )

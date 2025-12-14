@@ -1,5 +1,5 @@
-import type { D1Database } from '@cloudflare/workers-types'
 import { CustomError } from '~/utils/error'
+import type { D1Like } from '~/utils/types'
 
 export interface Recipe {
   id: number
@@ -45,11 +45,11 @@ export interface RecipeCheck {
 }
 
 export class RecipesRepository {
-  constructor(private db: any) {}
+  constructor(private db: D1Like) {}
 
   async fetchAll(userId: number): Promise<Recipe[]> {
     try {
-      const recipes = await this.db.all(
+      const recipes = await this.db.all<Recipe[]>(
         `SELECT * FROM recipes WHERE user_id = ? ORDER BY created_at DESC`,
         [userId]
       )
@@ -67,7 +67,7 @@ export class RecipesRepository {
 
   async fetchById(id: number, userId: number): Promise<Recipe | null> {
     try {
-      const recipe = await this.db.get(
+      const recipe = await this.db.get<Recipe | null>(
         `SELECT * FROM recipes WHERE id = ? AND user_id = ?`,
         [id, userId]
       )
@@ -139,7 +139,7 @@ export class RecipesRepository {
 
   async search(query: string, userId: number): Promise<Recipe[]> {
     try {
-      const recipes = await this.db.all(
+      const recipes = await this.db.all<Recipe[]>(
         `SELECT * FROM recipes WHERE user_id = ? AND (title LIKE ? OR description LIKE ?)
          ORDER BY created_at DESC`,
         [userId, `%${query}%`, `%${query}%`]
@@ -153,7 +153,7 @@ export class RecipesRepository {
 
   async filterByFolder(folderId: number, userId: number): Promise<Recipe[]> {
     try {
-      const recipes = await this.db.all(
+      const recipes = await this.db.all<Recipe[]>(
         `SELECT * FROM recipes WHERE user_id = ? AND folder_id = ? ORDER BY created_at DESC`,
         [userId, folderId]
       )
@@ -167,7 +167,7 @@ export class RecipesRepository {
   async filterByTags(tagIds: number[], userId: number): Promise<Recipe[]> {
     try {
       const placeholders = tagIds.map(() => '?').join(',')
-      const recipes = await this.db.all(
+      const recipes = await this.db.all<Recipe[]>(
         `SELECT DISTINCT r.* FROM recipes r
          JOIN recipe_tags rt ON r.id = rt.recipe_id
          WHERE r.user_id = ? AND rt.tag_id IN (${placeholders})
@@ -195,7 +195,7 @@ export class RecipesRepository {
   }
 
   private async loadRecipeTags(recipeId: number): Promise<Tag[]> {
-    return await this.db.all(
+    return await this.db.all<Tag[]>(
       `SELECT t.* FROM tags t
        JOIN recipe_tags rt ON t.id = rt.tag_id
        WHERE rt.recipe_id = ?`,
@@ -204,7 +204,7 @@ export class RecipesRepository {
   }
 
   private async loadRecipeChecks(recipeId: number): Promise<RecipeCheck[]> {
-    return await this.db.all(
+    return await this.db.all<RecipeCheck[]>(
       `SELECT * FROM recipe_checks WHERE recipe_id = ? ORDER BY checked_at DESC`,
       [recipeId]
     )

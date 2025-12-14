@@ -1,5 +1,5 @@
-// @ts-ignore
-import { defineStore } from 'pinia' // @ts-ignore
+// @ts-expect-error: Pinia types may not be available in typecheck environment
+import { defineStore } from 'pinia'
 import type { Recipe, RecipeInput, RecipeUpdate } from '~/repositories/recipes'
 
 export const useRecipesStore = defineStore('recipes', () => {

@@ -1,5 +1,5 @@
-import type { D1Database } from '@cloudflare/workers-types'
 import { CustomError } from '~/utils/error'
+import type { D1Like } from '~/utils/types'
 
 export interface Tag {
   id: number
@@ -17,11 +17,11 @@ export interface TagUpdate {
 }
 
 export class TagsRepository {
-  constructor(private db: any) {}
+  constructor(private db: D1Like) {}
 
   async fetchAll(userId: number): Promise<Tag[]> {
     try {
-      return await this.db.all(
+      return await this.db.all<Tag[]>(
         `SELECT * FROM tags WHERE user_id = ? ORDER BY name`,
         [userId]
       )
@@ -32,7 +32,7 @@ export class TagsRepository {
 
   async fetchById(id: number, userId: number): Promise<Tag | null> {
     try {
-      return await this.db.get(
+      return await this.db.get<Tag | null>(
         `SELECT * FROM tags WHERE id = ? AND user_id = ?`,
         [id, userId]
       )
@@ -93,7 +93,7 @@ export class TagsRepository {
   async findOrCreate(name: string, userId: number): Promise<Tag> {
     try {
       // Try to find existing tag
-      const tag = await this.db.get(
+      const tag = await this.db.get<Tag | null>(
         `SELECT * FROM tags WHERE user_id = ? AND name = ?`,
         [userId, name]
       )

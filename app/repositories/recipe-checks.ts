@@ -1,5 +1,5 @@
-import type { D1Database } from '@cloudflare/workers-types'
 import { CustomError } from '~/utils/error'
+import type { D1Like } from '~/utils/types'
 
 export interface RecipeCheck {
   id: number
@@ -14,18 +14,18 @@ export interface CheckStats {
 }
 
 export class RecipeChecksRepository {
-  constructor(private db: any) {}
+  constructor(private db: D1Like) {}
 
   async fetchByRecipe(recipeId: number, userId: number): Promise<RecipeCheck[]> {
     try {
       // First verify the recipe belongs to the user
-      const recipe = await this.db.get(
+      const recipe = await this.db.get<{ id: number }>(
         `SELECT id FROM recipes WHERE id = ? AND user_id = ?`,
         [recipeId, userId]
       )
       if (!recipe) throw CustomError.notFound('Recipe not found')
 
-      return await this.db.all(
+      return await this.db.all<RecipeCheck[]>(
         `SELECT * FROM recipe_checks WHERE recipe_id = ? ORDER BY checked_at DESC`,
         [recipeId]
       )
@@ -38,7 +38,7 @@ export class RecipeChecksRepository {
   async create(recipeId: number, userId: number): Promise<RecipeCheck> {
     try {
       // First verify the recipe belongs to the user
-      const recipe = await this.db.get(
+      const recipe = await this.db.get<{ id: number }>(
         `SELECT id FROM recipes WHERE id = ? AND user_id = ?`,
         [recipeId, userId]
       )
@@ -49,7 +49,7 @@ export class RecipeChecksRepository {
         [recipeId]
       )
 
-      const newCheck = await this.db.get(
+      const newCheck = await this.db.get<RecipeCheck>(
         `SELECT * FROM recipe_checks WHERE id = ?`,
         [result.lastID]
       )
@@ -70,13 +70,13 @@ export class RecipeChecksRepository {
         : 'date(\'now\', \'-7 days\')'
 
       const [totalResult, periodResult] = await Promise.all([
-        this.db.get(
+        this.db.get<{ count: number }>(
           `SELECT COUNT(*) as count FROM recipe_checks rc
            JOIN recipes r ON rc.recipe_id = r.id
            WHERE r.user_id = ?`,
           [userId]
         ),
-        this.db.get(
+        this.db.get<{ count: number }>(
           `SELECT COUNT(*) as count FROM recipe_checks rc
            JOIN recipes r ON rc.recipe_id = r.id
            WHERE r.user_id = ? AND rc.checked_at >= ${dateFilter}`,
