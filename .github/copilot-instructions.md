@@ -17,6 +17,7 @@ These instructions define how GitHub Copilot should assist with this TypeScript 
 - Prefer named functions, especially for reuse and testability.
 - Use `async/await` over raw Promises and avoid `.then().catch()` chains.
 - Keep files small, focused, and well-organized.
+ - **Auth policy**: Prefer server-set HttpOnly refresh cookies + short-lived access tokens for improved security. Do not store tokens in localStorage; use `/api/auth/me` to initialize client session. When changing auth behavior update `.agent/specs/auth.md` and include tests (unit/integration/E2E for refresh flow).
 
 ## 🧾 Additional Team Rules (from recent workflow updates)
 
@@ -28,6 +29,14 @@ These instructions define how GitHub Copilot should assist with this TypeScript 
 - When making code/API changes, update the appropriate `.agent/specs/` or `.agent/docs/tasks/` entries in the same PR. The `Specs Check` workflow will fail PRs that change code without corresponding spec/docs/task/CHANGELOG updates unless a `spec-exception` label is added with a QA entry.
 - Use the repository TODO list manager for larger tasks and mark progress (`manage_todo_list`) so agents and contributors can track completion.
 
+## Recent Fixes / Common Mistakes (learned from recent releases)
+
+- **CI Node versions**: Avoid using EoL Node versions (e.g., Node 18/20 were EoL during our update). Keep CI matrix on Active LTS / Current and reflect this in `package.json` `engines.node` when relevant.
+- **SFC template parsing / lint errors**: Duplicate attributes, malformed tags, and indentation issues cause parser failures in CI. Always run `pnpm lint` and `pnpm exec eslint . --fix` locally and fix SFC template issues (e.g., duplicate <select> tags, attribute order, singleline content newline) before pushing.
+- **Specs & CHANGELOG**: Changing API/behavior without updating `.agent/specs` / `.agent/docs` / `CHANGELOG.md` will fail the `Specs Check`. For lint-only UI fixes, add a QA entry and `spec-exception` label; for any behavioral/API change, update specs and changelog in the same PR.
+- **Release tagging permissions**: Automated `Create Release` workflows may 403 when pushing tags due to token permissions. Decide on a secure approach (Actions permission change, GitHub App, or manual maintainer tag push) and document it in QA/specs.
+- **Vue tests & a11y**: When adding tests for `.vue` files, ensure `@vitejs/plugin-vue` is present and `vitest.config.ts` is configured; include `axe-core` dev dependency and a11y tests for modified UI components.
+
 ## 🧶 Patterns
 
 ### ✅ Patterns to Follow
@@ -37,6 +46,7 @@ These instructions define how GitHub Copilot should assist with this TypeScript 
   - Input validation with Joi / express-validator
   - Error handling using custom error classes / status codes / try-catch blocks
   - Logging via Winston or console in dev mode
+  - Authentication: follow `.agent/specs/auth.md` for cookie/refresh patterns and rotation/revocation requirements
 - For UI:
   - Components should be pure and reusable
 Avoid inline styling; use NuxtUI / Tailwind CSS / styled-components
