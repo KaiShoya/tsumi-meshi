@@ -1,3 +1,5 @@
+import { apiClient } from '~/utils/api/client'
+
 export interface User {
   id: number
   email: string
