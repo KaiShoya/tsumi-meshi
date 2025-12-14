@@ -74,6 +74,7 @@ Minor completion of TODOs and API surface parity between client and server.
 ### Changed
 - Updated `app/stores/pages/recipes.ts` to use global loading state.
 - Replace console.error with user-facing toast on home page check toggle failure (`app/pages/index.vue`).
+- Replace various `console.error` calls with `useLogger.error` and user-facing toasts in page stores and pages (`app/stores/pages/*`, `app/pages/index.vue`).
 
 ### Tests
 - Added `tests/stores/tags.spec.ts`, extended `tests/stores/recipes.spec.ts`, and added `tests/stores/ui.spec.ts`.
