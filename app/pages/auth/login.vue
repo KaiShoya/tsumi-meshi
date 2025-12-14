@@ -136,13 +136,23 @@ const error = ref('')
 
 const { login } = useAuth()
 
-const onSubmit = async (event: unknown) => {
-  const data = (event as { data: typeof schema._output }).data
+const onSubmit = async (event?: unknown) => {
   loading.value = true
   error.value = ''
 
+  // UForm emits an object with { data } — support both emit and native form state
+  const payload: Schema = (event && (event as { data?: Schema }).data) ? (event as { data?: Schema }).data! : state
+
+  const result = schema.safeParse(payload)
+  if (!result.success) {
+    const first = result.error.errors?.[0]
+    error.value = first?.message ?? '入力が正しくありません'
+    loading.value = false
+    return
+  }
+
   try {
-    await login(data.email, data.password)
+    await login(result.data.email, result.data.password)
   } catch (err: unknown) {
     error.value = err instanceof Error ? err.message : 'ログインに失敗しました'
   } finally {
@@ -155,4 +165,6 @@ const { isAuthenticated } = useAuth()
 if (isAuthenticated.value) {
   await navigateTo('/')
 }
+
+// No local stubs required for native form elements
 </script>
