@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitest/config'
 import { fileURLToPath } from 'node:url'
+import AutoImport from 'unplugin-auto-import/vite'
 
 export default defineConfig({
   test: {
@@ -13,5 +14,11 @@ export default defineConfig({
       '~/': fileURLToPath(new URL('./app/', import.meta.url)),
       '~': fileURLToPath(new URL('./app/', import.meta.url))
     }
-  }
+  },
+  plugins: [
+    AutoImport({
+      imports: ['vue'],
+      dts: false
+    })
+  ]
 })
