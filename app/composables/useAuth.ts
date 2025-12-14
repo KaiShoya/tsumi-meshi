@@ -26,7 +26,7 @@ export const useAuth = () => {
     try {
       const res = await $fetch<{ user: User | null }>('/api/auth/me')
       state.user = res?.user ?? null
-    } catch (err) {
+    } catch {
       // Not authenticated or error: clear local state
       state.user = null
     } finally {

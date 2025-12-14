@@ -1,4 +1,4 @@
-import { useAuth } from '~/composables/useAuth'
+// Authentication is cookie-based; do not rely on client-side token
 
 class ApiClient {
   private baseURL: string
@@ -12,17 +12,10 @@ class ApiClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
-    const { token } = useAuth()
-
     const url = `${this.baseURL}${endpoint}`
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       ...(options.headers as Record<string, string>)
-    }
-
-    // Add authorization header if token exists
-    if (token) {
-      headers.Authorization = `Bearer ${token}`
     }
 
     try {

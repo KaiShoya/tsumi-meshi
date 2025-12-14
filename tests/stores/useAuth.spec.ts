@@ -38,14 +38,15 @@ describe('useAuth', () => {
   })
 
   it('logout calls API and clears user and navigates to login', async () => {
-    const fetchMock = vi.fn().mockResolvedValue({})
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce({ user: { id: 9, email: 'x@y.com', name: 'X' } }) // initAuth
+      .mockResolvedValueOnce({}) // logout
     vi.stubGlobal('$fetch', fetchMock)
     const nav = vi.fn()
     vi.stubGlobal('navigateTo', nav)
 
     const auth = useAuth()
-    // seed user
-    ;(auth.user as any).value = { id: 9, email: 'x@y.com', name: 'X' }
+    await auth.initAuth()
 
     await auth.logout()
 
