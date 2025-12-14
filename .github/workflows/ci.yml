@@ -2,23 +2,35 @@ name: CI
 
 on:
   push:
-    branches: [ main, 'release/**' ]
+    branches: [ main, 'release/**', 'feature/**' ]
   pull_request:
-    branches: [ main, 'release/**' ]
+    branches: [ main, 'release/**', 'feature/**' ]
+  workflow_dispatch:
+
+env:
+  # Set to 'true' to run the optional Miniflare E2E job
+  RUN_MINIFLARE: ${{ env.RUN_MINIFLARE || 'false' }}
 
 jobs:
   test:
-    name: Lint, Typecheck, Test
+    name: Lint, Typecheck, Test (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [24, 25]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.23.0
 
       - name: Enable Corepack
         run: corepack enable && corepack prepare pnpm@latest --activate
@@ -37,21 +49,27 @@ jobs:
 
       - name: Run tests
         run: pnpm test -- --run
+        env:
+          CI: true
 
   miniflare-e2e:
     name: Optional Miniflare E2E
     runs-on: ubuntu-latest
     needs: test
-    if: env.RUN_MINIFLARE == 'true'
+    if: ${{ env.RUN_MINIFLARE == 'true' }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.23.0
 
       - name: Enable Corepack
         run: corepack enable && corepack prepare pnpm@latest --activate
@@ -61,62 +79,5 @@ jobs:
 
       - name: Run Miniflare E2E tests
         run: pnpm test -- tests/integration/auth-refresh-miniflare.spec.ts -- --run
-name: CI
-
-on:
-  push:
-    branches: [main, 'feature/**']
-  pull_request:
-    branches: [main]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # Use current Active LTS and Current for CI
-        node-version: [24, 25]
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.23.0
-
-      - name: Debug environment
-        run: |
-          echo "PATH=$PATH"
-          node -v
-          npm -v
-          which pnpm || echo "pnpm not found yet"
-
-      - name: Ensure pnpm available
-        run: |
-          if ! command -v pnpm >/dev/null 2>&1; then
-            echo "pnpm not found: trying corepack prepare"
-            corepack enable || true
-            corepack prepare pnpm@10.23.0 --activate || npm i -g pnpm@10.23.0
-          fi
-          pnpm -v
-
-      - name: Install dependencies
-        run: |
-          pnpm -v
-          pnpm install --frozen-lockfile
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Typecheck
-        run: pnpm typecheck
-
-      - name: Run tests
-        run: pnpm test -- --run
         env:
           CI: true
