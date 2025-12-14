@@ -33,10 +33,11 @@ class ApiClient {
     } catch (error) {
       // Use logger for consistent logging; keep throwing so callers can handle
       try {
-        const { error: logError } = await import('~/composables/useLogger')
-        // call the returned function if available
+        const mod = await import('~/composables/useLogger') as unknown
+        const logger = (mod as { useLogger?: () => { error?: (message: string, context: Record<string, unknown>, error?: Error) => void } }).useLogger?.()
+        // call the returned logger if available
         try {
-          logError?.('API request failed', { endpoint }, error instanceof Error ? error : new Error(String(error)))
+          logger?.error?.('API request failed', { endpoint }, error instanceof Error ? error : new Error(String(error)))
         } catch {
           // fallback to console if logger invocation fails
           console.error(`API request failed: ${endpoint}`, error)
