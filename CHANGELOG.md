@@ -76,5 +76,11 @@ Minor completion of TODOs and API surface parity between client and server.
 - Replace console.error with user-facing toast on home page check toggle failure (`app/pages/index.vue`).
 - Replace various `console.error` calls with `useLogger.error` and user-facing toasts in page stores and pages (`app/stores/pages/*`, `app/pages/index.vue`).
 
+### Fixed
+- Suppress Vue unresolved-component warnings in dev/test by adding lightweight Nuxt UI stubs and ensuring layout usage:
+  - Added `plugins/00-nuxt-ui-stubs.ts` and `plugins/nuxt-ui-stubs.ts` to register safe stubs for `@nuxt/ui` components during development/tests.
+  - Updated `app/app.vue` / `app/layouts/default.vue` to use `<NuxtLayout>` to avoid "NuxtLayout not used" warning.
+  - Added test global component stubs in `tests/setup.ts` to keep Vitest output clean.
+
 ### Tests
 - Added `tests/stores/tags.spec.ts`, extended `tests/stores/recipes.spec.ts`, and added `tests/stores/ui.spec.ts`.
