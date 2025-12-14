@@ -124,6 +124,20 @@ Avoid inline styling; use NuxtUI / Tailwind CSS / styled-components
 
 These rules are enforced by PR template and a CI check; follow them strictly when authoring PRs or when assisting as an automated agent.
 
+## Agent File-Movement Rules
+
+These additional rules apply specifically to automated agents and Copilot-driven edits to avoid accidental destructive changes (moves/deletes/commits):
+
+- **Confirm Before Move/Delete**: An agent MUST present the proposed filesystem changes (output of `git status --porcelain` and `git diff --staged --name-status`) to the user and receive explicit approval before performing any move, rename, or delete that affects more than 1 file or any file under `.agent/` or `.github/`.
+- **No Silent Commits**: Agents must never commit or push archival or destructive changes without the user's explicit `commit` instruction after showing the staged changes and the commit message.
+- **Create Archives Safely**: When archiving (moving to `qa-archive` or `task-archive`), prefer copy+commit then delete pattern: create archive files, commit the additions, then after user confirmation commit deletions. This preserves recoverability.
+- **Update Indexes**: Any automated archive or move of docs must also update relevant index files (e.g., `.agent/docs/tasks.md`, `.agent/docs/qa-index.md`) in the same PR.
+- **Spec/Docs Consistency Check**: If code changes are present in the branch, ensure `.agent/specs/` or `.agent/docs/` changes are included. If the agent cannot modify specs, it must add a `spec-exception` QA entry and request the label instead of committing.
+- **Record Actions**: Agents must append a short note to `.agent/docs/qa/vX.Y-qa.md` (or the relevant QA file) recording the archive action and rationale when performing archival operations.
+- **Escalation on Uncertainty**: If an agent detects potential sensitive content or is unsure whether a change is safe, it must stop and ask the user rather than proceeding.
+
+These rules are mandatory for automated edits and are intended to prevent accidental repository modifications performed without human review.
+
 
 ## SFCの `<spec>` カスタムブロック運用
 
