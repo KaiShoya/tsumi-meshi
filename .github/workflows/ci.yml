@@ -5,12 +5,11 @@ on:
     branches: [ main, 'release/**', 'feature/**' ]
     paths-ignore:
       - '.agent/**'
-      - '.github/**'
   pull_request:
     branches: [ main, 'release/**', 'feature/**' ]
     paths-ignore:
       - '.agent/**'
-      - '.github/**'
+  
   workflow_dispatch:
     inputs:
       run_miniflare:
