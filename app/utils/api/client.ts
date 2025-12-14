@@ -112,6 +112,30 @@ class ApiClient {
     return this.request<{ folders: unknown[] }>('/folders')
   }
 
+  async getFolderHierarchy() {
+    return this.request<{ folders: unknown[] }>('/folders/hierarchy')
+  }
+
+  async createFolder(payload: { name: string; parentId?: number | null }) {
+    return this.request<{ folder: unknown }>('/folders', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
+  }
+
+  async updateFolder(id: number, payload: { name?: string; parentId?: number | null }) {
+    return this.request<{ folder: unknown }>(`/folders/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload)
+    })
+  }
+
+  async deleteFolder(id: number) {
+    return this.request(`/folders/${id}`, {
+      method: 'DELETE'
+    })
+  }
+
   async createTag(name: string) {
     return this.request<{ tag: unknown }>('/tags', {
       method: 'POST',
