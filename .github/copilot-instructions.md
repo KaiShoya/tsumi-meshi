@@ -33,7 +33,7 @@ Avoid inline styling; use NuxtUI / Tailwind CSS / styled-components
 
 ### 🚫 Patterns to Avoid
 
-- Don’t generate code without tests.
+- Don’t generate code without tests. New features that change behavior (repositories/stores/pages) must include unit tests (preferably Vitest) as part of the same PR.
 - Don’t hardcode values; use config/env files.
 - Avoid global state unless absolutely necessary.
 - Don’t expose secrets or keys.
@@ -43,6 +43,20 @@ Avoid inline styling; use NuxtUI / Tailwind CSS / styled-components
 - Use `@nuxt/test-utils`, `Vitest`, `@pinia/testing` for unit and integration tests.
 - Prefer test-driven development (TDD) when modifying core logic.
 - Include mocks/stubs for third-party services.
+- When adding tests, include a `tests/setup.ts` (or equivalent) for global setup (e.g., Pinia initialization), add a `test` script to `package.json`, and list any new test dependencies in the PR description so CI can install them.
+- Ensure CI runs `pnpm lint`, `pnpm typecheck`, and `pnpm test -- --run` on PRs; add a GitHub Actions workflow named `CI` to accomplish this.
+
+### パッケージ管理 / CI の注意
+
+- **packageManager を信頼する**: `package.json` の `packageManager` を唯一の基準とする。CI の `pnpm` アクションや手元の `pnpm` のバージョンはこれに合わせること。
+- **ロックファイルを必ずコミット**: 新しい devDeps を追加するときは `pnpm install` / `pnpm up` を実行し、`pnpm-lock.yaml` を PR に含める。CI は `pnpm install --frozen-lockfile` を使って不整合を検知する。
+- **ワークフローのフォールバック**: CI の `pnpm` アクションが利用できない環境を考慮して、`corepack` やグローバルインストールのフォールバック手順を用意する。
+
+### Vitest / テスト環境
+
+- 推奨: `vitest` v4+, `jsdom` v27+。
+- テスト実行時に Nuxt の自動インポートを利用する場合は `unplugin-auto-import` を導入し、`vitest.config.ts` にテスト用のエイリアスとプラグイン設定を明示する。
+- `tests/setup.ts` に共通のテスト初期化（Pinia のセットアップ、ドメイン固有のプラグイン）があることを推奨する。
 
 # パターンとベストプラクティス
 
@@ -71,6 +85,11 @@ Avoid inline styling; use NuxtUI / Tailwind CSS / styled-components
 - 仕様変更を伴う実装では、`.agent/specs/` 更新を同じ PR に必ず含め、コミットメッセージにも触れる。
 - **Push頻度の抑制**: CIリソース節約のため、Pushは「ある程度まとまった作業が完了し、動作確認（型チェック・テスト）が取れたタイミング」で行う。**勝手にPushしない**。
 - **Commitの整理**: 軽微な修正やリファクタリングは、可能な限り `git commit --amend` を使用して既存のコミットに統合し、履歴を汚さないようにする。
+- **リリース/PR の必須項目**: 仕様変更を含む PR（特にリリースPR）には、必ず以下を含めること：
+  - 更新された `.agent/specs/*` の差分
+  - `CHANGELOG.md` の該当エントリ
+  - `pnpm-lock.yaml` の更新（もし依存を変更/追加した場合）
+  - CI が通ること（`pnpm install --frozen-lockfile`, lint, typecheck, tests）
 
 ## SFCの `<spec>` カスタムブロック運用
 

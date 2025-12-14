@@ -1,76 +1,285 @@
+<spec lang="md">
+# ホーム（レシピ一覧）
+
+## Purpose
+ユーザーが保存したレシピの一覧を表示し、検索・フィルタ・作成・編集・削除などの基本操作を提供するメイン画面。
+
+## Data
+- `recipes`: レシピ一覧（store/data/recipesから取得）
+- `searchQuery`: 検索クエリ
+- `selectedFolder`: 選択中のフォルダ
+- `selectedTags`: 選択中のタグ
+
+## Interactions
+- 検索バー入力 → `searchRecipes` アクション呼び出し
+- フォルダ選択 → `filterByFolder` アクション呼び出し
+- タグ選択 → `filterByTags` アクション呼び出し
+- レシピ作成ボタン → `/recipes/create` に遷移
+- レシピクリック → `/recipes/[id]` に遷移
+- レシピ削除 → 確認ダイアログ → `deleteRecipe` アクション呼び出し
+
+## Features
+- レシピ一覧表示（カード形式）
+- 検索・フィルタ機能
+- ページネーション（将来的に）
+- レスポンシブデザイン
+
+## Error Handling
+- データ読み込み失敗 → エラーメッセージ表示
+- 検索失敗 → エラートースト表示
+- 削除失敗 → エラートースト表示
+
+## i18n
+- テキストは `locales/ja.ts` から取得
+- ボタンラベル、メッセージなどすべてi18n対応
+
+## Notes
+- 認証必須ページ（未ログイン時はリダイレクト）
+- モバイル対応：カードを縦並びに
+</spec>
+
 <template>
-  <div>
-    <UPageHero
-      title="Nuxt Starter Template"
-      description="A production-ready starter template powered by Nuxt UI. Build beautiful, accessible, and performant applications in minutes, not hours."
-      :links="[{
-        label: 'Get started',
-        to: 'https://ui.nuxt.com/docs/getting-started/installation/nuxt',
-        target: '_blank',
-        trailingIcon: 'i-lucide-arrow-right',
-        size: 'xl'
-      }, {
-        label: 'Use this template',
-        to: 'https://github.com/nuxt-ui-templates/starter',
-        target: '_blank',
-        icon: 'i-simple-icons-github',
-        size: 'xl',
-        color: 'neutral',
-        variant: 'subtle'
-      }]"
-    />
+  <div class="space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <h1 class="text-2xl font-bold">
+          レシピ一覧
+        </h1>
+        <UButton
+          variant="outline"
+          size="sm"
+          @click="navigateTo('/checks')"
+        >
+          チェック統計
+        </UButton>
+      </div>
 
-    <UPageSection
-      id="features"
-      title="Everything you need to build modern Nuxt apps"
-      description="Start with a solid foundation. This template includes all the essentials for building production-ready applications with Nuxt UI's powerful component system."
-      :features="[{
-        icon: 'i-lucide-rocket',
-        title: 'Production-ready from day one',
-        description: 'Pre-configured with TypeScript, ESLint, Tailwind CSS, and all the best practices. Focus on building features, not setting up tooling.'
-      }, {
-        icon: 'i-lucide-palette',
-        title: 'Beautiful by default',
-        description: 'Leveraging Nuxt UI\'s design system with automatic dark mode, consistent spacing, and polished components that look great out of the box.'
-      }, {
-        icon: 'i-lucide-zap',
-        title: 'Lightning fast',
-        description: 'Optimized for performance with SSR/SSG support, automatic code splitting, and edge-ready deployment. Your users will love the speed.'
-      }, {
-        icon: 'i-lucide-blocks',
-        title: '100+ components included',
-        description: 'Access Nuxt UI\'s comprehensive component library. From forms to navigation, everything is accessible, responsive, and customizable.'
-      }, {
-        icon: 'i-lucide-code-2',
-        title: 'Developer experience first',
-        description: 'Auto-imports, hot module replacement, and TypeScript support. Write less boilerplate and ship more features.'
-      }, {
-        icon: 'i-lucide-shield-check',
-        title: 'Built for scale',
-        description: 'Enterprise-ready architecture with proper error handling, SEO optimization, and security best practices built-in.'
-      }]"
-    />
+      <UButton
+        icon="i-lucide-plus"
+        size="lg"
+        @click="navigateTo('/recipes/create')"
+      >
+        新規レシピ
+      </UButton>
+    </div>
 
-    <UPageSection>
-      <UPageCTA
-        title="Ready to build your next Nuxt app?"
-        description="Join thousands of developers building with Nuxt and Nuxt UI. Get this template and start shipping today."
-        variant="subtle"
-        :links="[{
-          label: 'Start building',
-          to: 'https://ui.nuxt.com/docs/getting-started/installation/nuxt',
-          target: '_blank',
-          trailingIcon: 'i-lucide-arrow-right',
-          color: 'neutral'
-        }, {
-          label: 'View on GitHub',
-          to: 'https://github.com/nuxt-ui-templates/starter',
-          target: '_blank',
-          icon: 'i-simple-icons-github',
-          color: 'neutral',
-          variant: 'outline'
-        }]"
+    <!-- Search and Filters -->
+    <div class="space-y-4">
+      <UInput
+        v-model="searchQuery"
+        icon="i-lucide-search"
+        placeholder="レシピを検索..."
+        size="lg"
+        @input="handleSearch"
       />
-    </UPageSection>
+
+      <div class="flex gap-4">
+        <USelectMenu
+          v-model="selectedFolder"
+          :options="folderOptions"
+          placeholder="フォルダを選択"
+          @update:model-value="handleFolderFilter"
+        />
+        <USelectMenu
+          v-model="selectedTags"
+          :options="tagOptions"
+          multiple
+          placeholder="タグを選択"
+          @update:model-value="handleTagFilter"
+        />
+      </div>
+    </div>
+
+    <!-- Recipe Grid -->
+    <div
+      v-if="recipes.length > 0"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+    >
+      <UCard
+        v-for="recipe in recipes"
+        :key="recipe.id"
+        class="cursor-pointer hover:shadow-lg transition-shadow"
+        @click="navigateTo(`/recipes/${recipe.id}`)"
+      >
+        <div class="space-y-3">
+          <div
+            v-if="recipe.imageUrl"
+            class="aspect-video rounded-lg overflow-hidden"
+          >
+            <img
+              :src="recipe.imageUrl"
+              :alt="recipe.title"
+              class="w-full h-full object-cover"
+            >
+          </div>
+
+          <div>
+            <h3 class="font-semibold text-lg line-clamp-2">
+              {{ recipe.title }}
+            </h3>
+            <p
+              v-if="recipe.description"
+              class="text-sm text-gray-600 line-clamp-2 mt-1"
+            >
+              {{ recipe.description }}
+            </p>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex gap-1">
+              <UBadge
+                v-for="tag in recipe.tags.slice(0, 3)"
+                :key="tag.id"
+                variant="subtle"
+                size="sm"
+              >
+                {{ tag.name }}
+              </UBadge>
+              <UBadge
+                v-if="recipe.tags.length > 3"
+                variant="subtle"
+                size="sm"
+              >
+                +{{ recipe.tags.length - 3 }}
+              </UBadge>
+            </div>
+
+            <div class="flex gap-2">
+              <UButton
+                icon="i-lucide-check-circle"
+                :color="recipe.checks.length > 0 ? 'success' : 'neutral'"
+                variant="ghost"
+                size="sm"
+                @click.stop="toggleCheck(recipe)"
+              />
+              <UButton
+                icon="i-lucide-clock"
+                variant="ghost"
+                size="sm"
+                @click.stop="navigateTo(`/recipes/${recipe.id}/checks`)"
+              />
+              <UDropdown
+                :items="[{
+                  label: '編集',
+                  icon: 'i-lucide-edit',
+                  click: () => navigateTo(`/recipes/${recipe.id}/edit`)
+                }, {
+                  label: '削除',
+                  icon: 'i-lucide-trash',
+                  click: () => deleteRecipe(recipe)
+                }]"
+              >
+                <UButton
+                  icon="i-lucide-more-vertical"
+                  variant="ghost"
+                  size="sm"
+                  @click.stop
+                />
+              </UDropdown>
+            </div>
+          </div>
+        </div>
+      </UCard>
+    </div>
+
+    <!-- Empty State -->
+    <div
+      v-else
+      class="text-center py-12"
+    >
+      <UIcon
+        name="i-lucide-book-open"
+        class="mx-auto h-12 w-12 text-gray-400"
+      />
+      <h3 class="mt-2 text-sm font-semibold text-gray-900">
+        レシピがありません
+      </h3>
+      <p class="mt-1 text-sm text-gray-500">
+        最初のレシピを作成しましょう。
+      </p>
+      <div class="mt-6">
+        <UButton
+          icon="i-lucide-plus"
+          @click="navigateTo('/recipes/create')"
+        >
+          新規レシピ
+        </UButton>
+      </div>
+    </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useRecipesPageStore } from '~/stores/pages/recipes'
+import type { Recipe } from '~/repositories/recipes'
+import type { SelectMenuItem } from '@nuxt/ui'
+import { useDebounceFn } from '@vueuse/core'
+import { apiClient } from '~/utils/api/client'
+import { useRecipesStore } from '~/stores/data/recipes'
+
+// Data
+const searchQuery = ref('')
+const selectedFolder = ref<number | null>(null)
+const selectedTags = ref<number[]>([])
+
+const folderOptions = ref<Array<{ label: string, value: number }>>([])
+const tagOptions = ref<Array<{ label: string, value: number }>>([])
+
+// Store
+const recipesStore = useRecipesPageStore()
+const recipesStoreData = useRecipesStore()
+const recipes = computed(() => recipesStoreData.recipes)
+
+// Methods
+const handleSearch = useDebounceFn(async () => {
+  if (searchQuery.value) {
+    await recipesStore.searchRecipes(searchQuery.value)
+  } else {
+    await recipesStore.fetchRecipes({ folderId: selectedFolder.value ?? undefined, tagIds: selectedTags.value })
+  }
+}, 300)
+
+const handleFolderFilter = async (value: SelectMenuItem) => {
+  const folderId = typeof value === 'number' ? value : null
+  selectedFolder.value = folderId
+  await recipesStore.fetchRecipes({ folderId: folderId ?? undefined })
+}
+
+const handleTagFilter = async (value: SelectMenuItem[]) => {
+  const tagIds = value.filter((item): item is number => typeof item === 'number')
+  selectedTags.value = tagIds
+  await recipesStore.fetchRecipes({ tagIds })
+}
+
+const toggleCheck = async (recipe: Recipe) => {
+  try {
+    await recipesStore.toggleCheck(recipe.id)
+  } catch (err: unknown) {
+    console.error(err)
+  }
+}
+
+const deleteRecipe = async (recipe: Recipe) => {
+  // TODO: Show confirmation dialog
+  await recipesStore.deleteRecipe(recipe.id, recipe.title)
+}
+
+// Lifecycle
+onMounted(async () => {
+  const { initAuth, isAuthenticated } = useAuth()
+  initAuth()
+
+  if (!isAuthenticated.value) {
+    await navigateTo('/auth/login')
+    return
+  }
+
+  // Load initial data
+  await recipesStore.fetchRecipes()
+  const tagsRes = await apiClient.getTags()
+  tagOptions.value = ((tagsRes.tags ?? []) as Array<{ id: number, name: string }>).map(t => ({ label: t.name, value: t.id }))
+  const foldersRes = await apiClient.getFolders()
+  folderOptions.value = ((foldersRes.folders ?? []) as Array<{ id: number, name: string }>).map(f => ({ label: f.name, value: f.id }))
+})
+</script>
