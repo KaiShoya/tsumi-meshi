@@ -17,13 +17,13 @@ describe('useAppToast', () => {
     expect((useToast as unknown as vi.Mock)()).toEqual({ add })
 
     // ensure initialization resolves
-    await new Promise((r) => setTimeout(r, 0))
+    await new Promise(r => setTimeout(r, 0))
 
     const { showSuccessToast } = useAppToast()
 
     // call after init — should invoke the mocked `add` immediately
     showSuccessToast('ok')
-    await new Promise((r) => setTimeout(r, 0))
+    await new Promise(r => setTimeout(r, 0))
 
     expect(useToast).toHaveBeenCalled()
   })
