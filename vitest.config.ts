@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitest/config'
 import { fileURLToPath } from 'node:url'
 import AutoImport from 'unplugin-auto-import/vite'
+import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   test: {
@@ -19,6 +20,7 @@ export default defineConfig({
     AutoImport({
       imports: ['vue'],
       dts: false
-    })
+    }),
+    vue()
   ]
 })

@@ -11,7 +11,12 @@
         @submit="onCreate"
       >
         <div class="flex gap-2">
+          <label
+            for="tag-name-input"
+            class="sr-only"
+          >タグ名</label>
           <UInput
+            id="tag-name-input"
             v-model="name"
             placeholder="タグ名"
           />
@@ -31,11 +36,16 @@
           :key="tag.id"
           class="flex items-center justify-between"
         >
-          <div>{{ tag.name }}</div>
+          <div class="flex-1 min-w-0">
+            <div class="truncate">
+              {{ tag.name }}
+            </div>
+          </div>
           <div class="flex gap-2">
             <UButton
               size="sm"
               variant="ghost"
+              :aria-label="`編集 ${tag.name}`"
               @click="startEdit(tag)"
             >
               編集
@@ -44,6 +54,7 @@
               size="sm"
               variant="ghost"
               color="error"
+              :aria-label="`削除 ${tag.name}`"
               @click="remove(tag.id, tag.name)"
             >
               削除

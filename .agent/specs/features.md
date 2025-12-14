@@ -52,6 +52,8 @@ Tsumi Meshi is a web application for managing recipes collected from YouTube and
 - **Performance**: Optimized queries, caching where appropriate
 - **Error Handling**: User-friendly error messages
 - **Loading States**: Progress indicators for async operations
+ - **Accessibility (a11y)**: Accessibility tests (axe-core) are part of the QA workflow; UI changes should include automated a11y checks and visible/sr-only labeling for form controls.
+ - **E2E Smoke Tests**: Critical flows (create recipe, add tag, check recipe) have E2E smoke tests and are run on release branches or scheduled CI jobs.
 
 ## Future Features
 - Bulk operations

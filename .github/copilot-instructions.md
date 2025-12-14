@@ -18,6 +18,16 @@ These instructions define how GitHub Copilot should assist with this TypeScript 
 - Use `async/await` over raw Promises and avoid `.then().catch()` chains.
 - Keep files small, focused, and well-organized.
 
+## 🧾 Additional Team Rules (from recent workflow updates)
+
+- Always run `pnpm lint` and `pnpm typecheck` locally after changing source files and before committing. PRs should pass these checks in CI; release PRs must include passing lint/typecheck output in a verification step.
+- When modifying UI components, include accessibility tests (axe-core) as part of the same PR. Add `axe-core` as a dev dependency with `pnpm add -D axe-core` and include an automated a11y test (e.g., `tests/a11y/<component>.a11y.spec.ts`).
+- Add E2E smoke tests for critical flows (create recipe, add tag, check recipe) when touching cross-cutting features; place them in `tests/integration/`.
+- Do not edit `package.json` manually to add dev dependencies; use `pnpm add -D <pkg>` so the lockfile (`pnpm-lock.yaml`) stays in sync and can be committed. The CI uses `pnpm install --frozen-lockfile` to ensure reproducibility.
+- Release PRs should update `CHANGELOG.md`. The repository enforces this for `release/*` branch PRs. Use the `release` workflow (or trigger `release.yml`) to create a GitHub release and tag.
+- When making code/API changes, update the appropriate `.agent/specs/` or `.agent/docs/tasks/` entries in the same PR. The `Specs Check` workflow will fail PRs that change code without corresponding spec/docs/task/CHANGELOG updates unless a `spec-exception` label is added with a QA entry.
+- Use the repository TODO list manager for larger tasks and mark progress (`manage_todo_list`) so agents and contributors can track completion.
+
 ## 🧶 Patterns
 
 ### ✅ Patterns to Follow
