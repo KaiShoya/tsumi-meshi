@@ -1,13 +1,14 @@
-import { useToast as nuxtUseToast } from '@nuxt/ui'
+import nuxtUseToast from '@nuxt/ui'
 
 export const useAppToast = () => {
-  let add = (_opts?: { description?: string; color?: string }) => {}
+  let add = (_opts?: { description?: string, color?: string }) => {}
 
   if (typeof nuxtUseToast === 'function') {
     try {
-      const t = nuxtUseToast()
+      type ToastApi = { add?: (opts?: { description?: string, color?: string }) => void }
+      const t = (nuxtUseToast as unknown as (...args: unknown[]) => ToastApi)()
       if (t && typeof t.add === 'function') add = t.add.bind(t)
-    } catch (e) {
+    } catch {
       // noop — tests or environment may not provide NuxtUI
     }
   }

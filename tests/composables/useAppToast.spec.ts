@@ -1,8 +1,10 @@
 import { describe, it, expect, vi } from 'vitest'
-vi.mock('@nuxt/ui', () => ({ useToast: vi.fn() }))
+
+/* eslint-disable import/first */
+vi.mock('@nuxt/ui', () => ({ default: vi.fn() }))
 
 import { useAppToast } from '~/composables/useAppToast'
-import { useToast } from '@nuxt/ui'
+import useToast from '@nuxt/ui'
 
 describe('useAppToast', () => {
   it('calls useToast.add with correct colors', () => {
