@@ -1,3 +1,5 @@
+import { apiClient } from '~/utils/api/client'
+
 export interface User {
   id: number
   email: string
@@ -6,38 +8,37 @@ export interface User {
 
 export interface AuthResponse {
   user: User
-  token: string
+  token?: string
 }
 
 export interface AuthState {
   user: User | null
-  token: string | null
   loading: boolean
 }
 
 export const useAuth = () => {
   const state = reactive<AuthState>({
     user: null,
-    token: null,
     loading: false
   })
 
-  // Initialize auth state from localStorage
-  const initAuth = () => {
-    if (import.meta.client) {
-      const token = localStorage.getItem('auth_token')
-      const userStr = localStorage.getItem('auth_user')
-
-      if (token && userStr) {
-        try {
-          const user = JSON.parse(userStr)
-          state.token = token
-          state.user = user
-        } catch {
-          // Invalid stored data, clear it
-          clearAuth()
-        }
+  // Initialize auth state by asking server for current session
+  const initAuth = async () => {
+    state.loading = true
+    try {
+      const globalAny = globalThis as unknown as { $fetch?: (...args: unknown[]) => Promise<unknown> }
+      if (typeof globalAny.$fetch === 'function') {
+        const res = await globalAny.$fetch('/api/auth/me')
+        state.user = (res as { user?: User | null })?.user ?? null
+      } else {
+        const res = await apiClient.getCurrentUser()
+        state.user = (res as { user?: User | null })?.user ?? null
       }
+    } catch {
+      // Not authenticated or error: clear local state
+      state.user = null
+    } finally {
+      state.loading = false
     }
   }
 
@@ -45,24 +46,16 @@ export const useAuth = () => {
   const login = async (email: string, password: string) => {
     state.loading = true
     try {
-      // TODO: Implement API call to Cloudflare Workers
-      const response = await $fetch<AuthResponse>('/api/auth/login', {
-        method: 'POST',
-        body: { email, password }
-      })
-
-      const { user, token } = response
-
-      state.user = user
-      state.token = token
-
-      // Store in localStorage
-      if (import.meta.client) {
-        localStorage.setItem('auth_token', token)
-        localStorage.setItem('auth_user', JSON.stringify(user))
+      const globalAny = globalThis as unknown as { $fetch?: (...args: unknown[]) => Promise<unknown> }
+      if (typeof globalAny.$fetch === 'function') {
+        const response = await globalAny.$fetch('/api/auth/login', { method: 'POST', body: { email, password } })
+        const user = (response as { user?: User })?.user
+        state.user = (user ?? null) as User | null
+      } else {
+        const response = await apiClient.login(email, password)
+        const user = (response as { user?: User })?.user
+        state.user = (user ?? null) as User | null
       }
-
-      // Redirect to home
       await navigateTo('/')
     } finally {
       state.loading = false
@@ -73,24 +66,16 @@ export const useAuth = () => {
   const register = async (name: string, email: string, password: string) => {
     state.loading = true
     try {
-      // TODO: Implement API call to Cloudflare Workers
-      const response = await $fetch<AuthResponse>('/api/auth/register', {
-        method: 'POST',
-        body: { name, email, password }
-      })
-
-      const { user, token } = response
-
-      state.user = user
-      state.token = token
-
-      // Store in localStorage
-      if (import.meta.client) {
-        localStorage.setItem('auth_token', token)
-        localStorage.setItem('auth_user', JSON.stringify(user))
+      const globalAny = globalThis as unknown as { $fetch?: (...args: unknown[]) => Promise<unknown> }
+      if (typeof globalAny.$fetch === 'function') {
+        const response = await globalAny.$fetch('/api/auth/register', { method: 'POST', body: { name, email, password } })
+        const user = (response as { user?: User })?.user
+        state.user = (user ?? null) as User | null
+      } else {
+        const response = await apiClient.register(name, email, password)
+        const user = (response as { user?: User })?.user
+        state.user = (user ?? null) as User | null
       }
-
-      // Redirect to home
       await navigateTo('/')
     } finally {
       state.loading = false
@@ -98,24 +83,28 @@ export const useAuth = () => {
   }
 
   // Logout function
-  const logout = () => {
+  const logout = async () => {
+    try {
+      const globalAny = globalThis as unknown as { $fetch?: (...args: unknown[]) => Promise<unknown> }
+      if (typeof globalAny.$fetch === 'function') {
+        await globalAny.$fetch('/api/auth/logout', { method: 'POST' })
+      } else {
+        await apiClient.logout()
+      }
+    } catch {
+      // ignore errors on logout
+    }
     clearAuth()
-    navigateTo('/auth/login')
+    await navigateTo('/auth/login')
   }
 
   // Clear authentication data
   const clearAuth = () => {
     state.user = null
-    state.token = null
-
-    if (import.meta.client) {
-      localStorage.removeItem('auth_token')
-      localStorage.removeItem('auth_user')
-    }
   }
 
   // Check if user is authenticated
-  const isAuthenticated = computed(() => !!state.user && !!state.token)
+  const isAuthenticated = computed(() => !!state.user)
 
   // Get current user ID (for API calls)
   const getCurrentUserId = () => {
@@ -124,8 +113,7 @@ export const useAuth = () => {
 
   return {
     // State
-    user: readonly(state).user,
-    token: readonly(state).token,
+    user: computed(() => state.user),
     loading: readonly(state).loading,
     isAuthenticated,
 

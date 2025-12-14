@@ -1,4 +1,4 @@
-import { useAuth } from '~/composables/useAuth'
+// Authentication is cookie-based; do not rely on client-side token
 
 class ApiClient {
   private baseURL: string
@@ -12,17 +12,10 @@ class ApiClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
-    const { token } = useAuth()
-
     const url = `${this.baseURL}${endpoint}`
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       ...(options.headers as Record<string, string>)
-    }
-
-    // Add authorization header if token exists
-    if (token) {
-      headers.Authorization = `Bearer ${token}`
     }
 
     try {
@@ -38,7 +31,20 @@ class ApiClient {
 
       return await response.json()
     } catch (error) {
-      console.error(`API request failed: ${endpoint}`, error)
+      // Use logger for consistent logging; keep throwing so callers can handle
+      try {
+        const mod = await import('~/composables/useLogger') as unknown
+        const logger = (mod as { useLogger?: () => { error?: (message: string, context: Record<string, unknown>, error?: Error) => void } }).useLogger?.()
+        // call the returned logger if available
+        try {
+          logger?.error?.('API request failed', { endpoint }, error instanceof Error ? error : new Error(String(error)))
+        } catch {
+          // fallback to console if logger invocation fails
+          console.error(`API request failed: ${endpoint}`, error)
+        }
+      } catch {
+        console.error(`API request failed: ${endpoint}`, error)
+      }
       throw error
     }
   }
@@ -60,6 +66,12 @@ class ApiClient {
 
   async getCurrentUser() {
     return this.request<{ user: unknown }>('/auth/me')
+  }
+
+  async logout() {
+    return this.request('/auth/logout', {
+      method: 'POST'
+    })
   }
 
   // Recipe endpoints

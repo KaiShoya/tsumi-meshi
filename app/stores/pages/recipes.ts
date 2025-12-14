@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useRecipesStore } from '~/stores/data/recipes'
+import { useUiStore } from '~/stores/ui'
 import { useAppToast } from '~/composables/useAppToast'
 import { useLogger } from '~/composables/useLogger'
 import { apiClient } from '~/utils/api/client'
@@ -79,7 +80,7 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
       showSuccessToast('チェックを記録しました')
       await fetchRecipes()
     } catch (err: unknown) {
-      console.error(err)
+      logger.error('Failed to record check', { module: 'recipesPage', recipeId }, err instanceof Error ? err : new Error(String(err)))
       showDangerToast('チェックの登録に失敗しました')
     } finally {
       hideLoading()
@@ -96,13 +97,11 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
     }
   }
 
-  const showLoading = () => {
-    // TODO: Implement global loading state
-  }
+  const ui = useUiStore()
 
-  const hideLoading = () => {
-    // TODO: Implement global loading state
-  }
+  const showLoading = () => ui.showLoading()
+
+  const hideLoading = () => ui.hideLoading()
 
   return {
     createRecipe,

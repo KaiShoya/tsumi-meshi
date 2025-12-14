@@ -1,28 +1,39 @@
 export const useAppToast = () => {
+  // `apiRef` is registered by the Nuxt plugin or tests via `setAppToast`.
+  let apiRef: { add?: (opts?: { description?: string, color?: string }) => void } | undefined
+  const queue: Array<{ description?: string, color?: string }> = []
+
+  const setAppToast = (api?: { add?: (opts?: { description?: string, color?: string }) => void }) => {
+    apiRef = api
+    if (apiRef && typeof apiRef.add === 'function') {
+      for (const opts of queue) apiRef.add(opts)
+      queue.length = 0
+    }
+  }
+
   const showSuccessToast = (message: string) => {
-    // TODO: Implement with NuxtUI toast
-    console.log('Success:', message)
+    const opts = { description: message, color: 'success' }
+    if (apiRef && typeof apiRef.add === 'function') apiRef.add(opts)
+    else queue.push(opts)
   }
 
   const showDangerToast = (message: string) => {
-    // TODO: Implement with NuxtUI toast
-    console.error('Error:', message)
+    const opts = { description: message, color: 'error' }
+    if (apiRef && typeof apiRef.add === 'function') apiRef.add(opts)
+    else queue.push(opts)
   }
 
   const showInfoToast = (message: string) => {
-    // TODO: Implement with NuxtUI toast
-    console.log('Info:', message)
+    const opts = { description: message, color: 'info' }
+    if (apiRef && typeof apiRef.add === 'function') apiRef.add(opts)
+    else queue.push(opts)
   }
 
   const showWarningToast = (message: string) => {
-    // TODO: Implement with NuxtUI toast
-    console.warn('Warning:', message)
+    const opts = { description: message, color: 'warning' }
+    if (apiRef && typeof apiRef.add === 'function') apiRef.add(opts)
+    else queue.push(opts)
   }
 
-  return {
-    showSuccessToast,
-    showDangerToast,
-    showInfoToast,
-    showWarningToast
-  }
+  return { showSuccessToast, showDangerToast, showInfoToast, showWarningToast, setAppToast }
 }

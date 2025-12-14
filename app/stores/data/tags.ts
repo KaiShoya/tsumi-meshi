@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import type { Tag, TagInput } from '~/repositories/tags'
+import { apiClient } from '~/utils/api/client'
 
 export const useTagsStore = defineStore('tags', () => {
   const tags = ref<Tag[]>([])
@@ -8,27 +9,30 @@ export const useTagsStore = defineStore('tags', () => {
   const fetchTags = async () => {
     loading.value = true
     try {
-      // TODO: Implement API call
-      // tags.value = await apiClient.getTags()
-      tags.value = []
+      const res = await apiClient.getTags()
+      tags.value = (res.tags ?? []) as Tag[]
     } finally {
       loading.value = false
     }
   }
 
   const createTag = async (tag: TagInput) => {
-    // TODO: Implement API call
-    console.log('Create tag:', tag)
+    const res = await apiClient.createTag(tag.name)
+    const newTag = res.tag as Tag
+    tags.value.push(newTag)
+    return newTag
   }
 
   const updateTag = async (id: number, name: string) => {
-    // TODO: Implement API call
-    console.log('Update tag:', id, name)
+    const res = await apiClient.updateTag(id, name)
+    const updated = res.tag as Tag
+    tags.value = tags.value.map(t => (t.id === id ? updated : t))
+    return updated
   }
 
   const deleteTag = async (id: number) => {
-    // TODO: Implement API call
-    console.log('Delete tag:', id)
+    await apiClient.deleteTag(id)
+    tags.value = tags.value.filter(t => t.id !== id)
   }
 
   return {

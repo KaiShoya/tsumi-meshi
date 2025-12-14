@@ -4,7 +4,10 @@ import { apiClient } from '~/utils/api/client'
 
 vi.mock('~/utils/api/client', () => ({
   apiClient: {
-    getRecipes: vi.fn()
+    getRecipes: vi.fn(),
+    createRecipe: vi.fn(),
+    updateRecipe: vi.fn(),
+    deleteRecipe: vi.fn()
   }
 }))
 
@@ -50,5 +53,43 @@ describe('recipes store', () => {
     const store = useRecipesStore()
     await expect(store.fetchRecipes()).rejects.toThrow('API failure')
     expect(store.loading).toBe(false)
+  })
+
+  it('creates a recipe and appends to state', async () => {
+    const mocked = apiClient.createRecipe as unknown as vi.Mock
+    mocked.mockResolvedValue({ recipe: { id: 10, title: 'New', tags: [], checks: [] } })
+
+    const store = useRecipesStore()
+    const r = await store.createRecipe({ title: 'New', url: 'http://', description: '', folderId: undefined })
+
+    expect(r.id).toBe(10)
+    expect(store.recipes.find(x => x.id === 10)).toBeDefined()
+  })
+
+  it('updates a recipe and replaces state', async () => {
+    const mocked = apiClient.updateRecipe as unknown as vi.Mock
+    mocked.mockResolvedValue({ recipe: { id: 11, title: 'Updated', tags: [], checks: [] } })
+
+    const store = useRecipesStore()
+    const createMock = apiClient.createRecipe as unknown as vi.Mock
+    createMock.mockResolvedValue({ recipe: { id: 11, userId: 1, title: 'Old', url: 'http://', tags: [], checks: [], createdAt: new Date(), updatedAt: new Date() } })
+    await store.createRecipe({ title: 'Old', url: 'http://', description: '', folderId: undefined })
+
+    const updated = await store.updateRecipe(11, { title: 'Updated' })
+
+    expect(updated.title).toBe('Updated')
+    expect(store.recipes.find(x => x.id === 11)?.title).toBe('Updated')
+  })
+
+  it('deletes a recipe and removes from state', async () => {
+    const mocked = apiClient.deleteRecipe as unknown as vi.Mock
+    mocked.mockResolvedValue({})
+
+    const store = useRecipesStore()
+    store['recipes'].push({ id: 12, userId: 1, title: 'ToDelete', url: 'http://', tags: [], checks: [], createdAt: new Date(), updatedAt: new Date() })
+
+    await store.deleteRecipe(12)
+
+    expect(store.recipes.find(x => x.id === 12)).toBeUndefined()
   })
 })

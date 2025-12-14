@@ -2,50 +2,53 @@ name: CI
 
 on:
   push:
-    branches: [main, 'feature/**']
+    branches: [ main, 'release/**', 'feature/**' ]
+    paths-ignore:
+      - '.agent/**'
   pull_request:
-    branches: [main]
+    branches: [ main, 'release/**', 'feature/**' ]
+    paths-ignore:
+      - '.agent/**'
+
+  workflow_dispatch:
+    inputs:
+      run_miniflare:
+        description: 'Run the optional Miniflare E2E job (true/false)'
+        required: false
+        default: 'false'
+
+env:
+  # Default: set to 'true' in repository Actions variables to enable
+  RUN_MINIFLARE: 'false'
 
 jobs:
-  build:
+  test:
+    name: Lint, Typecheck, Test (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # Use current Active LTS and Current for CI
         node-version: [24, 25]
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+
+      - name: Enable Corepack (early)
+        run: corepack enable && corepack prepare pnpm@latest --activate
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10.23.0
 
-      - name: Debug environment
-        run: |
-          echo "PATH=$PATH"
-          node -v
-          npm -v
-          which pnpm || echo "pnpm not found yet"
-
-      - name: Ensure pnpm available
-        run: |
-          if ! command -v pnpm >/dev/null 2>&1; then
-            echo "pnpm not found: trying corepack prepare"
-            corepack enable || true
-            corepack prepare pnpm@10.23.0 --activate || npm i -g pnpm@10.23.0
-          fi
-          pnpm -v
-
       - name: Install dependencies
-        run: |
-          pnpm -v
-          pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Specs Check
+        run: ./.github/scripts/check-specs.sh || true
 
       - name: Lint
         run: pnpm lint
@@ -55,5 +58,36 @@ jobs:
 
       - name: Run tests
         run: pnpm test -- --run
+        env:
+          CI: true
+
+  miniflare-e2e:
+    name: Optional Miniflare E2E
+    runs-on: ubuntu-latest
+    needs: test
+    # Use workflow input OR repository-level variable (`vars.RUN_MINIFLARE`) to decide
+    # Note: `env.RUN_MINIFLARE` cannot be referenced in an `if` expression at workflow runtime.
+    if: ${{ github.event.inputs.run_miniflare == 'true' || vars.RUN_MINIFLARE == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Enable Corepack (early)
+        run: corepack enable && corepack prepare pnpm@latest --activate
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.23.0
+
+      - name: Install dependencies (include miniflare)
+        run: pnpm add -D miniflare && pnpm install --frozen-lockfile
+
+      - name: Run Miniflare E2E tests
+        run: pnpm test -- tests/integration/auth-refresh-miniflare.spec.ts -- --run
         env:
           CI: true

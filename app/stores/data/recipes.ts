@@ -17,25 +17,27 @@ export const useRecipesStore = defineStore('recipes', () => {
   }
 
   const createRecipe = async (recipe: RecipeInput) => {
-    // TODO: Implement API call
-    // const newRecipe = await $recipesRepository.create(recipe, getCurrentUserId())
-    // recipes.value.push(newRecipe)
-    console.log('Create recipe:', recipe)
+    const res = await apiClient.createRecipe({
+      title: recipe.title,
+      url: recipe.url,
+      description: recipe.description,
+      folderId: recipe.folderId
+    })
+    const newRecipe = res.recipe as Recipe
+    recipes.value.push(newRecipe)
+    return newRecipe
   }
 
   const updateRecipe = async (id: number, recipe: RecipeUpdate) => {
-    // TODO: Implement API call
-    // const updatedRecipe = await $recipesRepository.update(id, recipe, getCurrentUserId())
-    // const index = recipes.value.findIndex(r => r.id === id)
-    // if (index !== -1) recipes.value[index] = updatedRecipe
-    console.log('Update recipe:', id, recipe)
+    const res = await apiClient.updateRecipe(id, recipe)
+    const updatedRecipe = res.recipe as Recipe
+    recipes.value = recipes.value.map(r => (r.id === id ? updatedRecipe : r))
+    return updatedRecipe
   }
 
   const deleteRecipe = async (id: number) => {
-    // TODO: Implement API call
-    // await $recipesRepository.delete(id, getCurrentUserId())
-    // recipes.value = recipes.value.filter(r => r.id !== id)
-    console.log('Delete recipe:', id)
+    await apiClient.deleteRecipe(id)
+    recipes.value = recipes.value.filter(r => r.id !== id)
   }
 
   const searchRecipes = async (query: string) => {
