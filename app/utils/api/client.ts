@@ -129,6 +129,21 @@ class ApiClient {
       body: JSON.stringify({ name })
     })
   }
+
+  // Check endpoints
+  async getChecks(recipeId: number) {
+    return this.request<{ checks: unknown[] }>(`/recipes/${recipeId}/checks`)
+  }
+
+  async createCheck(recipeId: number) {
+    return this.request<{ check: unknown }>(`/recipes/${recipeId}/checks`, {
+      method: 'POST'
+    })
+  }
+
+  async getCheckStats(period: 'month' | 'week' = 'month') {
+    return this.request<{ totalChecks: number, periodChecks: number }>(`/checks/stats?period=${period}`)
+  }
 }
 
 export const apiClient = new ApiClient()

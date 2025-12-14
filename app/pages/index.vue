@@ -235,8 +235,11 @@ const handleTagFilter = async (value: SelectMenuItem[]) => {
 }
 
 const toggleCheck = async (recipe: Recipe) => {
-  // TODO: Implement check toggle
-  console.log('Toggle check for recipe:', recipe.id)
+  try {
+    await recipesStore.toggleCheck(recipe.id)
+  } catch (err: unknown) {
+    console.error(err)
+  }
 }
 
 const deleteRecipe = async (recipe: Recipe) => {

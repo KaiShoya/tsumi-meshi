@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import { useRecipesStore } from '~/stores/data/recipes'
 import { useToast } from '~/composables/useToast'
+import { apiClient } from '~/utils/api/client'
 import type { RecipeInput, RecipeUpdate } from '~/repositories/recipes'
 
 export const useRecipesPageStore = defineStore('recipesPage', () => {
@@ -71,6 +72,20 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
     }
   }
 
+  const toggleCheck = async (recipeId: number) => {
+    try {
+      showLoading()
+      await apiClient.createCheck(recipeId)
+      showSuccessToast('チェックを記録しました')
+      await fetchRecipes()
+    } catch (err: unknown) {
+      console.error(err)
+      showDangerToast('チェックの登録に失敗しました')
+    } finally {
+      hideLoading()
+    }
+  }
+
   // Helper functions
   const fetchRecipes = async () => {
     try {
@@ -87,6 +102,15 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
 
   const hideLoading = () => {
     // TODO: Implement global loading state
+  }
+
+  return {
+    createRecipe,
+    updateRecipe,
+    deleteRecipe,
+    searchRecipes,
+    fetchRecipes,
+    toggleCheck
   }
 
   return {
