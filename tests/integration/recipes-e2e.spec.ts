@@ -37,14 +37,14 @@ describe('E2E smoke: core flows (integration)', () => {
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
 
     // Create recipe
-    const createReq = new Request('http://localhost/recipes', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ title: newRecipe.title }) })
+    const createReq = new Request('http://localhost/recipes', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ title: newRecipe.title }) })
     const createRes = await app.fetch(createReq, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(createRes.status).toBe(200)
     const createBody = await createRes.json()
     expect(createBody.recipe.id).toBe(newRecipe.id)
 
     // Create tag
-    const tagReq = new Request('http://localhost/tags', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ name: newTag.name }) })
+    const tagReq = new Request('http://localhost/tags', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ name: newTag.name }) })
     const tagRes = await app.fetch(tagReq, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(tagRes.status).toBe(200)
     const tagBody = await tagRes.json()

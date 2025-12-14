@@ -16,7 +16,7 @@ function createJWT(payload: Record<string, unknown>, secret: string) {
 describe('Recipes search edge cases (integration)', () => {
   it('GET /recipes with no tagIds returns base results', async () => {
     const mockDB = {
-      prepare: (sql: string) => ({
+      prepare: (_sql: string) => ({
         bind: (_: unknown) => {
           // If no tag filter present, return a simple list
           return { all: async () => ({ results: [{ id: 10, title: 'Plain Recipe', tags: '', created_at: '2025-01-10' }] }) }
@@ -34,9 +34,9 @@ describe('Recipes search edge cases (integration)', () => {
 
   it('GET /recipes with large tagIds list handles correctly', async () => {
     const mockDB = {
-      prepare: (sql: string) => ({
+      prepare: (_sql: string) => ({
         bind: (_: unknown) => {
-          if (sql.includes('EXISTS')) {
+          if (_sql.includes('EXISTS')) {
             return { all: async () => ({ results: [{ id: 11, title: 'ManyTags', tags: 'a,b,c', created_at: '2025-01-11' }] }) }
           }
           return { all: async () => ({ results: [] }) }
@@ -56,7 +56,7 @@ describe('Recipes search edge cases (integration)', () => {
 
   it('GET /recipes with SQL-like q param does not break (sanity)', async () => {
     const mockDB = {
-      prepare: (sql: string) => ({
+      prepare: (_sql: string) => ({
         bind: (_: unknown) => ({ all: async () => ({ results: [{ id: 12, title: 'Safe', tags: '', created_at: '2025-01-12' }] }) })
       })
     }
