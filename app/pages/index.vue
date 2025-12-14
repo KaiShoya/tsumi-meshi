@@ -219,6 +219,14 @@ const deleteRecipe = async (recipe: Recipe) => {
 
 // Lifecycle
 onMounted(async () => {
+  const { initAuth, isAuthenticated } = useAuth()
+  initAuth()
+
+  if (!isAuthenticated.value) {
+    await navigateTo('/auth/login')
+    return
+  }
+
   await recipesStore.fetchRecipes()
 })
 </script>
