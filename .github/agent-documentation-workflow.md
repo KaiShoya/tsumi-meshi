@@ -137,9 +137,9 @@ This directory contains finalized specifications that represent the **current st
   - **Reference when**: Adding new features, creating new composables/stores/repositories
   - **Key info**: Directory structure, design patterns, timezone handling, i18n strategy
 
-- **`data-model.md`**: Supabase schema, table definitions, RLS policies, migrations
+- **`data-model.md`**: Cloudflare D1/KV schema, table definitions, access policies, migrations
   - **Reference when**: Working with database operations, verifying type definitions, planning schema changes
-  - **Key info**: 5 tables (auth.users, user_settings, drink_labels, drinks, drink_counters), foreign keys, indexes
+  - **Key info**: Tables (recipes, etc.), foreign keys, indexes
 
 - **`repository-api.md`**: Repository pattern implementation, CRUD APIs, error handling strategy
   - **Reference when**: Implementing `store/data/` stores, verifying data access methods
@@ -252,13 +252,13 @@ Data Store ← Simply rethrow
     ↓ (call repository)
 Repository ← Throw CustomError
     ↓
-Supabase API
+Cloudflare API
 ```
 
 **Each Layer's Responsibility**:
 
 1. **Repository** (`app/repositories/`)
-   - Catch Supabase errors
+   - Catch Cloudflare API errors
    - Convert to `CustomError` and throw
    - Messages for developers (English)
 

@@ -29,7 +29,7 @@ These instructions define how GitHub Copilot should assist with this TypeScript 
   - Logging via Winston or console in dev mode
 - For UI:
   - Components should be pure and reusable
-Avoid inline styling; use Tailwind / CSS Modules / styled-components
+Avoid inline styling; use NuxtUI / Tailwind CSS / styled-components
 
 ### 🚫 Patterns to Avoid
 
@@ -48,12 +48,12 @@ Avoid inline styling; use Tailwind / CSS Modules / styled-components
 
 - 関数型プログラミングの原則（不変性、純粋関数、制御不能な副作用の回避）を徹底する。
 - 状態管理はローカルには useState、グローバルには Pinia を使う。
-- Supabase との通信は副作用として切り出し、型安全性を担保する。
+- Cloudflare API との通信は副作用として切り出し、型安全性を担保する。
 - UI コンポーネントは再利用性を意識し、props と emits でデータフローを明確にする。
 - i18n（@nuxtjs/i18n）は必ず利用し、テキストは直接埋め込まずロケールファイル経由で管理する。
 - アイコンは @nuxt/icon、@iconify-json/mdi を利用する。
 - Google Analytics 連携は nuxt-gtag を使い、環境変数で有効/無効を切り替える。
-- スタイルは Bulma, animate.css を利用し、SCSS でカスタマイズする。
+- スタイルは NuxtUI, animate.css を利用し、Tailwind CSS でカスタマイズする。
 
 # コーディングスタイルとドキュメント
 

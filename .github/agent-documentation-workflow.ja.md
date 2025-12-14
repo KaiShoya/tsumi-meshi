@@ -137,9 +137,9 @@ Issue に記録 + QA ファイルに追記
   - **参照タイミング**: 新機能追加、新しい composable/store/repository 作成時
   - **キー情報**: ディレクトリ構造、設計パターン、タイムゾーン処理、i18n 戦略
 
-- **`data-model.md`**: Supabase スキーマ、テーブル定義、RLS ポリシー、マイグレーション
+- **`data-model.md`**: Cloudflare D1/KV スキーマ、テーブル定義、アクセスポリシー、マイグレーション
   - **参照タイミング**: データベース操作、型定義の確認、スキーマ変更計画時
-  - **キー情報**: 5テーブル（auth.users, user_settings, drink_labels, drinks, drink_counters）、外部キー、インデックス
+  - **キー情報**: テーブル（recipesなど）、外部キー、インデックス
 
 - **`repository-api.md`**: Repository パターン実装、CRUD API、エラーハンドリング戦略
   - **参照タイミング**: `store/data/` ストア実装、データアクセス方法確認時
@@ -252,13 +252,13 @@ Data Store ← 単に再スロー
     ↓ (repository 呼び出し)
 Repository ← CustomError をスロー
     ↓
-Supabase API
+Cloudflare API
 ```
 
 **各層の責務**:
 
 1. **Repository** (`app/utils/api/`)
-   - Supabase エラーをキャッチ
+   - Cloudflare API エラーをキャッチ
    - `CustomError` に変換してスロー
    - メッセージは実装者向け（英語）
 
