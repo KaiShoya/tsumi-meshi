@@ -35,7 +35,7 @@ onMounted(async () => {
   await store.fetchFolders()
 })
 
-  const flattened = computed(() => {
+const flattened = computed(() => {
   // simple flatten: no hierarchy required for select, just show depth if children present
   const res: { id: number, name: string, level: number }[] = []
   const map = new Map<number, Readonly<Folder>>()
