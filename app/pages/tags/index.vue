@@ -37,7 +37,9 @@
           class="flex items-center justify-between"
         >
           <div class="flex-1 min-w-0">
-            <div class="truncate">{{ tag.name }}</div>
+            <div class="truncate">
+              {{ tag.name }}
+            </div>
           </div>
           <div class="flex gap-2">
             <UButton

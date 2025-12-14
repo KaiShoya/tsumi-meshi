@@ -6,8 +6,6 @@
     >フォルダ</label>
     <select
       id="folder-select"
-      class="mt-1 block w-full rounded border-gray-300"
-    <select id="folder-select"
       class="mt-1 block w-full rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
     >
       <option :value="null">
