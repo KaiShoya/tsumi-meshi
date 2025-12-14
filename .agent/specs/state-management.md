@@ -22,6 +22,7 @@ const useRecipesStore = defineStore('recipes', () => {
   const fetchRecipes = async () => {
     loading.value = true
     try {
+      // Support optional filters/search: fetchRecipes may accept `{ q?, folderId?, tagIds? }`
       recipes.value = await $recipesRepository.fetchAll(getCurrentUserId())
     } catch (error) {
       throw error // Simply rethrow
@@ -80,6 +81,13 @@ const useRecipesPageStore = defineStore('recipesPage', () => {
   }
 
   // Other methods with error handling...
+
+#### checksStore
+`checksStore` provides history for a specific recipe and exposes:
+
+- `fetchChecks(recipeId: number)` — fetches `RecipeCheck[]` for a recipe
+
+Page stores should call into `checksStore` and expose `fetchStats(period)` via API client wrappers (page store handles errors and toasts).
 })
 ```
 

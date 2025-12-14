@@ -113,3 +113,8 @@ interface User {
 
 ## API Integration
 Repositories communicate with Cloudflare Workers API endpoints for data operations.
+
+### Notes
+- The `/recipes` endpoint supports optional query parameters for search and filtering: `q` (search in title/description/url), `folderId` (numeric), and `tagIds` (comma-separated tag ids). Repositories should provide corresponding methods (e.g., `search(query, userId)` and `filterByFolder`/`filterByTags`) that map to these query parameters.
+- Recipe checks endpoints are provided: `POST /recipes/:id/checks`, `GET /recipes/:id/checks`, and `GET /checks/stats` (period: `month` | `week`). Implementations should use `RecipeChecksRepository` (`fetchByRecipe`, `create`, `getStats`) and include tests for stats aggregation.
+- When API surface changes, update the corresponding repository method signatures and add unit/integration tests in the same PR.

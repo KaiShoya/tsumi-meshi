@@ -33,7 +33,7 @@ Avoid inline styling; use NuxtUI / Tailwind CSS / styled-components
 
 ### 🚫 Patterns to Avoid
 
-- Don’t generate code without tests.
+- Don’t generate code without tests. New features that change behavior (repositories/stores/pages) must include unit tests (preferably Vitest) as part of the same PR.
 - Don’t hardcode values; use config/env files.
 - Avoid global state unless absolutely necessary.
 - Don’t expose secrets or keys.
@@ -43,6 +43,7 @@ Avoid inline styling; use NuxtUI / Tailwind CSS / styled-components
 - Use `@nuxt/test-utils`, `Vitest`, `@pinia/testing` for unit and integration tests.
 - Prefer test-driven development (TDD) when modifying core logic.
 - Include mocks/stubs for third-party services.
+- When adding tests, include a `tests/setup.ts` (or equivalent) for global setup (e.g., Pinia initialization), add a `test` script to `package.json`, and list any new test dependencies in the PR description so CI can install them.
 
 # パターンとベストプラクティス
 
