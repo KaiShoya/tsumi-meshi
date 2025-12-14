@@ -31,7 +31,19 @@ class ApiClient {
 
       return await response.json()
     } catch (error) {
-      console.error(`API request failed: ${endpoint}`, error)
+      // Use logger for consistent logging; keep throwing so callers can handle
+      try {
+        const { error: logError } = await import('~/composables/useLogger')
+        // call the returned function if available
+        try {
+          logError?.('API request failed', { endpoint }, error instanceof Error ? error : new Error(String(error)))
+        } catch {
+          // fallback to console if logger invocation fails
+          console.error(`API request failed: ${endpoint}`, error)
+        }
+      } catch {
+        console.error(`API request failed: ${endpoint}`, error)
+      }
       throw error
     }
   }

@@ -24,7 +24,7 @@ export const useTagsPageStore = defineStore('tagsPage', () => {
       showSuccessToast('タグを作成しました')
       await fetchTags()
     } catch (err: unknown) {
-      console.error(err)
+      logger.error('Failed to create tag', { module: 'tagsPage' }, err instanceof Error ? err : new Error(String(err)))
       showDangerToast('タグの作成に失敗しました')
     }
   }
@@ -35,7 +35,7 @@ export const useTagsPageStore = defineStore('tagsPage', () => {
       showSuccessToast('タグを更新しました')
       await fetchTags()
     } catch (err: unknown) {
-      console.error(err)
+      logger.error('Failed to update tag', { module: 'tagsPage', tagId: id }, err instanceof Error ? err : new Error(String(err)))
       showDangerToast('タグの更新に失敗しました')
     }
   }
@@ -46,7 +46,7 @@ export const useTagsPageStore = defineStore('tagsPage', () => {
       showSuccessToast('タグを削除しました')
       await fetchTags()
     } catch (err: unknown) {
-      console.error(err)
+      logger.error('Failed to delete tag', { module: 'tagsPage', tagId: id }, err instanceof Error ? err : new Error(String(err)))
       showDangerToast('タグの削除に失敗しました')
     }
   }
