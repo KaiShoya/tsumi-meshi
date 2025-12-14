@@ -1,7 +1,7 @@
 <template>
   <div>
-    <label class="block text-sm font-medium text-gray-700">フォルダ</label>
-    <select
+    <label for="folder-select" class="block text-sm font-medium text-gray-700">フォルダ</label>
+    <select id="folder-select"
       class="mt-1 block w-full rounded border-gray-300"
       :value="modelValue"
       @change="$emit('update:modelValue', (($event.target as HTMLSelectElement)?.value) ? Number(($event.target as HTMLSelectElement).value) : null)"
