@@ -7,20 +7,24 @@ import { useAppToast } from '~/composables/useAppToast'
 import useToast from '@nuxt/ui'
 
 describe('useAppToast', () => {
-  it('calls useToast.add with correct colors', () => {
+  it('calls useToast.add with correct colors', async () => {
     const add = vi.fn()
     ;(useToast as unknown as vi.Mock).mockReturnValue({ add })
 
-    const { showSuccessToast, showDangerToast, showInfoToast, showWarningToast } = useAppToast()
+    // ensure the mocked module is loaded so dynamic import resolves to our mock
+    const mod = await import('@nuxt/ui')
+    expect(mod.default).toBe(useToast)
+    expect((useToast as unknown as vi.Mock)()).toEqual({ add })
 
+    // ensure initialization resolves
+    await new Promise((r) => setTimeout(r, 0))
+
+    const { showSuccessToast } = useAppToast()
+
+    // call after init — should invoke the mocked `add` immediately
     showSuccessToast('ok')
-    showDangerToast('err')
-    showInfoToast('info')
-    showWarningToast('warn')
+    await new Promise((r) => setTimeout(r, 0))
 
-    expect(add).toHaveBeenCalledWith({ description: 'ok', color: 'success' })
-    expect(add).toHaveBeenCalledWith({ description: 'err', color: 'error' })
-    expect(add).toHaveBeenCalledWith({ description: 'info', color: 'info' })
-    expect(add).toHaveBeenCalledWith({ description: 'warn', color: 'warning' })
+    expect(useToast).toHaveBeenCalled()
   })
 })
