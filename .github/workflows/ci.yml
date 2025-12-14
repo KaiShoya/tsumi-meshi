@@ -6,10 +6,15 @@ on:
   pull_request:
     branches: [ main, 'release/**', 'feature/**' ]
   workflow_dispatch:
+    inputs:
+      run_miniflare:
+        description: 'Run the optional Miniflare E2E job (true/false)'
+        required: false
+        default: 'false'
 
 env:
-  # Set to 'true' to run the optional Miniflare E2E job
-  RUN_MINIFLARE: ${{ env.RUN_MINIFLARE || 'false' }}
+  # Default: set to 'true' in repository Actions variables to enable
+  RUN_MINIFLARE: 'false'
 
 jobs:
   test:
@@ -56,7 +61,7 @@ jobs:
     name: Optional Miniflare E2E
     runs-on: ubuntu-latest
     needs: test
-    if: ${{ env.RUN_MINIFLARE == 'true' }}
+    if: ${{ github.event.inputs.run_miniflare == 'true' || env.RUN_MINIFLARE == 'true' }}
     steps:
       - uses: actions/checkout@v4
 
