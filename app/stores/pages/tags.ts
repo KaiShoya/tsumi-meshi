@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 import { useTagsStore } from '~/stores/data/tags'
-import { useToast } from '~/composables/useToast'
+import { useAppToast } from '~/composables/useAppToast'
 import type { TagInput } from '~/repositories/tags'
 
 export const useTagsPageStore = defineStore('tagsPage', () => {
   const tagsStore = useTagsStore()
-  const { showSuccessToast, showDangerToast } = useToast()
+  const { showSuccessToast, showDangerToast } = useAppToast()
 
   const fetchTags = async () => {
     try {

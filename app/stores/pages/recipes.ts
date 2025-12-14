@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
 import { useRecipesStore } from '~/stores/data/recipes'
-import { useToast } from '~/composables/useToast'
+import { useAppToast } from '~/composables/useAppToast'
 import { apiClient } from '~/utils/api/client'
 import type { RecipeInput, RecipeUpdate } from '~/repositories/recipes'
 
 export const useRecipesPageStore = defineStore('recipesPage', () => {
   const recipesStore = useRecipesStore()
-  const { showSuccessToast, showDangerToast } = useToast()
+  const { showSuccessToast, showDangerToast } = useAppToast()
   const logger = useLogger()
 
   const createRecipe = async (recipe: RecipeInput) => {
