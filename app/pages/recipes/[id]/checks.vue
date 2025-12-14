@@ -12,13 +12,19 @@
       </UButton>
     </div>
 
-    <div v-if="checks.length === 0" class="text-center py-8">
+    <div
+      v-if="checks.length === 0"
+      class="text-center py-8"
+    >
       <p class="text-sm text-gray-500">
         チェック履歴がありません
       </p>
     </div>
 
-    <div v-else class="space-y-2">
+    <div
+      v-else
+      class="space-y-2"
+    >
       <div
         v-for="check in checks"
         :key="check.id"
