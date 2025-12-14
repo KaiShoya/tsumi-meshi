@@ -3,6 +3,7 @@ import { FoldersRepository } from '~/repositories/folders'
 
 describe('FoldersRepository', () => {
   it('builds hierarchy from flat list', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const db: any = {
       all: vi.fn().mockResolvedValue([
         { id: 1, userId: 1, name: 'Root', parentId: null },

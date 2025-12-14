@@ -16,7 +16,7 @@ export const useFoldersStore = defineStore('folders', () => {
     }
   }
 
-  const createFolder = async (payload: { name: string; parentId?: number | null }) => {
+  const createFolder = async (payload: { name: string, parentId?: number | null }) => {
     const res = await apiClient.createFolder(payload)
     if (res.folder) {
       folders.value.push(res.folder as Folder)
@@ -24,7 +24,7 @@ export const useFoldersStore = defineStore('folders', () => {
     return res.folder
   }
 
-  const updateFolder = async (id: number, payload: { name?: string; parentId?: number | null }) => {
+  const updateFolder = async (id: number, payload: { name?: string, parentId?: number | null }) => {
     const res = await apiClient.updateFolder(id, payload)
     if (res.folder) {
       const idx = folders.value.findIndex(f => f.id === id)

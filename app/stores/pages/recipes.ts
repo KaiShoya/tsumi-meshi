@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { useRecipesStore } from '~/stores/data/recipes'
 import { useAppToast } from '~/composables/useAppToast'
+import { useLogger } from '~/composables/useLogger'
 import { apiClient } from '~/utils/api/client'
 import type { RecipeInput, RecipeUpdate } from '~/repositories/recipes'
 
