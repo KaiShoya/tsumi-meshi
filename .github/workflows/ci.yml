@@ -66,7 +66,9 @@ jobs:
     name: Optional Miniflare E2E
     runs-on: ubuntu-latest
     needs: test
-    if: ${{ github.event.inputs.run_miniflare == 'true' || env.RUN_MINIFLARE == 'true' }}
+    # Use workflow input OR repository-level variable (`vars.RUN_MINIFLARE`) to decide
+    # Note: `env.RUN_MINIFLARE` cannot be referenced in an `if` expression at workflow runtime.
+    if: ${{ github.event.inputs.run_miniflare == 'true' || vars.RUN_MINIFLARE == 'true' }}
     steps:
       - uses: actions/checkout@v4
 
