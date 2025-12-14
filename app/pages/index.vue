@@ -217,6 +217,7 @@ import type { SelectMenuItem } from '@nuxt/ui'
 import { useDebounceFn } from '@vueuse/core'
 import { apiClient } from '~/utils/api/client'
 import { useRecipesStore } from '~/stores/data/recipes'
+import { useAppToast } from '~/composables/useAppToast'
 
 // Data
 const searchQuery = ref('')
@@ -229,6 +230,7 @@ const tagOptions = ref<Array<{ label: string, value: number }>>([])
 // Store
 const recipesStore = useRecipesPageStore()
 const recipesStoreData = useRecipesStore()
+const { showDangerToast } = useAppToast()
 const recipes = computed(() => recipesStoreData.recipes)
 
 // Methods
@@ -257,6 +259,7 @@ const toggleCheck = async (recipe: Recipe) => {
     await recipesStore.toggleCheck(recipe.id)
   } catch (err: unknown) {
     console.error(err)
+    showDangerToast('チェックの登録に失敗しました')
   }
 }
 
