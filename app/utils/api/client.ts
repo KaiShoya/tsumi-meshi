@@ -96,6 +96,39 @@ class ApiClient {
       method: 'DELETE'
     })
   }
+
+  // Tag endpoints
+  async getTags() {
+    return this.request<{ tags: unknown[] }>('/tags')
+  }
+
+  async createTag(name: string) {
+    return this.request<{ tag: unknown }>('/tags', {
+      method: 'POST',
+      body: JSON.stringify({ name })
+    })
+  }
+
+  async updateTag(id: number, name: string) {
+    return this.request<{ tag: unknown }>(`/tags/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ name })
+    })
+  }
+
+  async deleteTag(id: number) {
+    return this.request(`/tags/${id}`, {
+      method: 'DELETE',
+      body: null
+    })
+  }
+
+  async findOrCreateTag(name: string) {
+    return this.request<{ tag: unknown }>('/tags/find-or-create', {
+      method: 'POST',
+      body: JSON.stringify({ name })
+    })
+  }
 }
 
 export const apiClient = new ApiClient()
