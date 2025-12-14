@@ -1,4 +1,4 @@
-export const useToast = () => {
+export const useAppToast = () => {
   const showSuccessToast = (message: string) => {
     // TODO: Implement with NuxtUI toast
     console.log('Success:', message)

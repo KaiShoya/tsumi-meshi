@@ -61,7 +61,7 @@ Business logic, error handling, and user notifications.
 ```typescript
 const useRecipesPageStore = defineStore('recipesPage', () => {
   const recipesStore = useRecipesStore()
-  const { showSuccessToast, showDangerToast } = useToast()
+  const { showSuccessToast, showDangerToast } = useAppToast()
   const { $logger } = useNuxtApp()
 
   const createRecipe = async (recipe: RecipeInput) => {
