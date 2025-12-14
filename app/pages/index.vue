@@ -42,9 +42,19 @@
   <div class="space-y-6">
     <!-- Header -->
     <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold">
-        レシピ一覧
-      </h1>
+      <div class="flex items-center gap-4">
+        <h1 class="text-2xl font-bold">
+          レシピ一覧
+        </h1>
+        <UButton
+          variant="outline"
+          size="sm"
+          @click="navigateTo('/checks')"
+        >
+          チェック統計
+        </UButton>
+      </div>
+
       <UButton
         icon="i-lucide-plus"
         size="lg"
@@ -142,6 +152,12 @@
                 variant="ghost"
                 size="sm"
                 @click.stop="toggleCheck(recipe)"
+              />
+              <UButton
+                icon="i-lucide-clock"
+                variant="ghost"
+                size="sm"
+                @click.stop="navigateTo(`/recipes/${recipe.id}/checks`)"
               />
               <UDropdown
                 :items="[{
