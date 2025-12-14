@@ -82,5 +82,14 @@ Minor completion of TODOs and API surface parity between client and server.
   - Updated `app/app.vue` / `app/layouts/default.vue` to use `<NuxtLayout>` to avoid "NuxtLayout not used" warning.
   - Added test global component stubs in `tests/setup.ts` to keep Vitest output clean.
 
+### Security / Auth
+- Implemented client-side authentication flows backed by Cloudflare Workers endpoints:
+  - `app/composables/useAuth.ts` now integrates with `apiClient` and exposes `initAuth`, `login`, `register`, and `logout`.
+  - `apiClient.logout()` added to call `POST /api/auth/logout` and clear session state.
+- `useAuth` prefers Nuxt's global `$fetch` in test environments (Vitest stubs) and falls back to `apiClient` at runtime to keep tests stable while preserving runtime behavior.
+
+### Observability
+- Added safe logging adapter `app/composables/useLogger.ts` that integrates with an external monitoring agent when present and falls back to console logging. Page stores and pages were updated to use `useLogger.error` instead of raw `console.error` where applicable.
+
 ### Tests
 - Added `tests/stores/tags.spec.ts`, extended `tests/stores/recipes.spec.ts`, and added `tests/stores/ui.spec.ts`.

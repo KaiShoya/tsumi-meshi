@@ -46,3 +46,18 @@ Acceptance criteria
 - `.agent/specs/auth.md` contains above contract
 - Implementation PR includes unit/integration tests and E2E smoke for refresh
 - CHANGELOG and QA updated to reference the authentication design
+
+Client implementation notes (v0.1.3)
+- The client-side composable `app/composables/useAuth.ts` implements the contract above and calls backend endpoints using the central `apiClient` in runtime.
+- For test stability, `useAuth` will prefer the Nuxt global `$fetch` when available (Vitest test harness stubs `$fetch`) and fall back to `apiClient` in runtime environments.
+- The `apiClient` includes `login`, `register`, `getCurrentUser` (`/api/auth/me`) and `logout` helpers; `logout()` issues `POST /api/auth/logout` and clears client session state.
+- Tests: unit tests for `useAuth` must stub `$fetch` or the `apiClient` as appropriate; integration/E2E tests should exercise cookie set/refresh/rotate behavior against a Workers test environment or a suitable mock that simulates `Set-Cookie` behavior.
+
+Acceptance criteria (v0.1.3 additions)
+- `useAuth` implements `initAuth`, `login`, `register`, `logout` flows and updates Pinia auth/page stores accordingly.
+- `apiClient.logout()` exists and is used by `useAuth.logout()`.
+- Unit tests cover happy/failure paths for login/register and `me` initialization, and integration/E2E tests validate refresh cookie rotation and session rehydration via `/api/auth/me`.
+- Relevant `.agent/docs/qa/v0.1.3-qa.md` entries reference these implementation details.
+
+Security reminder
+- Continue to enforce HttpOnly refresh cookies and rotate refresh tokens on each refresh call. Any deviation from these controls requires updating this spec and adding a `spec-exception` entry in `.agent/docs/qa/`.
