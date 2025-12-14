@@ -1,24 +1,48 @@
 <template>
   <div class="max-w-3xl mx-auto py-8">
-    <h1 class="text-2xl font-semibold mb-4">フォルダ管理</h1>
+    <h1 class="text-2xl font-semibold mb-4">
+      フォルダ管理
+    </h1>
 
     <div class="mb-6">
       <UForm @submit="onCreate">
         <div class="flex gap-2">
-          <UInput v-model="name" placeholder="フォルダ名" />
+          <UInput
+            v-model="name"
+            placeholder="フォルダ名"
+          />
           <FolderSelector v-model="parentId" />
-          <UButton type="submit">追加</UButton>
+          <UButton type="submit">
+            追加
+          </UButton>
         </div>
       </UForm>
     </div>
 
     <div>
       <ul class="space-y-2">
-        <li v-for="folder in folders" :key="folder.id" class="flex items-center justify-between">
+        <li
+          v-for="folder in folders"
+          :key="folder.id"
+          class="flex items-center justify-between"
+        >
           <div>{{ folder.name }}</div>
           <div class="flex gap-2">
-            <UButton size="sm" variant="ghost" @click="startEdit(folder)">編集</UButton>
-            <UButton size="sm" variant="ghost" color="error" @click="remove(folder.id, folder.name)">削除</UButton>
+            <UButton
+              size="sm"
+              variant="ghost"
+              @click="startEdit(folder as unknown as Folder)"
+            >
+              編集
+            </UButton>
+            <UButton
+              size="sm"
+              variant="ghost"
+              color="error"
+              @click="remove(folder.id, folder.name)"
+            >
+              削除
+            </UButton>
           </div>
         </li>
       </ul>
@@ -54,7 +78,7 @@ const onCreate = async () => {
   parentId.value = null
 }
 
-const startEdit = (folder: Folder) => {
+const startEdit = (folder: Readonly<Folder>) => {
   editing.value = folder.id
   editName.value = folder.name
 }

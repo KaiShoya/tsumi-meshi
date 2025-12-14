@@ -6,7 +6,7 @@ function base64url(input: Buffer) {
   return input.toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
 }
 
-function createJWT(payload: Record<string, any>, secret: string) {
+function createJWT(payload: Record<string, unknown>, secret: string) {
   const header = { alg: 'HS256', typ: 'JWT' }
   const encoded = `${base64url(Buffer.from(JSON.stringify(header)))}.${base64url(Buffer.from(JSON.stringify(payload)))}`
   const signature = crypto.createHmac('sha256', secret).update(encoded).digest()
@@ -15,9 +15,9 @@ function createJWT(payload: Record<string, any>, secret: string) {
 
 describe('Recipe Checks API (integration)', () => {
   it('GET /recipes/:id/checks returns checks list', async () => {
-    const mockDB: any = {
+    const mockDB = {
       prepare: (q: string) => ({
-        bind: (_: any) => {
+        bind: (_: unknown) => {
           if (q.includes('SELECT id FROM recipes')) {
             return { first: async () => ({ id: 1 }) }
           }
@@ -31,7 +31,7 @@ describe('Recipe Checks API (integration)', () => {
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
     const req = new Request('http://localhost/recipes/1/checks', { headers: { Authorization: `Bearer ${token}` } })
-    const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as any)
+    const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()
     expect(Array.isArray(body.checks)).toBe(true)
@@ -40,9 +40,9 @@ describe('Recipe Checks API (integration)', () => {
 
   it('POST /recipes/:id/checks creates a check', async () => {
     const newCheck = { id: 2, recipe_id: 1, checked_at: '2025-01-02' }
-    const mockDB: any = {
+    const mockDB = {
       prepare: (q: string) => ({
-        bind: (_: any) => {
+        bind: (_: unknown) => {
           if (q.includes('SELECT id FROM recipes')) return { first: async () => ({ id: 1 }) }
           if (q.includes('INSERT INTO recipe_checks')) return { run: async () => ({ meta: { last_row_id: newCheck.id } }) }
           if (q.includes('SELECT * FROM recipe_checks WHERE id = ?')) return { first: async () => newCheck }
@@ -53,16 +53,16 @@ describe('Recipe Checks API (integration)', () => {
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
     const req = new Request('http://localhost/recipes/1/checks', { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
-    const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as any)
+    const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()
     expect(body.check.id).toBe(2)
   })
 
   it('GET /checks/stats returns aggregated stats', async () => {
-    const mockDB: any = {
-      prepare: (q: string) => ({
-        bind: (_: any) => ({
+    const mockDB = {
+      prepare: (_q: string) => ({
+        bind: (_: unknown) => ({
           first: async () => ({ count: 42 })
         })
       })
@@ -70,7 +70,7 @@ describe('Recipe Checks API (integration)', () => {
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
     const req = new Request('http://localhost/checks/stats?period=month', { headers: { Authorization: `Bearer ${token}` } })
-    const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as any)
+    const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()
     expect(typeof body.totalChecks).toBe('number')
