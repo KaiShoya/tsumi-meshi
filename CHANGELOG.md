@@ -69,6 +69,7 @@ Minor completion of TODOs and API surface parity between client and server.
 ### Added
 - Implemented `tags` and `recipes` data store API calls (`app/stores/data/tags.ts`, `app/stores/data/recipes.ts`) using `apiClient` and added unit tests.
 - Added global UI store (`app/stores/ui.ts`) to manage loading state used by page stores.
+ - Added `useAppToast` wrapper (`app/composables/useAppToast.ts`) to centralize toast behavior (success/info/warning/error) using NuxtUI, with unit tests; the implementation safely no-ops when NuxtUI is unavailable (test/runtime resilience).
 
 ### Changed
 - Updated `app/stores/pages/recipes.ts` to use global loading state.
