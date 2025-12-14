@@ -16,7 +16,7 @@ function createJWT(payload: Record<string, unknown>, secret: string) {
 describe('Tags API (integration)', () => {
   it('GET /tags returns list', async () => {
     const mockDB = {
-      prepare: (sql: string) => ({
+      prepare: (_sql: string) => ({
         bind: (_: unknown) => ({ all: async () => ({ results: [{ id: 1, name: 'Sushi' }] }) })
       })
     }
@@ -32,13 +32,13 @@ describe('Tags API (integration)', () => {
 
   it('POST /tags/find-or-create creates when not exists', async () => {
     const mockDB = {
-      prepare: (sql: string) => ({
+      prepare: (_sql: string) => ({
         bind: (_: unknown) => ({ first: async () => null, run: async () => ({ meta: { last_row_id: 5 } }) })
       })
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/tags/find-or-create', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ name: 'newtag' }) })
+    const req = new Request('http://localhost/tags/find-or-create', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ name: 'newtag' }) })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()
@@ -47,11 +47,11 @@ describe('Tags API (integration)', () => {
 
   it('PUT /tags/:id updates tag', async () => {
     const mockDB = {
-      prepare: (sql: string) => ({ bind: (_: unknown) => ({ run: async () => ({ changes: 1 }), first: async () => ({ id: 3, name: 'Updated' }) }) })
+      prepare: (_sql: string) => ({ bind: (_: unknown) => ({ run: async () => ({ changes: 1 }), first: async () => ({ id: 3, name: 'Updated' }) }) })
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/tags/3', { method: 'PUT', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ name: 'Updated' }) })
+    const req = new Request('http://localhost/tags/3', { method: 'PUT', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ name: 'Updated' }) })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()
@@ -60,7 +60,7 @@ describe('Tags API (integration)', () => {
 
   it('DELETE /tags/:id deletes tag', async () => {
     const mockDB = {
-      prepare: (sql: string) => ({ bind: (_: unknown) => ({ run: async () => ({ changes: 1 }) }) })
+      prepare: (_sql: string) => ({ bind: (_: unknown) => ({ run: async () => ({ changes: 1 }) }) })
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
