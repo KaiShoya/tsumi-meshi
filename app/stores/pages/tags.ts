@@ -1,4 +1,3 @@
-// @ts-expect-error: Pinia types may not be available in typecheck environment
 import { defineStore } from 'pinia'
 import { useTagsStore } from '~/stores/data/tags'
 import { useToast } from '~/composables/useToast'

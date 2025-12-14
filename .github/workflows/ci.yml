@@ -20,7 +20,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 8
+          version: 10.23.0
 
       - name: Debug environment
         run: |
@@ -34,7 +34,7 @@ jobs:
           if ! command -v pnpm >/dev/null 2>&1; then
             echo "pnpm not found: trying corepack prepare"
             corepack enable || true
-            corepack prepare pnpm@8 --activate || npm i -g pnpm@8
+            corepack prepare pnpm@10.23.0 --activate || npm i -g pnpm@10.23.0
           fi
           pnpm -v
 

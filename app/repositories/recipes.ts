@@ -9,8 +9,8 @@ export interface Recipe {
   url: string
   description?: string
   imageUrl?: string
-  tags: Tag[]
-  checks: RecipeCheck[]
+  tags: readonly Tag[]
+  checks: readonly RecipeCheck[]
   createdAt: Date
   updatedAt: Date
 }

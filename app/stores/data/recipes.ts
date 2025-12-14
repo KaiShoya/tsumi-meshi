@@ -1,4 +1,3 @@
-// @ts-expect-error: Pinia types may not be available in typecheck environment
 import { defineStore } from 'pinia'
 import { apiClient } from '~/utils/api/client'
 import type { Recipe, RecipeInput, RecipeUpdate } from '~/repositories/recipes'

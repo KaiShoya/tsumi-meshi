@@ -1,4 +1,3 @@
-// @ts-expect-error: Pinia types may not be available in typecheck environment
 import { defineStore } from 'pinia'
 import { useRecipesStore } from '~/stores/data/recipes'
 import { useToast } from '~/composables/useToast'
@@ -87,9 +86,9 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
   }
 
   // Helper functions
-  const fetchRecipes = async () => {
+  const fetchRecipes = async (opts?: { q?: string, folderId?: number | null, tagIds?: number[] }) => {
     try {
-      await recipesStore.fetchRecipes()
+      await recipesStore.fetchRecipes(opts)
     } catch (error) {
       showDangerToast('レシピの読み込みに失敗しました')
       logger.error('Failed to fetch recipes', { module: 'recipesPageStore' }, error instanceof Error ? error : new Error(String(error)))
@@ -111,13 +110,5 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
     searchRecipes,
     fetchRecipes,
     toggleCheck
-  }
-
-  return {
-    createRecipe,
-    updateRecipe,
-    deleteRecipe,
-    searchRecipes,
-    fetchRecipes
   }
 })

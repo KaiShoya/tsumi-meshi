@@ -2,11 +2,19 @@ import { beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import * as vue from 'vue'
 
+type VueHelpers = {
+  ref: typeof vue.ref
+  computed: typeof vue.computed
+  readonly: typeof vue.readonly
+  onMounted: typeof vue.onMounted
+}
+
 // Make Nuxt-style auto-imported Vue helpers available globally for tests
-;(globalThis as any).ref = vue.ref
-;(globalThis as any).computed = vue.computed
-;(globalThis as any).readonly = vue.readonly
-;(globalThis as any).onMounted = vue.onMounted
+const g = globalThis as unknown as Partial<VueHelpers>
+g.ref = vue.ref
+g.computed = vue.computed
+g.readonly = vue.readonly
+g.onMounted = vue.onMounted
 
 beforeEach(() => {
   setActivePinia(createPinia())
