@@ -124,16 +124,46 @@ app.get('/recipes', jwtMiddleware, async (c) => {
   try {
     const payload = c.get('jwtPayload')
     const userId = payload.userId
+    // Optional filters
+    const q = c.req.query('q')
+    const folderId = c.req.query('folderId')
+    const tagIds = c.req.query('tagIds')
 
-    const recipes = await c.env.DB.prepare(
-      `SELECT r.*, GROUP_CONCAT(t.name) as tags
+    // Base query
+    let sql = `SELECT r.*, GROUP_CONCAT(t.name) as tags
        FROM recipes r
        LEFT JOIN recipe_tags rt ON r.id = rt.recipe_id
        LEFT JOIN tags t ON rt.tag_id = t.id
-       WHERE r.user_id = ?
-       GROUP BY r.id
-       ORDER BY r.created_at DESC`
-    ).bind(userId).all()
+       WHERE r.user_id = ?`
+    const params: unknown[] = [userId]
+
+    // Search query
+    if (q) {
+      sql += ` AND (r.title LIKE ? OR r.description LIKE ? OR r.url LIKE ?)`
+      const like = `%${q}%`
+      params.push(like, like, like)
+    }
+
+    // Folder filter
+    if (folderId) {
+      sql += ` AND r.folder_id = ?`
+      params.push(Number(folderId))
+    }
+
+    // Tag filter (comma-separated ids)
+    if (tagIds) {
+      const ids = String(tagIds).split(',').map(s => Number(s)).filter(n => !Number.isNaN(n))
+      if (ids.length > 0) {
+        // Use EXISTS to filter recipes that have at least one of the specified tags
+        const placeholders = ids.map(() => '?').join(',')
+        sql += ` AND EXISTS (SELECT 1 FROM recipe_tags rt2 WHERE rt2.recipe_id = r.id AND rt2.tag_id IN (${placeholders}))`
+        params.push(...ids)
+      }
+    }
+
+    sql += ` GROUP BY r.id ORDER BY r.created_at DESC`
+
+    const recipes = await c.env.DB.prepare(sql).bind(...params).all()
 
     return c.json({ recipes: recipes.results })
   } catch (error) {

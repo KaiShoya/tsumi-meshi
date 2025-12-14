@@ -1,17 +1,17 @@
 // @ts-expect-error: Pinia types may not be available in typecheck environment
 import { defineStore } from 'pinia'
+import { apiClient } from '~/utils/api/client'
 import type { Recipe, RecipeInput, RecipeUpdate } from '~/repositories/recipes'
 
 export const useRecipesStore = defineStore('recipes', () => {
   const recipes = ref<Recipe[]>([])
   const loading = ref(false)
 
-  const fetchRecipes = async () => {
+  const fetchRecipes = async (opts?: { q?: string, folderId?: number | null, tagIds?: number[] }) => {
     loading.value = true
     try {
-      // TODO: Implement API call to Cloudflare Workers
-      // recipes.value = await $recipesRepository.fetchAll(getCurrentUserId())
-      recipes.value = [] // Placeholder
+      const res = await apiClient.getRecipes(opts)
+      recipes.value = (res.recipes ?? []) as Recipe[]
     } finally {
       loading.value = false
     }
@@ -40,9 +40,13 @@ export const useRecipesStore = defineStore('recipes', () => {
   }
 
   const searchRecipes = async (query: string) => {
-    // TODO: Implement API call
-    // recipes.value = await $recipesRepository.search(query, getCurrentUserId())
-    console.log('Search recipes:', query)
+    loading.value = true
+    try {
+      const res = await apiClient.getRecipes({ q: query })
+      recipes.value = (res.recipes ?? []) as Recipe[]
+    } finally {
+      loading.value = false
+    }
   }
 
   return {

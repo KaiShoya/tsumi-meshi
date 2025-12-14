@@ -215,39 +215,41 @@ import { useRecipesPageStore } from '~/stores/pages/recipes'
 import type { Recipe } from '~/repositories/recipes'
 import type { SelectMenuItem } from '@nuxt/ui'
 import { useDebounceFn } from '@vueuse/core'
+import { apiClient } from '~/utils/api/client'
+import { useRecipesStore } from '~/stores/data/recipes'
 
 // Data
-const recipes = ref<Recipe[]>([])
 const searchQuery = ref('')
 const selectedFolder = ref<number | null>(null)
 const selectedTags = ref<number[]>([])
 
-// TODO: Load from stores
-const folderOptions = ref([])
-const tagOptions = ref([])
+const folderOptions = ref<Array<{ label: string, value: number }>>([])
+const tagOptions = ref<Array<{ label: string, value: number }>>([])
 
 // Store
 const recipesStore = useRecipesPageStore()
+const recipesStoreData = useRecipesStore()
+const recipes = computed(() => recipesStoreData.recipes)
 
 // Methods
 const handleSearch = useDebounceFn(async () => {
   if (searchQuery.value) {
     await recipesStore.searchRecipes(searchQuery.value)
   } else {
-    await recipesStore.fetchRecipes()
+    await recipesStore.fetchRecipes({ folderId: selectedFolder.value ?? undefined, tagIds: selectedTags.value })
   }
 }, 300)
 
 const handleFolderFilter = async (value: SelectMenuItem) => {
   const folderId = typeof value === 'number' ? value : null
-  // TODO: Implement folder filtering
-  console.log('Filter by folder:', folderId)
+  selectedFolder.value = folderId
+  await recipesStore.fetchRecipes({ folderId: folderId ?? undefined })
 }
 
 const handleTagFilter = async (value: SelectMenuItem[]) => {
   const tagIds = value.filter((item): item is number => typeof item === 'number')
-  // TODO: Implement tag filtering
-  console.log('Filter by tags:', tagIds)
+  selectedTags.value = tagIds
+  await recipesStore.fetchRecipes({ tagIds })
 }
 
 const toggleCheck = async (recipe: Recipe) => {
@@ -273,6 +275,11 @@ onMounted(async () => {
     return
   }
 
+  // Load initial data
   await recipesStore.fetchRecipes()
+  const tagsRes = await apiClient.getTags()
+  tagOptions.value = ((tagsRes.tags ?? []) as Array<{ id: number, name: string }>).map(t => ({ label: t.name, value: t.id }))
+  const foldersRes = await apiClient.getFolders()
+  folderOptions.value = ((foldersRes.folders ?? []) as Array<{ id: number, name: string }>).map(f => ({ label: f.name, value: f.id }))
 })
 </script>

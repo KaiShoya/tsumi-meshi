@@ -63,8 +63,13 @@ class ApiClient {
   }
 
   // Recipe endpoints
-  async getRecipes() {
-    return this.request<{ recipes: unknown[] }>('/recipes')
+  async getRecipes(opts?: { q?: string, folderId?: number | null, tagIds?: number[] }) {
+    const qs: string[] = []
+    if (opts?.q) qs.push(`q=${encodeURIComponent(opts.q)}`)
+    if (opts?.folderId) qs.push(`folderId=${opts.folderId}`)
+    if (opts?.tagIds && opts.tagIds.length > 0) qs.push(`tagIds=${opts.tagIds.join(',')}`)
+    const query = qs.length > 0 ? `?${qs.join('&')}` : ''
+    return this.request<{ recipes: unknown[] }>(`/recipes${query}`)
   }
 
   async createRecipe(recipe: {
@@ -100,6 +105,11 @@ class ApiClient {
   // Tag endpoints
   async getTags() {
     return this.request<{ tags: unknown[] }>('/tags')
+  }
+
+  // Folder endpoints
+  async getFolders() {
+    return this.request<{ folders: unknown[] }>('/folders')
   }
 
   async createTag(name: string) {
