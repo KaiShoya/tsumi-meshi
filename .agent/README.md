@@ -11,6 +11,7 @@
 ```
 .agent/
 ├── specs/               # 仕様・設計の確定版（ソース・オブ・トゥルース）
+│   └── ci-and-dependencies.md  # CI・パッケージ管理に関する運用ルール
 ├── docs/
 │   ├── QA_AND_DECISIONS.md  # Q&A と設計決定ログ
 │   ├── tasks.md             # リリース時のみ更新する統一インデックス
