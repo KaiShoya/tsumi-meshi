@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { useChecksStore } from '~/stores/data/checks'
 import { apiClient } from '~/utils/api/client'
 import { useAppToast } from '~/composables/useAppToast'
+import { useLogger } from '~/composables/useLogger'
 
 export const useChecksPageStore = defineStore('checksPage', () => {
   const checksStore = useChecksStore()
