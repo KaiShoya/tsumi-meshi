@@ -1,17 +1,19 @@
 import { defineStore } from 'pinia'
 import { useTagsStore } from '~/stores/data/tags'
 import { useAppToast } from '~/composables/useAppToast'
+import { useLogger } from '~/composables/useLogger'
 import type { TagInput } from '~/repositories/tags'
 
 export const useTagsPageStore = defineStore('tagsPage', () => {
   const tagsStore = useTagsStore()
   const { showSuccessToast, showDangerToast } = useAppToast()
+  const logger = useLogger()
 
   const fetchTags = async () => {
     try {
       await tagsStore.fetchTags()
     } catch (err: unknown) {
-      console.error(err)
+      logger.error('Failed to fetch tags', { module: 'tagsPage' }, err instanceof Error ? err : new Error(String(err)))
       showDangerToast('タグの読み込みに失敗しました')
     }
   }

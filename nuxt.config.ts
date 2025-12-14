@@ -18,6 +18,19 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2025-01-15',
 
+  vite: {
+    plugins: [
+      {
+        name: 'vue-spec-plugin',
+        transform(_, id) {
+          if (/vue&type=spec/.test(id)) {
+            return `export default {}`
+          }
+        }
+      }
+    ]
+  },
+
   eslint: {
     config: {
       stylistic: {
@@ -25,18 +38,5 @@ export default defineNuxtConfig({
         braceStyle: '1tbs'
       }
     }
-  },
-
-  vite: {
-    plugins: [
-      {
-        name: "vue-spec-plugin",
-        transform (_, id) {
-          if (/vue&type=spec/.test(id)) {
-            return `export default {}`;
-          }
-        },
-      },
-    ],
-  },
+  }
 })

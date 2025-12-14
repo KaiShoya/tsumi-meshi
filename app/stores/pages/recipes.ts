@@ -80,7 +80,7 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
       showSuccessToast('チェックを記録しました')
       await fetchRecipes()
     } catch (err: unknown) {
-      console.error(err)
+      logger.error('Failed to record check', { module: 'recipesPage', recipeId }, err instanceof Error ? err : new Error(String(err)))
       showDangerToast('チェックの登録に失敗しました')
     } finally {
       hideLoading()
