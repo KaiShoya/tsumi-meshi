@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 import { useChecksStore } from '~/stores/data/checks'
 import { apiClient } from '~/utils/api/client'
-import { useToast } from '~/composables/useToast'
+import { useAppToast } from '~/composables/useAppToast'
 
 export const useChecksPageStore = defineStore('checksPage', () => {
   const checksStore = useChecksStore()
-  const { showDangerToast } = useToast()
+  const { showDangerToast } = useAppToast()
   const logger = useLogger()
 
   const fetchChecks = async (recipeId: number) => {
