@@ -1,0 +1,11 @@
+name = "tsumi-meshi"
+main = "src/index.ts"
+compatibility_date = "2025-01-15"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tsumi_meshi_db"
+database_id = "your-database-id"  # Will be set after creation
+
+[vars]
+JWT_SECRET = "your-jwt-secret"  # Will be set in production
