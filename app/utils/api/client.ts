@@ -68,6 +68,12 @@ class ApiClient {
     return this.request<{ user: unknown }>('/auth/me')
   }
 
+  async logout() {
+    return this.request('/auth/logout', {
+      method: 'POST'
+    })
+  }
+
   // Recipe endpoints
   async getRecipes(opts?: { q?: string, folderId?: number | null, tagIds?: number[] }) {
     const qs: string[] = []

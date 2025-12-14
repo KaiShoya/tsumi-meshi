@@ -14,6 +14,8 @@ export interface AuthState {
   loading: boolean
 }
 
+import { apiClient } from '~/utils/api/client'
+
 export const useAuth = () => {
   const state = reactive<AuthState>({
     user: null,
@@ -24,8 +26,8 @@ export const useAuth = () => {
   const initAuth = async () => {
     state.loading = true
     try {
-      const res = await $fetch<{ user: User | null }>('/api/auth/me')
-      state.user = res?.user ?? null
+      const res = await apiClient.getCurrentUser()
+      state.user = (res as { user?: User | null })?.user ?? null
     } catch {
       // Not authenticated or error: clear local state
       state.user = null
@@ -38,18 +40,9 @@ export const useAuth = () => {
   const login = async (email: string, password: string) => {
     state.loading = true
     try {
-      // TODO: Implement API call to Cloudflare Workers
-      const response = await $fetch<AuthResponse>('/api/auth/login', {
-        method: 'POST',
-        body: { email, password }
-      })
-
-      const { user } = response
-
-      // Server sets auth cookie (HttpOnly); client stores only user in memory
-      state.user = user
-
-      // Redirect to home
+      const response = await apiClient.login(email, password)
+      const user = (response as { user?: User })?.user
+      state.user = (user ?? null) as User | null
       await navigateTo('/')
     } finally {
       state.loading = false
@@ -60,17 +53,9 @@ export const useAuth = () => {
   const register = async (name: string, email: string, password: string) => {
     state.loading = true
     try {
-      // TODO: Implement API call to Cloudflare Workers
-      const response = await $fetch<AuthResponse>('/api/auth/register', {
-        method: 'POST',
-        body: { name, email, password }
-      })
-
-      const { user } = response
-
-      state.user = user
-
-      // Redirect to home
+      const response = await apiClient.register(name, email, password)
+      const user = (response as { user?: User })?.user
+      state.user = (user ?? null) as User | null
       await navigateTo('/')
     } finally {
       state.loading = false
@@ -80,7 +65,7 @@ export const useAuth = () => {
   // Logout function
   const logout = async () => {
     try {
-      await $fetch('/api/auth/logout', { method: 'POST' })
+      await apiClient.logout()
     } catch {
       // ignore errors on logout
     }
