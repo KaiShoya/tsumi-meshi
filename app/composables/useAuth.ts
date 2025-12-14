@@ -16,8 +16,6 @@ export interface AuthState {
   loading: boolean
 }
 
-import { apiClient } from '~/utils/api/client'
-
 export const useAuth = () => {
   const state = reactive<AuthState>({
     user: null,
