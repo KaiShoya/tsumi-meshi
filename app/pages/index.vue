@@ -207,6 +207,16 @@
         </UButton>
       </div>
     </div>
+    <ConfirmModal
+      v-if="showConfirmModal"
+      :title="'本当に削除しますか？'"
+      :message="`『${confirmTargetTitle}』を削除すると元に戻せません。`"
+      confirm-label="削除する"
+      cancel-label="キャンセル"
+      :loading="deleting"
+      @confirm="performDelete"
+      @close="showConfirmModal = false"
+    />
   </div>
 </template>
 
@@ -219,6 +229,9 @@ import { apiClient } from '~/utils/api/client'
 import { useRecipesStore } from '~/stores/data/recipes'
 import { useAppToast } from '~/composables/useAppToast'
 import { useLogger } from '~/composables/useLogger'
+import { useAuth } from '~/composables/useAuth'
+import { ref, computed, onMounted } from 'vue'
+import ConfirmModal from '~/components/ConfirmModal.vue'
 
 // Data
 const searchQuery = ref('')
@@ -233,6 +246,12 @@ const recipesStore = useRecipesPageStore()
 const recipesStoreData = useRecipesStore()
 const { showDangerToast } = useAppToast()
 const recipes = computed(() => recipesStoreData.recipes)
+
+// Confirmation modal state
+const showConfirmModal = ref(false)
+const confirmTargetId = ref<number | null>(null)
+const confirmTargetTitle = ref('')
+const deleting = ref(false)
 
 // Methods
 const handleSearch = useDebounceFn(async () => {
@@ -266,8 +285,27 @@ const toggleCheck = async (recipe: Recipe) => {
 }
 
 const deleteRecipe = async (recipe: Recipe) => {
-  // TODO: Show confirmation dialog
-  await recipesStore.deleteRecipe(recipe.id, recipe.title)
+  // open confirmation dialog
+  confirmTargetId.value = recipe.id
+  confirmTargetTitle.value = recipe.title
+  showConfirmModal.value = true
+}
+
+const performDelete = async () => {
+  if (confirmTargetId.value == null) return
+  deleting.value = true
+  try {
+    await recipesStore.deleteRecipe(confirmTargetId.value, confirmTargetTitle.value)
+    showConfirmModal.value = false
+  } catch (err: unknown) {
+    const logger = useLogger()
+    logger.error('Failed to delete recipe', { module: 'indexPage', recipeId: confirmTargetId.value }, err instanceof Error ? err : new Error(String(err)))
+    showDangerToast('レシピの削除に失敗しました')
+  } finally {
+    deleting.value = false
+    confirmTargetId.value = null
+    confirmTargetTitle.value = ''
+  }
 }
 
 // Lifecycle
