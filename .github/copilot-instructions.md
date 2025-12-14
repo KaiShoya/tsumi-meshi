@@ -44,6 +44,7 @@ Avoid inline styling; use NuxtUI / Tailwind CSS / styled-components
 - Prefer test-driven development (TDD) when modifying core logic.
 - Include mocks/stubs for third-party services.
 - When adding tests, include a `tests/setup.ts` (or equivalent) for global setup (e.g., Pinia initialization), add a `test` script to `package.json`, and list any new test dependencies in the PR description so CI can install them.
+- Ensure CI runs `pnpm lint`, `pnpm typecheck`, and `pnpm test -- --run` on PRs; add a GitHub Actions workflow named `CI` to accomplish this.
 
 # パターンとベストプラクティス
 
