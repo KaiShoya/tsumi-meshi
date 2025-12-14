@@ -27,6 +27,18 @@ for p in "${CODE_PATTERNS[@]}"; do
 done
 
 if [ "$NEEDS_SPECS" = true ]; then
+  # If this is a release branch PR, require CHANGELOG.md to be updated
+  HEAD_REF=$(jq -r '.pull_request.head.ref' "$GITHUB_EVENT_PATH" 2>/dev/null || echo "")
+  if [[ "$HEAD_REF" == release/* ]]; then
+    if echo "$CHANGED_FILES" | grep -E "^CHANGELOG.md" >/dev/null; then
+      echo "Release PR includes CHANGELOG.md update — OK"
+      exit 0
+    else
+      echo "ERROR: Release PR detected ('$HEAD_REF') but CHANGELOG.md was not updated. Please add a changelog entry."
+      exit 1
+    fi
+  fi
+
   # Check if any specs/docs/tasks/CHANGELOG updated
   if echo "$CHANGED_FILES" | grep -E "^\.agent/specs/|^\.agent/docs/|^CHANGELOG.md|^\.agent/docs/tasks/" >/dev/null; then
     echo "Specs/docs/tasks/CHANGELOG updated alongside code changes — OK"
