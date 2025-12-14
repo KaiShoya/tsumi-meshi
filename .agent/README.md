@@ -41,6 +41,11 @@
 - タスクに Issue/PR/Commit のリンクを記載したか。
 - PR 本文に「ドキュメント更新」セクションを含めたか。
 
+## 強制ルール（自動化）
+- **ルール**: コードの変更は必ず関連する `specs` / `docs` / `tasks` を同一 PR で更新すること。
+- もし更新できない場合は、PR に `spec-exception` ラベルを付け、`.agent/docs/QA_AND_DECISIONS.md` に理由と次のアクションを記載すること。
+- CI ワークフローにより PR がコード変更を含むと自動検出された場合、対応する `specs`/`docs` の差分がなければ CI が失敗（または警告）します。
+
 ## 参照
 - プロジェクト固有の詳細ガイド: [`.github/copilot-instructions.md`](../.github/copilot-instructions.md)
 - 運用フロー詳細: [`.github/agent-documentation-workflow.md`](../.github/agent-documentation-workflow.md)

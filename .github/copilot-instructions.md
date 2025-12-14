@@ -89,7 +89,21 @@ Avoid inline styling; use NuxtUI / Tailwind CSS / styled-components
   - 更新された `.agent/specs/*` の差分
   - `CHANGELOG.md` の該当エントリ
   - `pnpm-lock.yaml` の更新（もし依存を変更/追加した場合）
-  - CI が通ること（`pnpm install --frozen-lockfile`, lint, typecheck, tests）
+  - CI が通ること（`pnpm install --frozen-lockfile', lint, typecheck, tests）
+
+## Documentation Sync Rules (for Copilot/Agents)
+
+- **Mandatory**: When generating or modifying code (repositories, stores, API, pages, components), you MUST in the same PR:
+  - Update the relevant `.agent/specs/*` (API or behavioral changes), or
+  - Update `.agent/docs/*` / `.agent/docs/tasks/*` to record decisions and task status, and/or
+  - Add/Update `CHANGELOG.md` when the change affects release notes.
+- **If you cannot update specs/docs in the same PR**: add a `spec-exception` label to the PR and create a QA entry under `.agent/docs/qa/vX.Y-qa.md` describing the reason and the owner/date for follow-up.
+- **CI Enforcement**: The repository includes a `Specs Check` workflow which will fail the PR if code/API changes are detected without corresponding updates to `specs`/`docs`/`tasks`/`CHANGELOG.md`, unless `spec-exception` is present.
+- **Tasks**: When you finish work, update the appropriate `tasks/vX.Y-tasks.md` to reflect progress (`- [x]` and add `completed`, `pr`, `commit` fields as needed).
+- **QA**: If design/behavioral ambiguity arises during implementation, immediately add an entry to `.agent/docs/qa/*` describing the question, options considered, and the decision or owner for making the decision.
+
+These rules are enforced by PR template and a CI check; follow them strictly when authoring PRs or when assisting as an automated agent.
+
 
 ## SFCの `<spec>` カスタムブロック運用
 
