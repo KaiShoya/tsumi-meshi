@@ -26,7 +26,7 @@ export const useAuth = () => {
   const initAuth = async () => {
     state.loading = true
     try {
-      const globalAny = globalThis as unknown as { $fetch?: (...args: any[]) => Promise<any> }
+      const globalAny = globalThis as unknown as { $fetch?: (...args: unknown[]) => Promise<unknown> }
       if (typeof globalAny.$fetch === 'function') {
         const res = await globalAny.$fetch('/api/auth/me')
         state.user = (res as { user?: User | null })?.user ?? null
@@ -46,7 +46,7 @@ export const useAuth = () => {
   const login = async (email: string, password: string) => {
     state.loading = true
     try {
-      const globalAny = globalThis as unknown as { $fetch?: (...args: any[]) => Promise<any> }
+      const globalAny = globalThis as unknown as { $fetch?: (...args: unknown[]) => Promise<unknown> }
       if (typeof globalAny.$fetch === 'function') {
         const response = await globalAny.$fetch('/api/auth/login', { method: 'POST', body: { email, password } })
         const user = (response as { user?: User })?.user
@@ -66,7 +66,7 @@ export const useAuth = () => {
   const register = async (name: string, email: string, password: string) => {
     state.loading = true
     try {
-      const globalAny = globalThis as unknown as { $fetch?: (...args: any[]) => Promise<any> }
+      const globalAny = globalThis as unknown as { $fetch?: (...args: unknown[]) => Promise<unknown> }
       if (typeof globalAny.$fetch === 'function') {
         const response = await globalAny.$fetch('/api/auth/register', { method: 'POST', body: { name, email, password } })
         const user = (response as { user?: User })?.user
@@ -85,7 +85,7 @@ export const useAuth = () => {
   // Logout function
   const logout = async () => {
     try {
-      const globalAny = globalThis as unknown as { $fetch?: (...args: any[]) => Promise<any> }
+      const globalAny = globalThis as unknown as { $fetch?: (...args: unknown[]) => Promise<unknown> }
       if (typeof globalAny.$fetch === 'function') {
         await globalAny.$fetch('/api/auth/logout', { method: 'POST' })
       } else {
