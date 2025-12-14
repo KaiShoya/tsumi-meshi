@@ -29,6 +29,26 @@ Handles folder hierarchy operations.
 - `delete(id: number, userId: number): Promise<void>`
 - `getHierarchy(userId: number): Promise<FolderTree[]>`
 
+### Folder API Endpoints
+The Workers API exposes folder-related endpoints. All endpoints require authentication (JWT).
+
+- `GET /folders`
+  - Response: `{ folders: Folder[] }` (flat list)
+- `GET /folders/hierarchy`
+  - Response: `{ folders: FolderTree[] }` (nested hierarchy)
+- `POST /folders`
+  - Request body: `{ name: string, parentId?: number | null }`
+  - Response: `{ folder: Folder }`
+- `PUT /folders/:id`
+  - Request body: `{ name?: string, parentId?: number | null }`
+  - Response: `{ folder: Folder }`
+- `DELETE /folders/:id`
+  - Response: `{ success: true }`
+
+Notes:
+- API responses use snake_case on the Workers side; repository and frontend map to camelCase types in code.
+- Integration tests for these endpoints should verify authentication, validation (e.g., missing name), and effects on `recipes.folder_id` when folders are deleted or moved.
+
 ### TagsRepository
 Handles tag management.
 
