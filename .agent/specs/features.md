@@ -33,7 +33,7 @@ Tsumi Meshi is a web application for managing recipes collected from YouTube and
   - Charts and summaries
 
 ### Search & Filter
-- Search by title, description
+- Search by title, description, URL
 - Filter by folder, tags, check status
 - Sort by creation date, title
 
