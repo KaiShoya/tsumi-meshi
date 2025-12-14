@@ -32,7 +32,9 @@
 
     <!-- Main Content -->
     <UMain>
-      <NuxtPage />
+      <NuxtLayout>
+        <NuxtPage />
+      </NuxtLayout>
     </UMain>
   </div>
 </template>
