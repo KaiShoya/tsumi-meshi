@@ -7,8 +7,8 @@
     <select
       id="folder-select"
       class="mt-1 block w-full rounded border-gray-300"
-      :value="modelValue"
-      @change="$emit('update:modelValue', (($event.target as HTMLSelectElement)?.value) ? Number(($event.target as HTMLSelectElement).value) : null)"
+    <select id="folder-select"
+      class="mt-1 block w-full rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
     >
       <option :value="null">
         — なし —
