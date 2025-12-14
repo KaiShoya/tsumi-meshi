@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
+    '@pinia/nuxt',
     '@nuxt/ui'
   ],
 
@@ -24,5 +25,18 @@ export default defineNuxtConfig({
         braceStyle: '1tbs'
       }
     }
-  }
+  },
+
+  vite: {
+    plugins: [
+      {
+        name: "vue-spec-plugin",
+        transform (_, id) {
+          if (/vue&type=spec/.test(id)) {
+            return `export default {}`;
+          }
+        },
+      },
+    ],
+  },
 })
