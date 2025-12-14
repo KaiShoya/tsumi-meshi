@@ -60,3 +60,18 @@ Small improvements, tests, and accessibility fixes ahead of v0.1.2 release.
 ---
 
 *Full details and tasks: see `.agent/docs/tasks/v0.1.1-tasks.md`.*
+
+## [v0.1.3] - 2025-12-14
+
+### Summary
+Minor completion of TODOs and API surface parity between client and server.
+
+### Added
+- Implemented `tags` and `recipes` data store API calls (`app/stores/data/tags.ts`, `app/stores/data/recipes.ts`) using `apiClient` and added unit tests.
+- Added global UI store (`app/stores/ui.ts`) to manage loading state used by page stores.
+
+### Changed
+- Updated `app/stores/pages/recipes.ts` to use global loading state.
+
+### Tests
+- Added `tests/stores/tags.spec.ts`, extended `tests/stores/recipes.spec.ts`, and added `tests/stores/ui.spec.ts`.
