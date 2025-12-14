@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { useRecipesStore } from '~/stores/data/recipes'
 import { useToast } from '~/composables/useToast'
-import { useLogger } from '~/composables/useLogger'
 import type { RecipeInput, RecipeUpdate } from '~/repositories/recipes'
 
 export const useRecipesPageStore = defineStore('recipesPage', () => {

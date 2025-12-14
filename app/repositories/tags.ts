@@ -25,7 +25,7 @@ export class TagsRepository {
         `SELECT * FROM tags WHERE user_id = ? ORDER BY name`,
         [userId]
       )
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to fetch tags')
     }
   }
@@ -36,7 +36,7 @@ export class TagsRepository {
         `SELECT * FROM tags WHERE id = ? AND user_id = ?`,
         [id, userId]
       )
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to fetch tag')
     }
   }
@@ -52,7 +52,7 @@ export class TagsRepository {
       if (!newTag) throw CustomError.databaseError('Failed to create tag')
 
       return newTag
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to create tag')
     }
   }
@@ -70,7 +70,7 @@ export class TagsRepository {
       if (!updatedTag) throw CustomError.databaseError('Failed to update tag')
 
       return updatedTag
-    } catch (error) {
+    } catch {
       if (error instanceof CustomError) throw error
       throw CustomError.databaseError('Failed to update tag')
     }
@@ -84,7 +84,7 @@ export class TagsRepository {
       )
 
       if (result.changes === 0) throw CustomError.notFound('Tag not found')
-    } catch (error) {
+    } catch {
       if (error instanceof CustomError) throw error
       throw CustomError.databaseError('Failed to delete tag')
     }
@@ -93,7 +93,7 @@ export class TagsRepository {
   async findOrCreate(name: string, userId: number): Promise<Tag> {
     try {
       // Try to find existing tag
-      let tag = await this.db.get<Tag>(
+      const tag = await this.db.get<Tag>(
         `SELECT * FROM tags WHERE user_id = ? AND name = ?`,
         [userId, name]
       )
@@ -102,7 +102,7 @@ export class TagsRepository {
 
       // Create new tag
       return await this.create({ name }, userId)
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to find or create tag')
     }
   }

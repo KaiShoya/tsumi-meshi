@@ -48,7 +48,10 @@
         </h2>
         <p class="mt-2 text-center text-sm text-gray-600">
           または
-          <NuxtLink to="/auth/login" class="font-medium text-primary-600 hover:text-primary-500">
+          <NuxtLink
+            to="/auth/login"
+            class="font-medium text-primary-600 hover:text-primary-500"
+          >
             ログイン
           </NuxtLink>
         </p>
@@ -60,7 +63,10 @@
         class="space-y-6"
         @submit="onSubmit"
       >
-        <UFormGroup label="名前" name="name">
+        <UFormGroup
+          label="名前"
+          name="name"
+        >
           <UInput
             v-model="state.name"
             placeholder="あなたの名前"
@@ -69,7 +75,10 @@
           />
         </UFormGroup>
 
-        <UFormGroup label="メールアドレス" name="email">
+        <UFormGroup
+          label="メールアドレス"
+          name="email"
+        >
           <UInput
             v-model="state.email"
             type="email"
@@ -79,7 +88,10 @@
           />
         </UFormGroup>
 
-        <UFormGroup label="パスワード" name="password">
+        <UFormGroup
+          label="パスワード"
+          name="password"
+        >
           <UInput
             v-model="state.password"
             type="password"
@@ -89,7 +101,10 @@
           />
         </UFormGroup>
 
-        <UFormGroup label="パスワード（確認）" name="confirmPassword">
+        <UFormGroup
+          label="パスワード（確認）"
+          name="confirmPassword"
+        >
           <UInput
             v-model="state.confirmPassword"
             type="password"
@@ -111,8 +126,13 @@
           </UButton>
         </div>
 
-        <div v-if="error" class="text-center">
-          <p class="text-sm text-red-600">{{ error }}</p>
+        <div
+          v-if="error"
+          class="text-center"
+        >
+          <p class="text-sm text-red-600">
+            {{ error }}
+          </p>
         </div>
       </UForm>
     </div>
@@ -120,19 +140,19 @@
 </template>
 
 <script setup lang="ts">
+import { z } from 'zod'
+import { useAuth } from '~/composables/useAuth'
+
 definePageMeta({
   layout: false
 })
-
-import { z } from 'zod'
-import { useAuth } from '~/composables/useAuth'
 
 const schema = z.object({
   name: z.string().min(1, '名前を入力してください'),
   email: z.string().email('有効なメールアドレスを入力してください'),
   password: z.string().min(6, 'パスワードは6文字以上で入力してください'),
   confirmPassword: z.string()
-}).refine((data) => data.password === data.confirmPassword, {
+}).refine(data => data.password === data.confirmPassword, {
   message: 'パスワードが一致しません',
   path: ['confirmPassword']
 })
@@ -157,8 +177,8 @@ const onSubmit = async (data: Schema) => {
 
   try {
     await register(data.name, data.email, data.password)
-  } catch (err: any) {
-    error.value = err.message || '登録に失敗しました'
+  } catch (err: unknown) {
+    error.value = err instanceof Error ? err.message : '登録に失敗しました'
   } finally {
     loading.value = false
   }

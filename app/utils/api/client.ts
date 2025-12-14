@@ -45,26 +45,26 @@ class ApiClient {
 
   // Auth endpoints
   async login(email: string, password: string) {
-    return this.request<{ user: any; token: string }>('/auth/login', {
+    return this.request<{ user: unknown, token: string }>('/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password })
     })
   }
 
   async register(name: string, email: string, password: string) {
-    return this.request<{ user: any; token: string }>('/auth/register', {
+    return this.request<{ user: unknown, token: string }>('/auth/register', {
       method: 'POST',
       body: JSON.stringify({ name, email, password })
     })
   }
 
   async getCurrentUser() {
-    return this.request<{ user: any }>('/auth/me')
+    return this.request<{ user: unknown }>('/auth/me')
   }
 
   // Recipe endpoints
   async getRecipes() {
-    return this.request<{ recipes: any[] }>('/recipes')
+    return this.request<{ recipes: unknown[] }>('/recipes')
   }
 
   async createRecipe(recipe: {
@@ -73,7 +73,7 @@ class ApiClient {
     description?: string
     folderId?: number
   }) {
-    return this.request<{ recipe: any }>('/recipes', {
+    return this.request<{ recipe: unknown }>('/recipes', {
       method: 'POST',
       body: JSON.stringify(recipe)
     })
@@ -85,7 +85,7 @@ class ApiClient {
     description?: string
     folderId?: number
   }>) {
-    return this.request<{ recipe: any }>(`/recipes/${id}`, {
+    return this.request<{ recipe: unknown }>(`/recipes/${id}`, {
       method: 'PUT',
       body: JSON.stringify(recipe)
     })

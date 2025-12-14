@@ -28,7 +28,7 @@ export class UsersRepository {
         `SELECT * FROM users WHERE email = ?`,
         [email]
       )
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to find user by email')
     }
   }
@@ -48,7 +48,7 @@ export class UsersRepository {
       if (!newUser) throw CustomError.databaseError('Failed to create user')
 
       return newUser
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to create user')
     }
   }
@@ -74,7 +74,7 @@ export class UsersRepository {
       if (!updatedUser) throw CustomError.databaseError('Failed to update user')
 
       return updatedUser
-    } catch (error) {
+    } catch {
       if (error instanceof CustomError) throw error
       throw CustomError.databaseError('Failed to update user')
     }

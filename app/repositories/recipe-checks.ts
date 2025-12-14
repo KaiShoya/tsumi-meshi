@@ -66,8 +66,8 @@ export class RecipeChecksRepository {
   async getStats(userId: number, period: 'month' | 'week' = 'month'): Promise<CheckStats> {
     try {
       const dateFilter = period === 'month'
-        ? "date('now', '-1 month')"
-        : "date('now', '-7 days')"
+        ? 'date(\'now\', \'-1 month\')'
+        : 'date(\'now\', \'-7 days\')'
 
       const [totalResult, periodResult] = await Promise.all([
         this.db.get<{ count: number }>(
@@ -89,7 +89,7 @@ export class RecipeChecksRepository {
         monthlyChecks: period === 'month' ? (periodResult?.count || 0) : 0,
         weeklyChecks: period === 'week' ? (periodResult?.count || 0) : 0
       }
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to get check statistics')
     }
   }

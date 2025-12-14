@@ -34,7 +34,7 @@ export class FoldersRepository {
         `SELECT * FROM folders WHERE user_id = ? ORDER BY name`,
         [userId]
       )
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to fetch folders')
     }
   }
@@ -45,7 +45,7 @@ export class FoldersRepository {
         `SELECT * FROM folders WHERE id = ? AND user_id = ?`,
         [id, userId]
       )
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to fetch folder')
     }
   }
@@ -61,7 +61,7 @@ export class FoldersRepository {
       if (!newFolder) throw CustomError.databaseError('Failed to create folder')
 
       return newFolder
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to create folder')
     }
   }
@@ -107,7 +107,7 @@ export class FoldersRepository {
     try {
       const folders = await this.fetchAll(userId)
       return this.buildHierarchy(folders)
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to get folder hierarchy')
     }
   }
@@ -117,12 +117,12 @@ export class FoldersRepository {
     const roots: FolderTree[] = []
 
     // Create folder map
-    folders.forEach(folder => {
+    folders.forEach((folder) => {
       folderMap.set(folder.id, { ...folder, children: [] })
     })
 
     // Build hierarchy
-    folders.forEach(folder => {
+    folders.forEach((folder) => {
       const folderTree = folderMap.get(folder.id)!
       if (folder.parentId) {
         const parent = folderMap.get(folder.parentId)

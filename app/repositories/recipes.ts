@@ -60,7 +60,7 @@ export class RecipesRepository {
       )
 
       return recipesWithDetails
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to fetch recipes')
     }
   }
@@ -75,7 +75,7 @@ export class RecipesRepository {
       if (!recipe) return null
 
       return await this.loadRecipeDetails(recipe)
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to fetch recipe')
     }
   }
@@ -92,7 +92,7 @@ export class RecipesRepository {
       if (!newRecipe) throw CustomError.databaseError('Failed to create recipe')
 
       return newRecipe
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to create recipe')
     }
   }
@@ -117,7 +117,7 @@ export class RecipesRepository {
       if (!updatedRecipe) throw CustomError.databaseError('Failed to update recipe')
 
       return updatedRecipe
-    } catch (error) {
+    } catch {
       if (error instanceof CustomError) throw error
       throw CustomError.databaseError('Failed to update recipe')
     }
@@ -131,7 +131,7 @@ export class RecipesRepository {
       )
 
       if (result.changes === 0) throw CustomError.notFound('Recipe not found')
-    } catch (error) {
+    } catch {
       if (error instanceof CustomError) throw error
       throw CustomError.databaseError('Failed to delete recipe')
     }
@@ -146,7 +146,7 @@ export class RecipesRepository {
       )
 
       return await Promise.all(recipes.map(recipe => this.loadRecipeDetails(recipe)))
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to search recipes')
     }
   }
@@ -159,7 +159,7 @@ export class RecipesRepository {
       )
 
       return await Promise.all(recipes.map(recipe => this.loadRecipeDetails(recipe)))
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to filter recipes by folder')
     }
   }
@@ -176,7 +176,7 @@ export class RecipesRepository {
       )
 
       return await Promise.all(recipes.map(recipe => this.loadRecipeDetails(recipe)))
-    } catch (error) {
+    } catch {
       throw CustomError.databaseError('Failed to filter recipes by tags')
     }
   }

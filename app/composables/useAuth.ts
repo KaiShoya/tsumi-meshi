@@ -19,7 +19,7 @@ export const useAuth = () => {
 
   // Initialize auth state from localStorage
   const initAuth = () => {
-    if (process.client) {
+    if (import.meta.client) {
       const token = localStorage.getItem('auth_token')
       const userStr = localStorage.getItem('auth_user')
 
@@ -28,7 +28,7 @@ export const useAuth = () => {
           const user = JSON.parse(userStr)
           state.token = token
           state.user = user
-        } catch (error) {
+        } catch {
           // Invalid stored data, clear it
           clearAuth()
         }
@@ -52,15 +52,13 @@ export const useAuth = () => {
       state.token = token
 
       // Store in localStorage
-      if (process.client) {
+      if (import.meta.client) {
         localStorage.setItem('auth_token', token)
         localStorage.setItem('auth_user', JSON.stringify(user))
       }
 
       // Redirect to home
       await navigateTo('/')
-    } catch (error) {
-      throw error
     } finally {
       state.loading = false
     }
@@ -82,15 +80,13 @@ export const useAuth = () => {
       state.token = token
 
       // Store in localStorage
-      if (process.client) {
+      if (import.meta.client) {
         localStorage.setItem('auth_token', token)
         localStorage.setItem('auth_user', JSON.stringify(user))
       }
 
       // Redirect to home
       await navigateTo('/')
-    } catch (error) {
-      throw error
     } finally {
       state.loading = false
     }
@@ -107,7 +103,7 @@ export const useAuth = () => {
     state.user = null
     state.token = null
 
-    if (process.client) {
+    if (import.meta.client) {
       localStorage.removeItem('auth_token')
       localStorage.removeItem('auth_user')
     }

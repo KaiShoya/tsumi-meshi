@@ -45,7 +45,10 @@
         </h2>
         <p class="mt-2 text-center text-sm text-gray-600">
           または
-          <NuxtLink to="/auth/register" class="font-medium text-primary-600 hover:text-primary-500">
+          <NuxtLink
+            to="/auth/register"
+            class="font-medium text-primary-600 hover:text-primary-500"
+          >
             新規登録
           </NuxtLink>
         </p>
@@ -57,7 +60,10 @@
         class="space-y-6"
         @submit="onSubmit"
       >
-        <UFormGroup label="メールアドレス" name="email">
+        <UFormGroup
+          label="メールアドレス"
+          name="email"
+        >
           <UInput
             v-model="state.email"
             type="email"
@@ -67,7 +73,10 @@
           />
         </UFormGroup>
 
-        <UFormGroup label="パスワード" name="password">
+        <UFormGroup
+          label="パスワード"
+          name="password"
+        >
           <UInput
             v-model="state.password"
             type="password"
@@ -89,8 +98,13 @@
           </UButton>
         </div>
 
-        <div v-if="error" class="text-center">
-          <p class="text-sm text-red-600">{{ error }}</p>
+        <div
+          v-if="error"
+          class="text-center"
+        >
+          <p class="text-sm text-red-600">
+            {{ error }}
+          </p>
         </div>
       </UForm>
     </div>
@@ -98,13 +112,12 @@
 </template>
 
 <script setup lang="ts">
+import { z } from 'zod'
+import { useAuth } from '~/composables/useAuth'
+
 definePageMeta({
   layout: false
 })
-
-import { z } from 'zod'
-import { apiClient } from '~/utils/api/client'
-import { useAuth } from '~/composables/useAuth'
 
 const schema = z.object({
   email: z.string().email('有効なメールアドレスを入力してください'),
@@ -129,8 +142,8 @@ const onSubmit = async (data: Schema) => {
 
   try {
     await login(data.email, data.password)
-  } catch (err: any) {
-    error.value = err.message || 'ログインに失敗しました'
+  } catch (err: unknown) {
+    error.value = err instanceof Error ? err.message : 'ログインに失敗しました'
   } finally {
     loading.value = false
   }

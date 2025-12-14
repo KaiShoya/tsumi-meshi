@@ -3,8 +3,14 @@
     <!-- Navigation -->
     <UHeader>
       <template #left>
-        <NuxtLink to="/" class="flex items-center space-x-2">
-          <UIcon name="i-lucide-book-open" class="h-6 w-6" />
+        <NuxtLink
+          to="/"
+          class="flex items-center space-x-2"
+        >
+          <UIcon
+            name="i-lucide-book-open"
+            class="h-6 w-6"
+          />
           <span class="font-bold text-lg">積み飯</span>
         </NuxtLink>
       </template>

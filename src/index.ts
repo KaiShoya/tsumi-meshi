@@ -18,7 +18,7 @@ app.use('*', logger())
 const jwtMiddleware = jwt({ secret: 'JWT_SECRET' })
 
 // Health check
-app.get('/health', (c) => c.json({ status: 'ok' }))
+app.get('/health', c => c.json({ status: 'ok' }))
 
 // Auth routes
 app.post('/auth/register', async (c) => {
@@ -39,11 +39,7 @@ app.post('/auth/register', async (c) => {
       return c.json({ error: 'User already exists' }, 409)
     }
 
-    // Hash password (simplified for demo)
-    const passwordHash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(password))
-    const passwordHashHex = Array.from(new Uint8Array(passwordHash))
-      .map(b => b.toString(16).padStart(2, '0'))
-      .join('')
+    // Hash password (simplified for demo - not stored for demo purposes)
 
     // Create user
     const result = await c.env.DB.prepare(
@@ -91,12 +87,7 @@ app.post('/auth/login', async (c) => {
       return c.json({ error: 'Invalid credentials' }, 401)
     }
 
-    // Verify password (simplified for demo)
-    const passwordHash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(password))
-    const passwordHashHex = Array.from(new Uint8Array(passwordHash))
-      .map(b => b.toString(16).padStart(2, '0'))
-      .join('')
-
+    // Verify password (simplified for demo - not verified for demo purposes)
     // In real implementation, compare with stored hash
     // For demo, we'll accept any password for existing users
 
@@ -175,7 +166,7 @@ app.post('/recipes', jwtMiddleware, async (c) => {
 })
 
 // Helper function to create JWT (simplified)
-async function createJWT(header: any, payload: any, secret: string): Promise<string> {
+async function createJWT(header: Record<string, unknown>, payload: Record<string, unknown>, secret: string): Promise<string> {
   const encoder = new TextEncoder()
   const headerB64 = btoa(JSON.stringify(header))
   const payloadB64 = btoa(JSON.stringify(payload))

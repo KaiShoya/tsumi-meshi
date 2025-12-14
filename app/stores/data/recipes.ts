@@ -11,55 +11,37 @@ export const useRecipesStore = defineStore('recipes', () => {
       // TODO: Implement API call to Cloudflare Workers
       // recipes.value = await $recipesRepository.fetchAll(getCurrentUserId())
       recipes.value = [] // Placeholder
-    } catch (error) {
-      throw error
     } finally {
       loading.value = false
     }
   }
 
   const createRecipe = async (recipe: RecipeInput) => {
-    try {
-      // TODO: Implement API call
-      // const newRecipe = await $recipesRepository.create(recipe, getCurrentUserId())
-      // recipes.value.push(newRecipe)
-      console.log('Create recipe:', recipe)
-    } catch (error) {
-      throw error
-    }
+    // TODO: Implement API call
+    // const newRecipe = await $recipesRepository.create(recipe, getCurrentUserId())
+    // recipes.value.push(newRecipe)
+    console.log('Create recipe:', recipe)
   }
 
   const updateRecipe = async (id: number, recipe: RecipeUpdate) => {
-    try {
-      // TODO: Implement API call
-      // const updatedRecipe = await $recipesRepository.update(id, recipe, getCurrentUserId())
-      // const index = recipes.value.findIndex(r => r.id === id)
-      // if (index !== -1) recipes.value[index] = updatedRecipe
-      console.log('Update recipe:', id, recipe)
-    } catch (error) {
-      throw error
-    }
+    // TODO: Implement API call
+    // const updatedRecipe = await $recipesRepository.update(id, recipe, getCurrentUserId())
+    // const index = recipes.value.findIndex(r => r.id === id)
+    // if (index !== -1) recipes.value[index] = updatedRecipe
+    console.log('Update recipe:', id, recipe)
   }
 
   const deleteRecipe = async (id: number) => {
-    try {
-      // TODO: Implement API call
-      // await $recipesRepository.delete(id, getCurrentUserId())
-      // recipes.value = recipes.value.filter(r => r.id !== id)
-      console.log('Delete recipe:', id)
-    } catch (error) {
-      throw error
-    }
+    // TODO: Implement API call
+    // await $recipesRepository.delete(id, getCurrentUserId())
+    // recipes.value = recipes.value.filter(r => r.id !== id)
+    console.log('Delete recipe:', id)
   }
 
   const searchRecipes = async (query: string) => {
-    try {
-      // TODO: Implement API call
-      // recipes.value = await $recipesRepository.search(query, getCurrentUserId())
-      console.log('Search recipes:', query)
-    } catch (error) {
-      throw error
-    }
+    // TODO: Implement API call
+    // recipes.value = await $recipesRepository.search(query, getCurrentUserId())
+    console.log('Search recipes:', query)
   }
 
   return {

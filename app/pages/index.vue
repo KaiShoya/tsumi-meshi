@@ -42,7 +42,9 @@
   <div class="space-y-6">
     <!-- Header -->
     <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold">レシピ一覧</h1>
+      <h1 class="text-2xl font-bold">
+        レシピ一覧
+      </h1>
       <UButton
         icon="i-lucide-plus"
         size="lg"
@@ -80,7 +82,10 @@
     </div>
 
     <!-- Recipe Grid -->
-    <div v-if="recipes.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div
+      v-if="recipes.length > 0"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+    >
       <UCard
         v-for="recipe in recipes"
         :key="recipe.id"
@@ -88,17 +93,25 @@
         @click="navigateTo(`/recipes/${recipe.id}`)"
       >
         <div class="space-y-3">
-          <div v-if="recipe.imageUrl" class="aspect-video rounded-lg overflow-hidden">
+          <div
+            v-if="recipe.imageUrl"
+            class="aspect-video rounded-lg overflow-hidden"
+          >
             <img
               :src="recipe.imageUrl"
               :alt="recipe.title"
               class="w-full h-full object-cover"
-            />
+            >
           </div>
 
           <div>
-            <h3 class="font-semibold text-lg line-clamp-2">{{ recipe.title }}</h3>
-            <p v-if="recipe.description" class="text-sm text-gray-600 line-clamp-2 mt-1">
+            <h3 class="font-semibold text-lg line-clamp-2">
+              {{ recipe.title }}
+            </h3>
+            <p
+              v-if="recipe.description"
+              class="text-sm text-gray-600 line-clamp-2 mt-1"
+            >
               {{ recipe.description }}
             </p>
           </div>
@@ -155,10 +168,20 @@
     </div>
 
     <!-- Empty State -->
-    <div v-else class="text-center py-12">
-      <UIcon name="i-lucide-book-open" class="mx-auto h-12 w-12 text-gray-400" />
-      <h3 class="mt-2 text-sm font-semibold text-gray-900">レシピがありません</h3>
-      <p class="mt-1 text-sm text-gray-500">最初のレシピを作成しましょう。</p>
+    <div
+      v-else
+      class="text-center py-12"
+    >
+      <UIcon
+        name="i-lucide-book-open"
+        class="mx-auto h-12 w-12 text-gray-400"
+      />
+      <h3 class="mt-2 text-sm font-semibold text-gray-900">
+        レシピがありません
+      </h3>
+      <p class="mt-1 text-sm text-gray-500">
+        最初のレシピを作成しましょう。
+      </p>
       <div class="mt-6">
         <UButton
           icon="i-lucide-plus"
