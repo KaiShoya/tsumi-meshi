@@ -1,0 +1,26 @@
+{
+  "app": {
+    "title": "積み飯"
+  },
+  "folders": {
+    "title": "フォルダ管理",
+    "create": "新規フォルダ作成",
+    "namePlaceholder": "フォルダ名",
+    "noFolders": "フォルダがありません。新しいフォルダを作成しましょう！",
+    "adding": "追加"
+  },
+  "tags": {
+    "title": "タグ管理",
+    "create": "追加"
+  },
+  "checks": {
+    "title": "チェック統計"
+  },
+  "common": {
+    "cancel": "キャンセル",
+    "save": "保存",
+    "delete": "削除",
+    "confirm": "確認",
+    "create": "作成"
+  }
+}

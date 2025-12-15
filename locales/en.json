@@ -1,0 +1,26 @@
+{
+  "app": {
+    "title": "Tsumi-Meshi"
+  },
+  "folders": {
+    "title": "Folders",
+    "create": "Create folder",
+    "namePlaceholder": "Folder name",
+    "noFolders": "No folders yet. Create one!",
+    "adding": "Add"
+  },
+  "tags": {
+    "title": "Tags",
+    "create": "Add"
+  },
+  "checks": {
+    "title": "Check Stats"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "create": "Create"
+  }
+}

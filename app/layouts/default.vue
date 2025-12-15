@@ -17,6 +17,7 @@
 
       <template #right>
         <div class="flex items-center space-x-4">
+          <LanguageSwitcher />
           <span class="text-sm text-gray-600">{{ user?.name }}</span>
           <UButton
             icon="i-lucide-log-out"
