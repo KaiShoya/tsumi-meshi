@@ -35,7 +35,7 @@ export default defineNuxtConfig({
               const m = src.match(/<spec\s+lang=["']md["'][^>]*>([\s\S]*?)<\/spec>/)
               const content = m ? m[1].trim() : ''
               return `export default ${JSON.stringify(content)}`
-            } catch (e) {
+            } catch {
               // If reading fails, return empty spec to avoid breaking the build
               return `export default ${JSON.stringify('')}`
             }
