@@ -3,6 +3,8 @@ import ja from '../../locales/ja.json'
 import en from '../../locales/en.json'
 import { LOCALES, DEFAULT_LOCALE, type Locale } from '../../utils/locales'
 
+// Keep runtime checks lightweight to avoid Node-specific globals in browser/SSR/test
+
 const messages: Record<Locale, Record<string, unknown>> = {
   ja,
   en
@@ -13,7 +15,9 @@ export const useI18n = () => {
 
   onMounted(() => {
     try {
-      const stored = localStorage.getItem('locale')
+      // In test environment, keep DEFAULT_LOCALE to avoid depending on JSDOM navigator
+      if (typeof import.meta !== 'undefined' && (import.meta as unknown as { env?: Record<string, string> }).env?.MODE === 'test') return
+      const stored = (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') ? window.localStorage.getItem('locale') : null
       if (stored && LOCALES.includes(stored as Locale)) {
         locale.value = stored as Locale
         return

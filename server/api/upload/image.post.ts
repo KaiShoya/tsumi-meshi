@@ -29,9 +29,7 @@ export default defineEventHandler(async (event) => {
   try {
     // Dynamic import so package is optional for devs who don't need this feature yet
 
-    // @ts-ignore - optional dependency may not be installed in all environments
     const awsS3Module = (await import('@aws-sdk/client-s3')) as unknown
-    // @ts-ignore - optional dependency may not be installed in all environments
     const presignerModule = (await import('@aws-sdk/s3-request-presigner')) as unknown
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { S3Client, PutObjectCommand } = awsS3Module as { S3Client: any, PutObjectCommand: any }

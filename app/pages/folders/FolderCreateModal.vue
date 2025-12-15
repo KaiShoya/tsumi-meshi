@@ -49,6 +49,7 @@
 
 <script setup lang="ts">
 import type { FolderInput } from '~/repositories/folders'
+import { useI18n } from '~/composables/useI18n'
 
 defineProps<{ modelValue: boolean }>()
 const emit = defineEmits<{
