@@ -45,6 +45,34 @@ The Workers API exposes folder-related endpoints. All endpoints require authenti
 - `DELETE /folders/:id`
   - Response: `{ success: true }`
 
+### Upload API Endpoints
+
+These endpoints support client-side uploads to Cloudflare R2 via server-generated presigned URLs.
+
+- `POST /api/upload/image`
+  - Purpose: Generate upload metadata or presigned URL for the client to upload an image file to R2.
+  - Request body (JSON):
+    - `name` (string, required): original filename
+    - `size` (number, required): file size in bytes
+    - `type` (string, optional): MIME type
+  - Validation:
+    - Max size: 5 * 1024 * 1024 (5MB)
+    - Allowed MIME types: `image/jpeg`, `image/png`, `image/webp`
+  - Response (success):
+    - Option A (presigned PUT): `{ url: string, key: string, expiresIn: number }`
+    - Option B (presigned POST): `{ url: string, fields: Record<string,string>, key: string, expiresIn: number }`
+    - Option C (server-upload proxies): `{ ok: true, key: string }` (not preferred)
+  - Response (error): standard H3 error structure with `statusCode` and `data.message`.
+  - Notes: The server is responsible for generating a secure, short-lived presigned URL using R2 credentials. The client will PUT/POST the file directly to R2 and then send the resulting `key` back to the app when saving the recipe.
+
+Security and Billing:
+- Authenticate requests to `/api/upload/image` (user must be signed in).
+- Enforce file size and type limits server-side.
+- Consider virus scanning or image sanitization if accepting uploads from untrusted sources.
+
+Integration:
+- Repositories and page stores that save recipes should accept an `imageKey` or `imageUrl` returned after upload and persist it on the recipe record. The URL served in the UI can be constructed as `https://<account>.r2.cloudflarestorage.com/<bucket>/<key>` or via a CDN domain.
+
 Notes:
 - API responses use snake_case on the Workers side; repository and frontend map to camelCase types in code.
 - Integration tests for these endpoints should verify authentication, validation (e.g., missing name), and effects on `recipes.folder_id` when folders are deleted or moved.
