@@ -54,7 +54,10 @@
       </UForm>
     </UCard>
 
-    <div v-else class="text-center py-8">
+    <div
+      v-else
+      class="text-center py-8"
+    >
       {{ t('recipes.loading') || 'Loading...' }}
     </div>
   </div>
@@ -73,19 +76,24 @@ const router = useRouter()
 const id = Number(route.params.id)
 const loaded = ref(false)
 const imageKey = ref<string | null>(null)
-const form = reactive({ title: '', url: '', description: '', folderId: undefined })
+type FormType = { title: string; url: string; description: string; folderId?: number | undefined }
+const form = reactive<FormType>({ title: '', url: '', description: '', folderId: undefined })
 
 onMounted(async () => {
   try {
-    const res = await $fetch(`/api/recipes/${id}`)
-    // @ts-expect-error - runtime shape from server
+    const res = await $fetch(`/api/recipes/${id}`) as { recipe?: Record<string, unknown> | null }
     const recipe = res.recipe
     if (recipe) {
-      form.title = recipe.title ?? ''
-      form.url = recipe.url ?? ''
-      form.description = recipe.description ?? ''
-      form.folderId = recipe.folder_id ?? undefined
-      imageKey.value = recipe.image_url ?? null
+      const r = recipe as Record<string, unknown>
+      form.title = typeof r.title === 'string' ? r.title : ''
+      form.url = typeof r.url === 'string' ? r.url : ''
+      form.description = typeof r.description === 'string' ? r.description : ''
+      form.folderId = typeof r.folderId === 'number'
+        ? (r.folderId as number)
+        : (typeof r.folder_id === 'number' ? (r.folder_id as number) : undefined)
+      imageKey.value = typeof r.imageUrl === 'string'
+        ? (r.imageUrl as string)
+        : (typeof r.image_url === 'string' ? (r.image_url as string) : null)
     }
   } catch (err) {
     console.error(err)
