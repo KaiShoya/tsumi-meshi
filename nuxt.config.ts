@@ -23,10 +23,24 @@ export default defineNuxtConfig({
     plugins: [
       {
         name: 'vue-spec-plugin',
-        transform(_, id) {
-          if (/vue&type=spec/.test(id)) {
-            return `export default {}`
+        enforce: 'pre',
+        async load(id) {
+          // Intercept SFC custom <spec lang="md"> blocks which Vite exposes
+          // as virtual modules like `file.vue?vue&type=spec&index=0&lang.md`.
+          if (id.includes('?vue&type=spec') && id.includes('&lang.md')) {
+            const fs = await import('fs')
+            const file = id.split('?')[0]
+            try {
+              const src = fs.readFileSync(file, 'utf-8')
+              const m = src.match(/<spec\s+lang=["']md["'][^>]*>([\s\S]*?)<\/spec>/)
+              const content = m ? m[1].trim() : ''
+              return `export default ${JSON.stringify(content)}`
+            } catch (e) {
+              // If reading fails, return empty spec to avoid breaking the build
+              return `export default ${JSON.stringify('')}`
+            }
           }
+          return null
         }
       }
     ]
