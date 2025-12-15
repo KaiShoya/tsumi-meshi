@@ -24,9 +24,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, unref, type Ref } from 'vue'
 import { useFoldersStore } from '~/stores/data/folders'
 import type { Folder } from '~/repositories/folders'
+
+type FoldersStoreLike = {
+  fetchFolders?: () => Promise<void>
+  folders?: Folder[] | Ref<Folder[]>
+}
 
 defineProps<{ modelValue?: number | null }>()
 defineEmits(['update:modelValue'])
@@ -34,14 +39,18 @@ defineEmits(['update:modelValue'])
 const store = useFoldersStore()
 
 onMounted(async () => {
-  await store.fetchFolders()
+  const s = store as unknown as FoldersStoreLike
+  if (s && typeof s.fetchFolders === 'function') {
+    await s.fetchFolders()
+  }
 })
 
 const flattened = computed(() => {
   // simple flatten: no hierarchy required for select, just show depth if children present
   const res: { id: number, name: string, level: number }[] = []
   const map = new Map<number, Readonly<Folder>>()
-  store.folders.forEach(f => map.set(f.id, f as unknown as Folder))
+  const storeFolders = unref(((store as unknown) as FoldersStoreLike)?.folders) || []
+  storeFolders.forEach((f: Folder) => map.set(f.id, f as Readonly<Folder>))
 
   const addWithLevel = (f: Readonly<Folder>, level = 0) => {
     res.push({ id: f.id, name: f.name, level })
@@ -51,16 +60,16 @@ const flattened = computed(() => {
   }
 
   // Build hierarchy from flat list if children not present
-  const hasChildrenFlag = store.folders.some(f => f.parentId)
+  const hasChildrenFlag = storeFolders.some((f: Folder) => !!(f as Folder).parentId)
   if (!hasChildrenFlag) {
-    store.folders.forEach(f => res.push({ id: f.id, name: f.name, level: 0 }))
+    storeFolders.forEach((f: Folder) => res.push({ id: f.id, name: f.name, level: 0 }))
     return res
   }
 
   // Build simple tree
   const roots: Folder[] = []
   const nodes = new Map<number, Folder & { children?: Folder[] }>()
-  store.folders.forEach(f => nodes.set(f.id, { ...f, children: [] }))
+  storeFolders.forEach((f: Folder) => nodes.set(f.id, { ...f, children: [] }))
   nodes.forEach((n) => {
     if (n.parentId && nodes.has(n.parentId)) nodes.get(n.parentId)!.children!.push(n)
     else roots.push(n)
