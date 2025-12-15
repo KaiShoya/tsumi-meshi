@@ -195,6 +195,42 @@ app.post('/recipes', jwtMiddleware, async (c) => {
   }
 })
 
+// Get recipe by id
+app.get('/recipes/:id', jwtMiddleware, async (c) => {
+  try {
+    const payload = c.get('jwtPayload')
+    const userId = payload.userId
+    const recipeId = Number(c.req.param('id'))
+    const recipe = await c.env.DB.prepare('SELECT * FROM recipes WHERE id = ? AND user_id = ?').bind(recipeId, userId).first()
+    if (!recipe) return c.json({ error: 'Not found' }, 404)
+    return c.json({ recipe })
+  } catch (error) {
+    console.error('Get recipe error:', error)
+    return c.json({ error: 'Internal server error' }, 500)
+  }
+})
+
+// Update recipe
+app.put('/recipes/:id', jwtMiddleware, async (c) => {
+  try {
+    const payload = c.get('jwtPayload')
+    const userId = payload.userId
+    const recipeId = Number(c.req.param('id'))
+    const body = await c.req.json()
+    const { title, url, description, folderId, imageUrl } = body
+
+    await c.env.DB.prepare(
+      'UPDATE recipes SET title = ?, url = ?, description = ?, folder_id = ?, image_url = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND user_id = ?'
+    ).bind(title, url, description ?? null, folderId ?? null, imageUrl ?? null, recipeId, userId).run()
+
+    const recipe = await c.env.DB.prepare('SELECT * FROM recipes WHERE id = ?').bind(recipeId).first()
+    return c.json({ recipe })
+  } catch (error) {
+    console.error('Update recipe error:', error)
+    return c.json({ error: 'Internal server error' }, 500)
+  }
+})
+
 // Tag routes (protected)
 app.get('/tags', jwtMiddleware, async (c) => {
   try {
