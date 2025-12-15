@@ -45,7 +45,7 @@ export const useI18n = () => {
     let node: unknown = messages[locale.value] || {}
     for (const p of parts) {
       if (node && Object.prototype.hasOwnProperty.call(node, p)) {
-        node = (node as any)[p]
+        node = (node as Record<string, unknown>)[p as string]
       } else {
         return fallback ?? key
       }

@@ -1,8 +1,8 @@
 <template>
   <div>
     <select
-      class="rounded border px-2 py-1 text-sm"
       v-model="current"
+      class="rounded border px-2 py-1 text-sm"
       @change="onChange"
     >
       <option value="ja">
