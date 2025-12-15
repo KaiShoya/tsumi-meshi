@@ -6,7 +6,7 @@
     <UCard>
       <template #header>
         <h2 class="text-lg font-semibold">
-          新規フォルダ作成
+          {{ t('folders.create') }}
         </h2>
       </template>
 
@@ -15,17 +15,17 @@
         @submit="handleSubmit"
       >
         <UFormGroup
-          label="フォルダ名"
+          :label="t('folders.namePlaceholder')"
           name="name"
           class="mb-4"
         >
           <UInput
             v-model="state.name"
-            placeholder="フォルダ名"
+            :placeholder="t('folders.namePlaceholder')"
           />
         </UFormGroup>
         <UFormGroup
-          label="親フォルダ"
+          :label="t('folders.parent')"
           name="parentId"
         >
           <FolderSelector v-model="state.parentId" />
@@ -36,10 +36,10 @@
             variant="ghost"
             @click="$emit('update:modelValue', false)"
           >
-            キャンセル
+            {{ t('common.cancel') }}
           </UButton>
           <UButton type="submit">
-            作成
+            {{ t('common.create') }}
           </UButton>
         </div>
       </UForm>
@@ -57,6 +57,8 @@ const emit = defineEmits<{
 }>()
 
 const state = reactive<FolderInput>({ name: '', parentId: undefined })
+
+const { t } = useI18n()
 
 function handleSubmit() {
   if (!state.name) return

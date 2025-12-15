@@ -1,25 +1,25 @@
 <template>
   <div class="max-w-3xl mx-auto py-8">
     <h1 class="text-2xl font-semibold mb-4">
-      フォルダ管理
+      {{ t('folders.title') }}
     </h1>
 
     <div class="mb-6">
       <div class="flex items-center justify-between mb-4">
         <div />
         <UButton
-          aria-label="新規フォルダ作成"
+          :aria-label="t('folders.create')"
           @click="isCreateModalOpen = true"
         >
-          新規フォルダ作成
+          {{ t('folders.create') }}
         </UButton>
       </div>
 
       <div v-if="loading">
-        フォルダを読み込み中...
+        {{ t('folders.loading') }}
       </div>
       <div v-else-if="rootFolders.length === 0">
-        フォルダがありません。新しいフォルダを作成しましょう！
+        {{ t('folders.noFolders') }}
       </div>
 
       <div v-else>
@@ -29,13 +29,13 @@
           <div class="flex gap-2">
             <UInput
               v-model="name"
-              placeholder="フォルダ名"
+              :placeholder="t('folders.namePlaceholder')"
             />
             <FolderSelector v-model="parentId" />
             <UButton
               type="submit"
             >
-              追加
+              {{ t('folders.adding') }}
             </UButton>
           </div>
         </UForm>
@@ -124,6 +124,8 @@ onMounted(async () => {
   await pageStore.fetchFolders()
 })
 
+const { t } = useI18n()
+
 const onCreate = async () => {
   if (!name.value) return
   await pageStore.createFolder({ name: name.value, parentId: parentId.value ?? undefined })
@@ -137,7 +139,7 @@ const startEdit = (folder: Folder) => {
 }
 
 const remove = async (id: number, title: string) => {
-  if (!confirm(`フォルダ「${title}」を削除しますか？`)) return
+  if (!confirm(t('folders.deleteConfirm').replace('{title}', title))) return
   await pageStore.deleteFolder(id)
 }
 

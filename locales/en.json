@@ -8,6 +8,11 @@
     "namePlaceholder": "Folder name",
     "noFolders": "No folders yet. Create one!",
     "adding": "Add"
+    ,
+    "loading": "Loading folders...",
+    "parent": "Parent folder",
+    "editTitle": "Edit folder",
+    "deleteConfirm": "Delete folder \"{title}\"?"
   },
   "tags": {
     "title": "Tags",

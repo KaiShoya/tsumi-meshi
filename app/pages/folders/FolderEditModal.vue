@@ -6,7 +6,7 @@
     <UCard>
       <template #header>
         <h2 class="text-lg font-semibold">
-          フォルダ編集
+          {{ t('folders.editTitle') }}
         </h2>
       </template>
 
@@ -15,17 +15,17 @@
         @submit="handleSubmit"
       >
         <UFormGroup
-          label="フォルダ名"
+          :label="t('folders.namePlaceholder')"
           name="name"
           class="mb-4"
         >
           <UInput
             v-model="state.name"
-            placeholder="フォルダ名"
+            :placeholder="t('folders.namePlaceholder')"
           />
         </UFormGroup>
         <UFormGroup
-          label="親フォルダ"
+          :label="t('folders.parent')"
           name="parentId"
         >
           <FolderSelector v-model="state.parentId" />
@@ -36,12 +36,12 @@
             variant="ghost"
             @click="$emit('update:modelValue', false)"
           >
-            キャンセル
+            {{ t('common.cancel') }}
           </UButton>
           <UButton
             type="submit"
           >
-            保存
+            {{ t('common.save') }}
           </UButton>
         </div>
       </UForm>
@@ -78,4 +78,6 @@ function handleSubmit() {
   emit('submit', { id: state.id, name: state.name, parentId: state.parentId })
   emit('update:modelValue', false)
 }
+
+const { t } = useI18n()
 </script>

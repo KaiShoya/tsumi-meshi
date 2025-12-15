@@ -8,6 +8,11 @@
     "namePlaceholder": "フォルダ名",
     "noFolders": "フォルダがありません。新しいフォルダを作成しましょう！",
     "adding": "追加"
+    ,
+    "loading": "フォルダを読み込み中...",
+    "parent": "親フォルダ",
+    "editTitle": "フォルダ編集",
+    "deleteConfirm": "フォルダ「{title}」を削除しますか？"
   },
   "tags": {
     "title": "タグ管理",
