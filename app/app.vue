@@ -1,3 +1,15 @@
+<spec lang="md">
+# App Root
+
+概要: アプリケーションルート。ヘッダー・ナビ・ページコンテンツをラップする。
+
+## Data
+- メタ情報や SEO メタは `useHead` / `useSeoMeta` で設定
+
+## Notes
+- ファイル: app/app.vue
+</spec>
+
 <script setup>
 useHead({
   meta: [

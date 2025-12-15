@@ -1,3 +1,18 @@
+<spec lang="md">
+# Checks Page
+
+概要: チェック統計表示ページ。期間に応じた統計を表示する。
+
+## Data
+- `useChecksPageStore()` を利用して統計を取得
+
+## Interactions
+- 期間切替で統計を再取得
+
+## Notes
+- ファイル: app/pages/checks/index.vue
+</spec>
+
 <template>
   <div class="space-y-6">
     <div class="flex items-center justify-between">

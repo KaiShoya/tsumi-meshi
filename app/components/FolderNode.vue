@@ -1,3 +1,19 @@
+<spec lang="md">
+# FolderNode
+
+概要: 単一ノードを表す再帰コンポーネント。ドラッグ&ドロップと編集・削除ボタンを提供。
+
+## Data
+- `node: Folder & { children?: Folder[] }` を props で受け取る
+
+## Interactions
+- ドラッグ開始/ドロップで移動イベントを発行
+- 編集・削除イベントを発行
+
+## Notes
+- ファイル: app/components/FolderNode.vue
+</spec>
+
 <template>
   <li class="folder-node">
     <div

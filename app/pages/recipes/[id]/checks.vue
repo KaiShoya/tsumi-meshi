@@ -1,3 +1,18 @@
+<spec lang="md">
+# Recipe Checks
+
+概要: レシピ別のチェック履歴表示ページ。
+
+## Data
+- `useChecksStore()` / `useChecksPageStore()` を使用し、`route.params.id` でレシピIDを取得
+
+## Interactions
+- ページロード時にチェック履歴を取得
+
+## Notes
+- ファイル: app/pages/recipes/[id]/checks.vue
+</spec>
+
 <template>
   <div class="space-y-6">
     <div class="flex items-center justify-between">

@@ -1,3 +1,18 @@
+<spec lang="md">
+# Folders Page
+
+概要: フォルダ管理ページ。フォルダの一覧表示・作成・編集・削除・移動を提供する。
+
+## Data
+- `useFoldersStore()` と `useFoldersPageStore()` を利用
+
+## Interactions
+- フォルダ作成・編集・削除・ドラッグで移動
+
+## Notes
+- ファイル: app/pages/folders/index.vue
+</spec>
+
 <template>
   <div class="max-w-3xl mx-auto py-8">
     <h1 class="text-2xl font-semibold mb-4">
