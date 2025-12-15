@@ -11,7 +11,7 @@
             name="i-lucide-book-open"
             class="h-6 w-6"
           />
-          <span class="font-bold text-lg">積み飯</span>
+          <span class="font-bold text-lg">{{ t('app.title') }}</span>
         </NuxtLink>
       </template>
 
@@ -25,7 +25,7 @@
             size="sm"
             @click="logout"
           >
-            ログアウト
+            {{ t('auth.logout') }}
           </UButton>
         </div>
       </template>
@@ -42,6 +42,7 @@
 
 <script setup lang="ts">
 const { user, logout, isAuthenticated } = useAuth()
+const { t } = useI18n()
 
 // Redirect to login if not authenticated
 if (!isAuthenticated.value) {

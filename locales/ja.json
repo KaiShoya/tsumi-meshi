@@ -23,4 +23,8 @@
     "confirm": "確認",
     "create": "作成"
   }
+  ,
+  "auth": {
+    "logout": "ログアウト"
+  }
 }

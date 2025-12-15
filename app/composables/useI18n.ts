@@ -1,7 +1,7 @@
 import { ref, computed, onMounted } from 'vue'
-import ja from '~/locales/ja.json'
-import en from '~/locales/en.json'
-import { LOCALES, DEFAULT_LOCALE, type Locale } from '~/utils/locales'
+import ja from '../../locales/ja.json'
+import en from '../../locales/en.json'
+import { LOCALES, DEFAULT_LOCALE, type Locale } from '../../utils/locales'
 
 const messages: Record<Locale, Record<string, unknown>> = {
   ja,
