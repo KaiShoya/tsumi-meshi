@@ -3,7 +3,7 @@ import ja from '~/locales/ja.json'
 import en from '~/locales/en.json'
 import { LOCALES, DEFAULT_LOCALE, type Locale } from '~/utils/locales'
 
-const messages: Record<Locale, Record<string, any>> = {
+const messages: Record<Locale, Record<string, unknown>> = {
   ja,
   en
 }
@@ -22,8 +22,8 @@ export const useI18n = () => {
       if (typeof navigator !== 'undefined') {
         if (navigator.languages && navigator.languages.length) {
           const found = navigator.languages
-            .map((l) => l.split('-')[0])
-            .find((l) => LOCALES.includes(l as Locale))
+            .map(l => l.split('-')[0])
+            .find(l => LOCALES.includes(l as Locale))
           if (found) {
             locale.value = found as Locale
           }
@@ -42,7 +42,7 @@ export const useI18n = () => {
 
   const t = (key: string, fallback?: string) => {
     const parts = key.split('.')
-    let node: any = messages[locale.value] || {}
+    let node: unknown = messages[locale.value] || {}
     for (const p of parts) {
       if (node && Object.prototype.hasOwnProperty.call(node, p)) {
         node = node[p]
