@@ -65,6 +65,45 @@ These endpoints support client-side uploads to Cloudflare R2 via server-generate
   - Response (error): standard H3 error structure with `statusCode` and `data.message`.
   - Notes: The server is responsible for generating a secure, short-lived presigned URL using R2 credentials. The client will PUT/POST the file directly to R2 and then send the resulting `key` back to the app when saving the recipe.
 
+  #### Presign API — Detailed Spec
+
+  - Endpoint: `POST /api/upload/image`
+  - Authentication: required (JWT)
+  - Request (application/json):
+    - `name` (string) — original filename, required
+    - `size` (number) — bytes, required
+    - `type` (string) — MIME type, optional
+
+  - Validation rules:
+    - `size` must be <= 5_242_880 (5MB)
+    - `type` if present must be one of `image/jpeg`, `image/png`, `image/webp`
+
+  - Success Response (200):
+    - `url` (string) — presigned URL that accepts an HTTP PUT with `Content-Type` set to the requested MIME type
+    - `key` (string) — storage key (object key) to persist on the recipe record
+    - `expiresIn` (number) — seconds until URL expiration
+
+  - Error responses:
+    - 400 BAD_REQUEST — missing `name` or `size` or invalid types
+    - 413 PAYLOAD_TOO_LARGE — `size` exceeds 5MB
+    - 415 UNSUPPORTED_MEDIA_TYPE — `type` not allowed
+    - 501 R2_NOT_CONFIGURED — server R2 credentials not present (development fallback)
+    - 500 PRESIGN_ERROR — underlying presign generation failed (e.g., missing optional SDK)
+
+  - Client flow (recommended):
+    1. Client requests presign: POST `/api/upload/image` with `{ name, size, type }`.
+    2. Server returns `{ url, key, expiresIn }`.
+    3. Client issues `PUT` to `url` with headers: `Content-Type: <type>` and body = file bytes.
+    4. On successful PUT (HTTP 200/201/204), client includes `imageKey` or `imageUrl` (constructed from `key`) in recipe create/update payload.
+    5. Server persists `image_url` (or `image_key`) on recipe record.
+
+  - Test / E2E notes:
+    - E2E should verify the full lifecycle: presign → PUT upload → GET/HEAD object or use R2 API to confirm object exists → cleanup (DELETE).
+    - For CI, mark the R2 E2E job as opt-in and require secrets: `R2_BUCKET`, `CLOUDFLARE_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, and optionally `R2_ENDPOINT`.
+    - Use a small binary (1–10 KB) image fixture for uploads.
+    - Ensure the client uses the returned `Content-Type` when performing the PUT; some S3-compatible endpoints validate this header during presign.
+
+
 Security and Billing:
 - Authenticate requests to `/api/upload/image` (user must be signed in).
 - Enforce file size and type limits server-side.
