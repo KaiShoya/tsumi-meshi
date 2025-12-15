@@ -1,18 +1,3 @@
-<spec lang="md">
-# FolderCreateModal
-
-概要: 新規フォルダ作成用のモーダルフォーム。`submit` イベントで `FolderInput` を送出する。
-
-## Data
-- `modelValue: boolean` を受ける
-
-## Interactions
-- 作成時に `submit` を emit
-
-## Notes
-- ファイル: app/pages/folders/FolderCreateModal.vue
-</spec>
-
 <template>
   <UModal
     :model-value="modelValue"
