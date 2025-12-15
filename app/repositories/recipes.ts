@@ -181,6 +181,18 @@ export class RecipesRepository {
     }
   }
 
+  async updateFolderId(oldFolderId: number, newFolderId: number | null, userId: number): Promise<void> {
+    try {
+      await this.db.run(
+        `UPDATE recipes SET folder_id = ? WHERE folder_id = ? AND user_id = ?`,
+        [newFolderId, oldFolderId, userId]
+      )
+    } catch (error) {
+      if (error instanceof CustomError) throw error
+      throw CustomError.databaseError('Failed to update folderId for recipes')
+    }
+  }
+
   private async loadRecipeDetails(recipe: Recipe): Promise<Recipe> {
     const [tags, checks] = await Promise.all([
       this.loadRecipeTags(recipe.id),

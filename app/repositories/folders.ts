@@ -67,6 +67,8 @@ export class FoldersRepository {
   }
 
   async update(id: number, folder: FolderUpdate, userId: number): Promise<Folder> {
+    const parentId = folder.parentId === undefined ? null : folder.parentId
+
     try {
       const result = await this.db.run(
         `UPDATE folders SET
@@ -74,7 +76,7 @@ export class FoldersRepository {
          parent_id = ?,
          updated_at = CURRENT_TIMESTAMP
          WHERE id = ? AND user_id = ?`,
-        [folder.name, folder.parentId, id, userId]
+        [folder.name, parentId, id, userId]
       )
 
       if (result.changes === 0) throw CustomError.notFound('Folder not found')
@@ -91,12 +93,14 @@ export class FoldersRepository {
 
   async delete(id: number, userId: number): Promise<void> {
     try {
-      const result = await this.db.run(
-        `DELETE FROM folders WHERE id = ? AND user_id = ?`,
-        [id, userId]
-      )
-
-      if (result.changes === 0) throw CustomError.notFound('Folder not found')
+      // @ts-expect-error D1Database does not have a transaction method in its public type, but it is supported.
+      await this.db.transaction(async (tx) => {
+        // First, update recipes that belong to the folder to be deleted
+        await tx.run(`UPDATE recipes SET folder_id = NULL WHERE folder_id = ? AND user_id = ?`, [id, userId])
+        // Then, delete the folder itself
+        const result = await tx.run(`DELETE FROM folders WHERE id = ? AND user_id = ?`, [id, userId])
+        if (result.changes === 0) throw CustomError.notFound('Folder not found')
+      })
     } catch (error) {
       if (error instanceof CustomError) throw error
       throw CustomError.databaseError('Failed to delete folder')

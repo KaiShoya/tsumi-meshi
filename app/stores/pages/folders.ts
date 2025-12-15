@@ -22,7 +22,6 @@ export const useFoldersPageStore = defineStore('foldersPage', () => {
     try {
       await foldersStore.createFolder(input)
       showSuccessToast('フォルダを作成しました')
-      await fetchFolders()
     } catch (err: unknown) {
       logger.error('Failed to create folder', { module: 'foldersPage' }, err instanceof Error ? err : new Error(String(err)))
       showDangerToast('フォルダの作成に失敗しました')
@@ -33,7 +32,6 @@ export const useFoldersPageStore = defineStore('foldersPage', () => {
     try {
       await foldersStore.updateFolder(id, input)
       showSuccessToast('フォルダを更新しました')
-      await fetchFolders()
     } catch (err: unknown) {
       logger.error('Failed to update folder', { module: 'foldersPage', folderId: id }, err instanceof Error ? err : new Error(String(err)))
       showDangerToast('フォルダの更新に失敗しました')
@@ -44,7 +42,6 @@ export const useFoldersPageStore = defineStore('foldersPage', () => {
     try {
       await foldersStore.deleteFolder(id)
       showSuccessToast('フォルダを削除しました')
-      await fetchFolders()
     } catch (err: unknown) {
       logger.error('Failed to delete folder', { module: 'foldersPage', folderId: id }, err instanceof Error ? err : new Error(String(err)))
       showDangerToast('フォルダの削除に失敗しました')
