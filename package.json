@@ -15,6 +15,7 @@
     "test": "vitest --run"
   },
   "dependencies": {
+    "@formkit/drag-and-drop": "^0.5.3",
     "@iconify-json/lucide": "^1.2.74",
     "@iconify-json/simple-icons": "^1.2.59",
     "@nuxt/ui": "^4.2.1",
