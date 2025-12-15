@@ -93,3 +93,25 @@ Minor completion of TODOs and API surface parity between client and server.
 
 ### Tests
 - Added `tests/stores/tags.spec.ts`, extended `tests/stores/recipes.spec.ts`, and added `tests/stores/ui.spec.ts`.
+
+## [v0.1.4] - 2025-12-15
+
+### Summary
+今回のリリースではフォルダ管理周りのUI実装、ストア／リポジトリの改良、テスト修正とドキュメント（spec）整備を行いました。
+
+### Added
+- フォルダ UI コンポーネント: `FolderTree`, `FolderNode`, `FolderSelector`、作成/編集モーダル、ページ統合（`app/pages/folders/*`、`app/components/*`）
+- データ/ページストアとリポジトリの更新: `app/stores/data/folders.ts`, `app/stores/pages/folders.ts`, `app/repositories/folders.ts`（レシピのフォルダ更新処理を含む）
+- テスト: `apiClient` をモックする形へテストを更新、フォルダ関連のユニット/統合テストを追加・修正
+- ドキュメント: 複数の `.vue` ファイルに `<spec lang="md">` ブロックを追加し、`.agent/docs/tasks`／QA の該当エントリを更新
+
+### Changed
+- ストアの一部でグローバル `$fetch` から `apiClient` へ移行（テストを合わせて修正）
+- lint / typecheck の指摘に対応するための小修正
+
+### Fixed
+- SFC の import/テスト環境での解析エラーを防ぐため、カスタム `<spec>` ブロック配置を整理
+
+### Release metadata
+- PR: https://github.com/KaiShoya/tsumi-meshi/pull/26 (feat: folder UI + stores + tests + docs (v0.1.4))
+
