@@ -30,7 +30,7 @@ export default defineNuxtConfig({
           // as virtual modules like `file.vue?vue&type=spec&index=0&lang.md`.
           if (id.includes('?vue&type=spec') && id.includes('&lang.md')) {
             const fs = (await import('f' + 's')) as { readFileSync: (path: string, enc: string) => string }
-            const file = id.split('?')[0]
+            const file = String(id.split('?')[0])
             try {
               const src = fs.readFileSync(file, 'utf-8')
               const m = src.match(/<spec\s+lang=["']md["'][^>]*>([\s\S]*?)<\/spec>/)
