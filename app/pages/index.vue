@@ -44,14 +44,14 @@
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-4">
         <h1 class="text-2xl font-bold">
-          レシピ一覧
+          {{ t('recipes.listTitle') }}
         </h1>
         <UButton
           variant="outline"
           size="sm"
           @click="navigateTo('/checks')"
         >
-          チェック統計
+          {{ t('checks.title') }}
         </UButton>
       </div>
 
@@ -60,7 +60,7 @@
         size="lg"
         @click="navigateTo('/recipes/create')"
       >
-        新規レシピ
+        {{ t('recipes.new') }}
       </UButton>
     </div>
 
@@ -69,7 +69,7 @@
       <UInput
         v-model="searchQuery"
         icon="i-lucide-search"
-        placeholder="レシピを検索..."
+        :placeholder="t('recipes.searchPlaceholder')"
         size="lg"
         @input="handleSearch"
       />
@@ -78,14 +78,14 @@
         <USelectMenu
           v-model="selectedFolder"
           :options="folderOptions"
-          placeholder="フォルダを選択"
+          :placeholder="t('recipes.folderPlaceholder')"
           @update:model-value="handleFolderFilter"
         />
         <USelectMenu
           v-model="selectedTags"
           :options="tagOptions"
           multiple
-          placeholder="タグを選択"
+          :placeholder="t('recipes.tagsPlaceholder')"
           @update:model-value="handleTagFilter"
         />
       </div>
@@ -193,26 +193,26 @@
         class="mx-auto h-12 w-12 text-gray-400"
       />
       <h3 class="mt-2 text-sm font-semibold text-gray-900">
-        レシピがありません
+        {{ t('recipes.noRecipesTitle') }}
       </h3>
       <p class="mt-1 text-sm text-gray-500">
-        最初のレシピを作成しましょう。
+        {{ t('recipes.noRecipesBody') }}
       </p>
       <div class="mt-6">
         <UButton
           icon="i-lucide-plus"
           @click="navigateTo('/recipes/create')"
         >
-          新規レシピ
+          {{ t('recipes.new') }}
         </UButton>
       </div>
     </div>
     <ConfirmModal
       v-if="showConfirmModal"
-      :title="'本当に削除しますか？'"
-      :message="`『${confirmTargetTitle}』を削除すると元に戻せません。`"
-      confirm-label="削除する"
-      cancel-label="キャンセル"
+      :title="t('confirm.deleteTitle')"
+      :message="t('confirm.deleteMessage').replace('{title}', confirmTargetTitle)"
+      :confirm-label="t('confirm.deleteLabel')"
+      :cancel-label="t('common.cancel')"
       :loading="deleting"
       @confirm="performDelete"
       @close="showConfirmModal = false"
@@ -232,6 +232,7 @@ import { useLogger } from '~/composables/useLogger'
 import { useAuth } from '~/composables/useAuth'
 import { ref, computed, onMounted } from 'vue'
 import ConfirmModal from '~/components/ConfirmModal.vue'
+import { useI18n } from '~/composables/useI18n'
 
 // Data
 const searchQuery = ref('')
@@ -254,6 +255,7 @@ const confirmTargetTitle = ref('')
 const deleting = ref(false)
 
 // Methods
+const { t } = useI18n()
 const handleSearch = useDebounceFn(async () => {
   if (searchQuery.value) {
     await recipesStore.searchRecipes(searchQuery.value)
