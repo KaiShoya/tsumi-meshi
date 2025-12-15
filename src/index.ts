@@ -176,11 +176,11 @@ app.post('/recipes', jwtMiddleware, async (c) => {
   try {
     const payload = c.get('jwtPayload')
     const userId = payload.userId
-    const { title, url, description, folderId } = await c.req.json()
+    const { title, url, description, folderId, imageUrl } = await c.req.json()
 
     const result = await c.env.DB.prepare(
-      'INSERT INTO recipes (user_id, folder_id, title, url, description) VALUES (?, ?, ?, ?, ?)'
-    ).bind(userId, folderId, title, url, description).run()
+      'INSERT INTO recipes (user_id, folder_id, title, url, description, image_url) VALUES (?, ?, ?, ?, ?, ?)'
+    ).bind(userId, folderId, title, url, description, imageUrl ?? null).run()
 
     const recipeId = result.meta?.last_row_id
 

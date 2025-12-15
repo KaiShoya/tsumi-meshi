@@ -19,6 +19,7 @@
 import { ref } from 'vue'
 import useUpload from '../composables/useUpload'
 
+const emit = defineEmits<{ (e: 'uploaded', key: string | null): void }>()
 const status = ref<string | null>(null)
 const { requestUpload } = useUpload()
 
@@ -30,6 +31,8 @@ const onFile = async (e: Event) => {
     status.value = 'Uploading...'
     const key = await requestUpload(file)
     status.value = key ? 'Uploaded' : 'Upload endpoint responded without URL'
+    // Emit uploaded key (may be null)
+    emit('uploaded', key)
   } catch (err: unknown) {
     status.value = (err as Error).message || 'Upload failed'
   }
