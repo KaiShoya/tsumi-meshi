@@ -28,7 +28,7 @@ export default defineNuxtConfig({
           // Intercept SFC custom <spec lang="md"> blocks which Vite exposes
           // as virtual modules like `file.vue?vue&type=spec&index=0&lang.md`.
           if (id.includes('?vue&type=spec') && id.includes('&lang.md')) {
-              const fs = await import('f' + 's') as any
+            const fs = (await import('f' + 's')) as { readFileSync: (path: string, enc: string) => string }
             const file = id.split('?')[0]
             try {
               const src = fs.readFileSync(file, 'utf-8')
