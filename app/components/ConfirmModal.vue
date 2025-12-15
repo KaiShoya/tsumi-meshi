@@ -1,18 +1,3 @@
-<spec lang="md">
-# ConfirmModal
-
-概要: 汎用的な確認モーダル。タイトル・メッセージと確認/キャンセルボタンを表示する。
-
-## Data
-- `title`, `message`, `confirmLabel`, `cancelLabel`, `loading` を props で受ける
-
-## Interactions
-- `confirm` / `close` イベントを emit
-
-## Notes
-- ファイル: app/components/ConfirmModal.vue
-</spec>
-
 <template>
   <div
     class="fixed inset-0 z-50 flex items-center justify-center"

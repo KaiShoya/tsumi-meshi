@@ -1,18 +1,3 @@
-<spec lang="md">
-# TemplateMenu
-
-概要: テンプレートへのショートカットメニューを表示するメニューコンポーネント。
-
-## Data
-- メニューアイテムは内部定義
-
-## Interactions
-- メニュー選択で外部リンクへ遷移
-
-## Notes
-- ファイル: app/components/TemplateMenu.vue
-</spec>
-
 <template>
   <UDropdownMenu
     v-slot="{ open }"

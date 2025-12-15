@@ -1,18 +1,3 @@
-<spec lang="md">
-# Tags Page
-
-概要: タグ管理ページ。タグの作成・編集・削除を提供する。
-
-## Data
-- `useTagsStore()` と `useTagsPageStore()` を利用
-
-## Interactions
-- タグ作成・編集・削除
-
-## Notes
-- ファイル: app/pages/tags/index.vue
-</spec>
-
 <template>
   <div class="max-w-3xl mx-auto py-8">
     <h1

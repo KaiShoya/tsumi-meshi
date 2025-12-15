@@ -1,27 +1,3 @@
-<spec lang="md">
-# Default Layout
-
-短い説明: アプリ共通のレイアウト。ヘッダー・メイン・フッターを提供する。
-
-## Data
-- ユーザー情報: `useAuth()` から取得
-
-## Interactions
-- 未認証時に `/auth/login` にリダイレクト
-
-## Features
-- グローバルヘッダー、メインコンテンツ、フッター
-
-## Error Handling
-- 認証チェック失敗時はリダイレクト
-
-## i18n
-- テキストはロケール経由で管理すること
-
-## Notes
-- ファイル: app/layouts/default.vue
-</spec>
-
 <template>
   <div>
     <!-- Navigation -->

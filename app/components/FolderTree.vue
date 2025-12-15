@@ -1,21 +1,3 @@
-<spec lang="md">
-# FolderTree
-
-概要: フォルダの階層をツリー表示するコンポーネント。`FolderNode` を再帰的に描画する。
-
-## Data
-- `folders: Folder[]` を props で受け取る
-
-## Interactions
-- 編集・削除・移動イベントを親へ伝搬する
-
-## Features
-- ツリー構築ロジックを内包
-
-## Notes
-- ファイル: app/components/FolderTree.vue
-</spec>
-
 <template>
   <ul class="folder-tree">
     <FolderNode

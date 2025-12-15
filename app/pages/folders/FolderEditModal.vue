@@ -1,18 +1,3 @@
-<spec lang="md">
-# FolderEditModal
-
-概要: 既存フォルダ編集用のモーダルフォーム。`submit` イベントで更新ペイロードを送出する。
-
-## Data
-- `modelValue: boolean`, `folder` を受け取る
-
-## Interactions
-- 保存時に `submit` を emit
-
-## Notes
-- ファイル: app/pages/folders/FolderEditModal.vue
-</spec>
-
 <template>
   <UModal
     :model-value="modelValue"

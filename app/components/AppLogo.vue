@@ -1,12 +1,3 @@
-<spec lang="md">
-# AppLogo
-
-概要: SVG ロゴコンポーネント。UI 内で再利用される。
-
-## Notes
-- ファイル: app/components/AppLogo.vue
-</spec>
-
 <template>
   <svg
     width="1020"

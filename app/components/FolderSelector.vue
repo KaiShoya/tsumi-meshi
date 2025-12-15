@@ -1,21 +1,3 @@
-<spec lang="md">
-# FolderSelector
-
-概要: フォルダを選択するためのシンプルなセレクトコンポーネント。
-
-## Data
-- `useFoldersStore()` からフォルダ一覧を取得
-
-## Interactions
-- 親フォルダの選択・解除
-
-## Features
-- 階層をインデントして表示するフラットなセレクト
-
-## Notes
-- ファイル: app/components/FolderSelector.vue
-</spec>
-
 <template>
   <div>
     <label
