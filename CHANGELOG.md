@@ -13,6 +13,13 @@ Planned changes for v0.1.5: dashboard & analytics, deploy/CI improvements, perfo
 - CI / Deploy: Pages + Workers deployment verification and opt-in E2E for R2
 - Performance: Lighthouse improvements and related fixes
 
+### Recent infra & test updates
+- Adopt `@nuxtjs/i18n` for runtime i18n support; `nuxt.config.ts` updated to include `i18n` settings (locales, `langDir`, `vueI18n` config).
+- Stabilize tests for i18n: add `vue-i18n` as a devDependency and register `createI18n` in `tests/setup.ts` so `useI18n()` works under Vitest.
+- Update `vitest.config.ts` AutoImport to include `vue-i18n` so test auto-imports resolve `useI18n`.
+- Removed development `plugins/` stubs and migrated required UI stubs into test setup to avoid shipping dev-only runtime code.
+
+
 
 ## [v0.1.1] - 2025-12-14
 
