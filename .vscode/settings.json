@@ -1,0 +1,47 @@
+{
+  "explorer.fileNesting.enabled": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "html.format.wrapAttributes": "force-expand-multiline",
+  "html.validate.scripts": true,
+  "html.validate.styles": true,
+  "editor.formatOnSave": false,
+  "editor.tabSize": 2,
+  "[sql]": {
+    "editor.formatOnSave": false
+  },
+  "[svg]": {
+    "editor.formatOnSave": false
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
+  },
+  "[markdown]": {
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": {
+      "comments": "on",
+      "strings": "on",
+      "other": "on"
+    },
+    "editor.snippetSuggestions": "top"
+  },
+  "files.exclude": {
+    ".nuxt": true,
+    ".output": true,
+    "node_modules": true
+  },
+  "markdown.extension.tableFormatter.enabled": true,
+  "markdown.extension.tableFormatter.delimiterRowNoPadding": false,
+  "markdown.extension.tableFormatter.normalizeIndentation": false,
+  "todo-tree.filtering.includeHiddenFiles": true,
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "javascript.format.insertSpaceAfterConstructor": true,
+  "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "typescript.format.insertSpaceAfterConstructor": true,
+  "html.format.wrapLineLength": 125,
+  "eslint.useFlatConfig": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  }
+  // "eslint.codeActionsOnSave.rules": null
+}

@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
+    "ecmel.vscode-html-css",
+    "editorconfig.editorconfig",
+    "vue.volar",
+    "yzhang.markdown-all-in-one",
+    "nuxtr.nuxtr-vscode",
+    "gruntfuggly.todo-tree",
+    "antfu.iconify"
+  ]
+}
