@@ -9,3 +9,20 @@ database_id = "your-database-id"  # Will be set after creation
 
 [vars]
 JWT_SECRET = "your-jwt-secret"  # Will be set in production
+
+# Recommended routing examples (mount this Worker under path-based API versions)
+# Option A: Use Cloudflare Routes (recommended)
+# - Create routes in the Cloudflare dashboard or via Terraform to map:
+#   - example.com/api/v1/* -> this Worker (v1)
+#   - example.com/api/v2/* -> your v2 Worker (when ready)
+# Option B: Use Wrangler environments with `routes` (example for illustration):
+# [env.production]
+# routes = ["https://api.example.com/api/v1/*"]
+# [env.v2]
+# routes = ["https://api.example.com/api/v2/*"]
+
+# Notes:
+# - Mounting at the CDN/route level keeps runtime code unchanged and lets clients
+#   continue using `/api/v1` without code modifications.
+# - For blue/green or phased rollouts, deploy v2 to a separate Worker and update
+#   routes or use a gateway for gradual traffic shifting.

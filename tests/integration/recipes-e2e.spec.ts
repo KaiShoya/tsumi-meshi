@@ -37,14 +37,14 @@ describe('E2E smoke: core flows (integration)', () => {
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
 
     // Create recipe
-    const createReq = new Request('http://localhost/recipes', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ title: newRecipe.title }) })
+    const createReq = new Request('http://localhost/api/v1/recipes', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ title: newRecipe.title }) })
     const createRes = await app.fetch(createReq, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(createRes.status).toBe(200)
     const createBody = await createRes.json()
     expect(createBody.recipe.id).toBe(newRecipe.id)
 
     // Create tag
-    const tagReq = new Request('http://localhost/tags', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ name: newTag.name }) })
+    const tagReq = new Request('http://localhost/api/v1/tags', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ name: newTag.name }) })
     const tagRes = await app.fetch(tagReq, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(tagRes.status).toBe(200)
     const tagBody = await tagRes.json()
@@ -52,7 +52,7 @@ describe('E2E smoke: core flows (integration)', () => {
 
     // Attach tag (direct DB insert is tested via repository, here we just ensure endpoints are reachable by simulating recipe_tags insert via tag creation flow)
     // Post a check
-    const checkReq = new Request(`http://localhost/recipes/${newRecipe.id}/checks`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
+    const checkReq = new Request(`http://localhost/api/v1/recipes/${newRecipe.id}/checks`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
     const checkRes = await app.fetch(checkReq, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(checkRes.status).toBe(200)
     const checkBody = await checkRes.json()

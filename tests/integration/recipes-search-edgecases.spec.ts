@@ -25,7 +25,7 @@ describe('Recipes search edge cases (integration)', () => {
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/recipes', { headers: { Authorization: `Bearer ${token}` } })
+    const req = new Request('http://localhost/api/v1/recipes', { headers: { Authorization: `Bearer ${token}` } })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()
@@ -47,7 +47,7 @@ describe('Recipes search edge cases (integration)', () => {
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
     // generate a long list of tag ids
     const ids = Array.from({ length: 100 }, (_, i) => i + 1).join(',')
-    const req = new Request(`http://localhost/recipes?tagIds=${ids}`, { headers: { Authorization: `Bearer ${token}` } })
+    const req = new Request(`http://localhost/api/v1/recipes?tagIds=${ids}`, { headers: { Authorization: `Bearer ${token}` } })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()
@@ -63,7 +63,7 @@ describe('Recipes search edge cases (integration)', () => {
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
     const malicious = `'; DROP TABLE recipes; --`
-    const req = new Request(`http://localhost/recipes?q=${encodeURIComponent(malicious)}`, { headers: { Authorization: `Bearer ${token}` } })
+    const req = new Request(`http://localhost/api/v1/recipes?q=${encodeURIComponent(malicious)}`, { headers: { Authorization: `Bearer ${token}` } })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()

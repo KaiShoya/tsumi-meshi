@@ -27,7 +27,7 @@ describe('Recipes search endpoint (integration)', () => {
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/recipes?q=sushi', { headers: { Authorization: `Bearer ${token}` } })
+    const req = new Request('http://localhost/api/v1/recipes?q=sushi', { headers: { Authorization: `Bearer ${token}` } })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()
@@ -48,7 +48,7 @@ describe('Recipes search endpoint (integration)', () => {
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/recipes?folderId=5', { headers: { Authorization: `Bearer ${token}` } })
+    const req = new Request('http://localhost/api/v1/recipes?folderId=5', { headers: { Authorization: `Bearer ${token}` } })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()
@@ -68,7 +68,7 @@ describe('Recipes search endpoint (integration)', () => {
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/recipes?tagIds=1,2', { headers: { Authorization: `Bearer ${token}` } })
+    const req = new Request('http://localhost/api/v1/recipes?tagIds=1,2', { headers: { Authorization: `Bearer ${token}` } })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()

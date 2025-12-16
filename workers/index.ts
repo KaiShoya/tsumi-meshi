@@ -518,4 +518,11 @@ async function createJWT(header: Record<string, unknown>, payload: Record<string
   return `${message}.${signatureB64}`
 }
 
-export default app
+// Create a root app and mount the existing app at `/api/v1` so the worker
+// can be deployed at the root while still serving versioned routes.
+const root = new Hono<{ Bindings: Bindings }>()
+
+// Mount the API under /api/v1
+root.route('/api/v1', app)
+
+export default root

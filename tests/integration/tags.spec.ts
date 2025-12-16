@@ -22,7 +22,7 @@ describe('Tags API (integration)', () => {
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/tags', { headers: { Authorization: `Bearer ${token}` } })
+    const req = new Request('http://localhost/api/v1/tags', { headers: { Authorization: `Bearer ${token}` } })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()
@@ -38,7 +38,7 @@ describe('Tags API (integration)', () => {
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/tags/find-or-create', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ name: 'newtag' }) })
+    const req = new Request('http://localhost/api/v1/tags/find-or-create', { method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ name: 'newtag' }) })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()
@@ -51,7 +51,7 @@ describe('Tags API (integration)', () => {
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/tags/3', { method: 'PUT', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ name: 'Updated' }) })
+    const req = new Request('http://localhost/api/v1/tags/3', { method: 'PUT', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ name: 'Updated' }) })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()
@@ -64,7 +64,7 @@ describe('Tags API (integration)', () => {
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/tags/4', { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } })
+    const req = new Request('http://localhost/api/v1/tags/4', { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()

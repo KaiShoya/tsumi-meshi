@@ -26,7 +26,7 @@ describe('Folders API (integration)', () => {
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/folders', { headers: { Authorization: `Bearer ${token}` } })
+    const req = new Request('http://localhost/api/v1/folders', { headers: { Authorization: `Bearer ${token}` } })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     if (res.status !== 200) console.error('GET /folders response:', await res.text())
     expect(res.status).toBe(200)
@@ -52,7 +52,7 @@ describe('Folders API (integration)', () => {
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/folders', {
+    const req = new Request('http://localhost/api/v1/folders', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: 'Recipes', parentId: null })
@@ -83,7 +83,7 @@ describe('Folders API (integration)', () => {
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/folders/6', {
+    const req = new Request('http://localhost/api/v1/folders/6', {
       method: 'PUT',
       headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: 'New' })
@@ -103,7 +103,7 @@ describe('Folders API (integration)', () => {
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/folders/6', { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } })
+    const req = new Request('http://localhost/api/v1/folders/6', { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()

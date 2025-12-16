@@ -31,14 +31,14 @@ describe('auth refresh via Miniflare (optional)', () => {
     const mf = new MfCtor({
       script: `addEventListener('fetch', event => {
         const url = new URL(event.request.url)
-        if (url.pathname === '/api/auth/me') {
+        if (url.pathname === '/api/v1/auth/me') {
           return event.respondWith(new Response(JSON.stringify({ user: null }), { headers: { 'Content-Type': 'application/json' } }))
         }
         return event.respondWith(new Response('ok'))
       })`
     })
     // dispatchFetch exists on Miniflare instance
-    const res = await mf.dispatchFetch('http://localhost/api/auth/me')
+    const res = await mf.dispatchFetch('http://localhost/api/v1/auth/me')
     const json = await res.json()
     expect(json).toHaveProperty('user')
     // stop may not be available on all Miniflare versions

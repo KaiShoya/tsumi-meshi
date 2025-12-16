@@ -30,7 +30,7 @@ describe('Recipe Checks API (integration)', () => {
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/recipes/1/checks', { headers: { Authorization: `Bearer ${token}` } })
+    const req = new Request('http://localhost/api/v1/recipes/1/checks', { headers: { Authorization: `Bearer ${token}` } })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()
@@ -52,7 +52,7 @@ describe('Recipe Checks API (integration)', () => {
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/recipes/1/checks', { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
+    const req = new Request('http://localhost/api/v1/recipes/1/checks', { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()
@@ -69,7 +69,7 @@ describe('Recipe Checks API (integration)', () => {
     }
 
     const token = createJWT({ userId: 1 }, 'JWT_SECRET')
-    const req = new Request('http://localhost/checks/stats?period=month', { headers: { Authorization: `Bearer ${token}` } })
+    const req = new Request('http://localhost/api/v1/checks/stats?period=month', { headers: { Authorization: `Bearer ${token}` } })
     const res = await app.fetch(req, { DB: mockDB, JWT_SECRET: 'JWT_SECRET' } as unknown)
     expect(res.status).toBe(200)
     const body = await res.json()
