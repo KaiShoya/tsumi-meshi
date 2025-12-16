@@ -1,6 +1,24 @@
-// Deprecated: worker entry moved to `workers/index.ts`.
-// Keep a thin re-export for tools that still reference `src/index.ts`.
-export { default } from '../workers/index'
+import { Hono } from 'hono'
+import { cors } from 'hono/cors'
+import { jwt } from 'hono/jwt'
+import { logger } from 'hono/logger'
+
+type Bindings = {
+  DB: D1Database
+  JWT_SECRET: string
+}
+
+const app = new Hono<{ Bindings: Bindings }>()
+
+// Middleware
+app.use('*', cors())
+app.use('*', logger())
+
+// JWT middleware for protected routes
+const jwtMiddleware = jwt({ secret: 'JWT_SECRET' })
+
+// Health check
+app.get('/health', c => c.json({ status: 'ok' }))
 
 // Auth routes
 app.post('/auth/register', async (c) => {

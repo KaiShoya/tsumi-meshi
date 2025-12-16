@@ -1,5 +1,5 @@
 name = "tsumi-meshi"
-main = "src/index.ts"
+main = "workers/index.ts"
 compatibility_date = "2025-01-15"
 
 [[d1_databases]]
