@@ -66,7 +66,6 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from '~/composables/useI18n'
 import ImageUploader from '~/components/ImageUploader.vue'
 
 const { t } = useI18n()

@@ -14,10 +14,6 @@
     "editTitle": "Edit folder",
     "deleteConfirm": "Delete folder \"{title}\"?"
   },
-  "tags": {
-    "title": "Tags",
-    "create": "Add"
-  },
   "checks": {
     "title": "Check Stats"
   },

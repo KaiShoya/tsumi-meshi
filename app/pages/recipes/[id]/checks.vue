@@ -44,7 +44,6 @@
 import { useRoute } from 'vue-router'
 import { useChecksStore } from '~/stores/data/checks'
 import { useChecksPageStore } from '~/stores/pages/checks'
-import { useI18n } from '~/composables/useI18n'
 
 const route = useRoute()
 const recipeId = Number(route.params.id)

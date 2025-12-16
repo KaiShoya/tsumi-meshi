@@ -1,10 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+/* eslint-disable nuxt/nuxt-config-keys-order */
 
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@pinia/nuxt',
-    '@nuxt/ui'
+    '@nuxt/ui',
+    '@nuxtjs/i18n'
   ],
 
   devtools: {
@@ -18,6 +20,17 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2025-01-15',
+
+  i18n: {
+    vueI18n: './i18n.config.ts',
+    locales: [
+      { code: 'ja', name: '日本語', file: 'ja.json' },
+      { code: 'en', name: 'English(US)', file: 'en.json' }
+    ],
+    defaultLocale: 'ja',
+    langDir: 'locales/',
+    strategy: 'prefix_except_default' // https://v8.i18n.nuxtjs.org/guide/routing-strategies
+  },
 
   vite: {
     plugins: [

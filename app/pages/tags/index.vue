@@ -71,7 +71,6 @@ import { ref, onMounted } from 'vue'
 import { useTagsPageStore } from '~/stores/pages/tags'
 import { useTagsStore } from '~/stores/data/tags'
 import type { Tag } from '~/repositories/tags'
-import { useI18n } from '~/composables/useI18n'
 
 const name = ref('')
 const editing = ref<number | null>(null)

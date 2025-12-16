@@ -18,7 +18,7 @@ export default defineConfig({
   },
   plugins: [
     AutoImport({
-      imports: ['vue'],
+      imports: ['vue', 'vue-i18n'],
       dts: false
     }),
     vue()

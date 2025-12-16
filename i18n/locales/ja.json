@@ -14,10 +14,6 @@
     "editTitle": "フォルダ編集",
     "deleteConfirm": "フォルダ「{title}」を削除しますか？"
   },
-  "tags": {
-    "title": "タグ管理",
-    "create": "追加"
-  },
   "checks": {
     "title": "チェック統計"
   },

@@ -232,7 +232,6 @@ import { useLogger } from '~/composables/useLogger'
 import { useAuth } from '~/composables/useAuth'
 import { ref, computed, onMounted } from 'vue'
 import ConfirmModal from '~/components/ConfirmModal.vue'
-import { useI18n } from '~/composables/useI18n'
 
 // Data
 const searchQuery = ref('')

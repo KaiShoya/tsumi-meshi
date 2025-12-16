@@ -73,7 +73,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from '~/composables/useI18n'
 import type { Recipe } from '~/repositories/recipes'
 
 const { t } = useI18n()
