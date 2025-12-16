@@ -201,10 +201,10 @@ class ApiClient {
   // Dashboard / stats
   async getDashboardStats(range = '30d') {
     return this.request<{
-      summary: { totalRecipes: number, totalChecks: number, activeTags: number },
-      checksOverTime: Array<{ date: string, count: number }>,
-      topTags: Array<{ tag: string, count: number }>,
-      recentRecipes: Array<any>
+      summary: { totalRecipes: number, totalChecks: number, activeTags: number }
+      checksOverTime: Array<{ date: string, count: number }>
+      topTags: Array<{ tag: string, count: number }>
+      recentRecipes: Array<{ id: number, title: string, createdAt: string }>
     }>(`/stats?range=${encodeURIComponent(range)}`)
   }
 
