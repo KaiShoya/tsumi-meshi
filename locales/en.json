@@ -1,0 +1,66 @@
+{
+  "app": {
+    "title": "Tsumi-Meshi"
+  },
+  "folders": {
+    "title": "Folders",
+    "create": "Create folder",
+    "namePlaceholder": "Folder name",
+    "noFolders": "No folders yet. Create one!",
+    "adding": "Add"
+    ,
+    "loading": "Loading folders...",
+    "parent": "Parent folder",
+    "editTitle": "Edit folder",
+    "deleteConfirm": "Delete folder \"{title}\"?"
+  },
+  "tags": {
+    "title": "Tags",
+    "create": "Add"
+  },
+  "checks": {
+    "title": "Check Stats"
+  },
+  "recipes": {
+    "listTitle": "Recipes",
+    "new": "New recipe",
+    "searchPlaceholder": "Search recipes...",
+    "folderPlaceholder": "Select folder",
+    "tagsPlaceholder": "Select tags",
+    "noRecipesTitle": "No recipes",
+    "noRecipesBody": "Create your first recipe.",
+    "deleteFailed": "Failed to delete recipe",
+    "toggleCheckFailed": "Failed to toggle check",
+    "loadTagsFailed": "Failed to load tags",
+    "loadFoldersFailed": "Failed to load folders"
+  },
+  "confirm": {
+    "deleteTitle": "Confirm deletion",
+    "deleteMessage": "Deleting \"{title}\" cannot be undone.",
+    "deleteLabel": "Delete"
+  },
+  "tags": {
+    "title": "Tags",
+    "namePlaceholder": "Tag name",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteConfirm": "Delete tag \"{title}\"?"
+  },
+  "recipeChecks": {
+    "title": "Check History",
+    "noHistory": "No check history",
+    "back": "Back"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "create": "Create"
+  }
+  ,
+  "auth": {
+    "logout": "Logout"
+  }
+}

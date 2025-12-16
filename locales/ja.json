@@ -1,0 +1,66 @@
+{
+  "app": {
+    "title": "積み飯"
+  },
+  "folders": {
+    "title": "フォルダ管理",
+    "create": "新規フォルダ作成",
+    "namePlaceholder": "フォルダ名",
+    "noFolders": "フォルダがありません。新しいフォルダを作成しましょう！",
+    "adding": "追加"
+    ,
+    "loading": "フォルダを読み込み中...",
+    "parent": "親フォルダ",
+    "editTitle": "フォルダ編集",
+    "deleteConfirm": "フォルダ「{title}」を削除しますか？"
+  },
+  "tags": {
+    "title": "タグ管理",
+    "create": "追加"
+  },
+  "checks": {
+    "title": "チェック統計"
+  },
+  "recipes": {
+    "listTitle": "レシピ一覧",
+    "new": "新規レシピ",
+    "searchPlaceholder": "レシピを検索...",
+    "folderPlaceholder": "フォルダを選択",
+    "tagsPlaceholder": "タグを選択",
+    "noRecipesTitle": "レシピがありません",
+    "noRecipesBody": "最初のレシピを作成しましょう。",
+    "deleteFailed": "レシピの削除に失敗しました",
+    "toggleCheckFailed": "チェックの登録に失敗しました",
+    "loadTagsFailed": "タグの読み込みに失敗しました",
+    "loadFoldersFailed": "フォルダの読み込みに失敗しました"
+  },
+  "confirm": {
+    "deleteTitle": "本当に削除しますか？",
+    "deleteMessage": "『{title}』を削除すると元に戻せません。",
+    "deleteLabel": "削除する"
+  },
+  "tags": {
+    "title": "タグ管理",
+    "namePlaceholder": "タグ名",
+    "add": "追加",
+    "edit": "編集",
+    "delete": "削除",
+    "deleteConfirm": "タグ「{title}」を削除しますか？"
+  },
+  "recipeChecks": {
+    "title": "チェック履歴",
+    "noHistory": "チェック履歴がありません",
+    "back": "戻る"
+  },
+  "common": {
+    "cancel": "キャンセル",
+    "save": "保存",
+    "delete": "削除",
+    "confirm": "確認",
+    "create": "作成"
+  }
+  ,
+  "auth": {
+    "logout": "ログアウト"
+  }
+}

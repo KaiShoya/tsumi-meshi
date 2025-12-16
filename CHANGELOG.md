@@ -93,3 +93,32 @@ Minor completion of TODOs and API surface parity between client and server.
 
 ### Tests
 - Added `tests/stores/tags.spec.ts`, extended `tests/stores/recipes.spec.ts`, and added `tests/stores/ui.spec.ts`.
+
+
+## [v0.1.4] - 2025-12-16
+
+### Summary
+今回のリリースではフォルダ管理周りのUI実装、ストア／リポジトリの改良、テスト修正とドキュメント（spec）整備に加え、SFC `<spec>` ブロックの取り扱いや画像アップロード（R2 presign）機能、軽量な i18n の導入、開発支援ルールの整備を行いました。
+
+### Added
+- フォルダ UI コンポーネント: `FolderTree`, `FolderNode`, `FolderSelector`、作成/編集モーダル、ページ統合（`app/pages/folders/*`、`app/components/*`）
+- データ/ページストアとリポジトリの更新: `app/stores/data/folders.ts`, `app/stores/pages/folders.ts`, `app/repositories/folders.ts`（レシピのフォルダ更新処理を含む）
+- テスト: `apiClient` をモックする形へテストを更新、フォルダ関連のユニット/統合テストを追加・修正
+- ドキュメント: 複数の `.vue` ファイルに `<spec lang="md">` ブロックを追加し、`.agent/docs/tasks`／QA の該当エントリを更新
+- SFC `<spec lang="md">` をビルド/テスト時に安全に扱う Nuxt/Vite loader を導入
+- 画像アップロード（Cloudflare R2）用の presign API とクライアント実装: `server/api/upload/image.post.ts`, `app/composables/useUpload.ts`, `app/components/ImageUploader.vue` を追加
+- 軽量な `useI18n` composable とロケールファイルを追加して一部画面で `t()` を導入
+- 環境テンプレート: `.env.template` を追加（R2 / JWT 等の必須環境変数を記載）
+- E2E用の統合テスト（R2 presign）を追加（環境変数が未設定の場合はスキップ）: `tests/integration/upload-presign.spec.ts`
+- 開発支援ルール: `.github/copilot-coding-rules.md` を追加（Copilot と自動支援のための運用ルール）
+
+### Changed
+- ストアの一部でグローバル `$fetch` から `apiClient` へ移行（テストを合わせて修正）
+- lint / typecheck の指摘に対応するための小修正
+
+### Fixed
+- SFC の import/テスト環境での解析エラーを防ぐため、カスタム `<spec>` ブロック配置を整理
+
+### Release metadata
+- PR: https://github.com/KaiShoya/tsumi-meshi/pull/26 (feat: folder UI + stores + tests + docs (v0.1.4))
+

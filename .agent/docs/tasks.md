@@ -1,15 +1,14 @@
 # Task Index
 
-This index lists all task documentation versions.
+This index lists all task documentation versions and long-term backlog items.
 
 ## Active Versions
-- [v0.1 Tasks](./tasks/v0.1-tasks.md) - Initial development tasks
-
-## Archived Versions
-- None yet
+- v0.1 Tasks - Initial development tasks (aggregated)
+- v0.1.4 Tasks - Short-term release for folder UI, i18n, R2
+- v0.1.5 Tasks - Short-term release for dashboard, deploy, perf
 
 ## Summary
-Total tasks: 25
+Total tasks: 3
 ```markdown
 # Task Index
 
@@ -17,7 +16,8 @@ This index lists all task documentation versions and long-term backlog items.
 
 ## Active Versions
 - [v0.1 Tasks](./tasks/v0.1-tasks.md) - Initial development tasks (aggregated)
-- [v0.1.4 Tasks](./tasks/v0.1.4-tasks.md) - Short-term release for folder UI, i18n, R2
+- [v0.1.4 Tasks](./task-archive/v0.1.4-tasks.md) - Short-term release for folder UI, i18n, R2 (archived)
+- [v0.1.5 Tasks](./tasks/v0.1.5-tasks.md) - Short-term release for dashboard, deploy, perf
 - [v0.1.5 Tasks](./tasks/v0.1.5-tasks.md) - Short-term release for dashboard, deploy, perf
 
 ## Roadmaps

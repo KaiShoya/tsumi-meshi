@@ -3,7 +3,7 @@
     <h1
       class="text-2xl font-semibold mb-4"
     >
-      タグ管理
+      {{ t('tags.title') }}
     </h1>
 
     <div class="mb-6">
@@ -14,16 +14,16 @@
           <label
             for="tag-name-input"
             class="sr-only"
-          >タグ名</label>
+          >{{ t('tags.namePlaceholder') }}</label>
           <UInput
             id="tag-name-input"
             v-model="name"
-            placeholder="タグ名"
+            :placeholder="t('tags.namePlaceholder')"
           />
           <UButton
             type="submit"
           >
-            追加
+            {{ t('tags.add') }}
           </UButton>
         </div>
       </UForm>
@@ -45,19 +45,19 @@
             <UButton
               size="sm"
               variant="ghost"
-              :aria-label="`編集 ${tag.name}`"
+              :aria-label="`${t('tags.edit')} ${tag.name}`"
               @click="startEdit(tag)"
             >
-              編集
+              {{ t('tags.edit') }}
             </UButton>
             <UButton
               size="sm"
               variant="ghost"
               color="error"
-              :aria-label="`削除 ${tag.name}`"
+              :aria-label="`${t('tags.delete')} ${tag.name}`"
               @click="remove(tag.id, tag.name)"
             >
-              削除
+              {{ t('tags.delete') }}
             </UButton>
           </div>
         </li>
@@ -71,6 +71,7 @@ import { ref, onMounted } from 'vue'
 import { useTagsPageStore } from '~/stores/pages/tags'
 import { useTagsStore } from '~/stores/data/tags'
 import type { Tag } from '~/repositories/tags'
+import { useI18n } from '~/composables/useI18n'
 
 const name = ref('')
 const editing = ref<number | null>(null)
@@ -90,6 +91,8 @@ const onCreate = async () => {
   await pageStore.createTag({ name: name.value })
   name.value = ''
 }
+
+const { t } = useI18n()
 
 const startEdit = (tag: Tag) => {
   editing.value = tag.id

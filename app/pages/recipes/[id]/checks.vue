@@ -2,13 +2,13 @@
   <div class="space-y-6">
     <div class="flex items-center justify-between">
       <h1 class="text-2xl font-bold">
-        チェック履歴
+        {{ t('recipeChecks.title') }}
       </h1>
       <UButton
         variant="ghost"
         @click="navigateTo('/')"
       >
-        戻る
+        {{ t('recipeChecks.back') }}
       </UButton>
     </div>
 
@@ -17,7 +17,7 @@
       class="text-center py-8"
     >
       <p class="text-sm text-gray-500">
-        チェック履歴がありません
+        {{ t('recipeChecks.noHistory') }}
       </p>
     </div>
 
@@ -44,6 +44,7 @@
 import { useRoute } from 'vue-router'
 import { useChecksStore } from '~/stores/data/checks'
 import { useChecksPageStore } from '~/stores/pages/checks'
+import { useI18n } from '~/composables/useI18n'
 
 const route = useRoute()
 const recipeId = Number(route.params.id)
@@ -64,4 +65,6 @@ const formatDate = (iso: string) => {
 onMounted(async () => {
   await checksPage.fetchChecks(recipeId)
 })
+
+const { t } = useI18n()
 </script>
