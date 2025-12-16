@@ -142,7 +142,7 @@
 <script setup lang="ts">
 import { z } from 'zod'
 import { useAuth } from '~/composables/useAuth'
-import { toStandard } from '../../../utils/zodStandardAdapter'
+import { toStandard } from '../../utils/zodStandardAdapter'
 
 definePageMeta({
   layout: false
