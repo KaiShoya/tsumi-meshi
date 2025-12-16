@@ -40,6 +40,17 @@ CI 要求（PR マージ前）:
 
 将来的な改善案:
 - `husky` + `lint-staged` を導入して `pre-commit` で `eslint --fix` と型の簡易チェックを走らせる。
+ - `husky` + `lint-staged` を導入して `pre-commit` で `eslint --fix` と型の簡易チェックを走らせる。
+  
+## 現在の自動化（2025-12-16）
+
+- `husky` と `lint-staged` を導入済み。`pre-commit` フックによりローカルコミット前に `pnpm lint --fix` と `pnpm typecheck` を実行する設定が入っている。
+- Copilot が生成するコードは `.github/copilot-coding-rules.md` を参照し、ローカルの `pnpm lint` / `pnpm typecheck` を必ず通した上でコミットすること。
+
+## Copilot への追加指示
+
+- 自動生成コードが `eslint`/`typecheck` を通さない場合は修正案を提示し、そのままコミットしないこと。
+- 仕様/API 変更を含むコードは、同一 PR に `.agent/specs/*` の更新を含めるか、`spec-exception` ラベル付きで QA エントリを作成すること（既存の Documentation Sync Rules に従う）。
 - `CONTRIBUTING.md` にこのチェック手順を追加し、PR テンプレートでチェックリスト化する。
 
 作業履歴と注意点:

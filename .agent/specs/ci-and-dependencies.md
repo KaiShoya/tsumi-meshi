@@ -34,7 +34,21 @@
 ## v0.1.2 での追加規約
 
 - **Lint / Typecheck を必須化**: すべての開発者はコード変更後に `pnpm lint` と `pnpm typecheck` を実行し、PR を作成する前に問題を解消すること。CI はこれを必須として検証する。
+ - **Lint / Typecheck を必須化**: すべての開発者はコード変更後に `pnpm lint` と `pnpm typecheck` を実行し、PR を作成する前に問題を解消すること。CI はこれを必須として検証する。
+ - **pre-commit フック**: リポジトリに `husky` + `lint-staged` を導入済み。コミット前に `pnpm lint --fix` と `pnpm typecheck` が実行されるため、ローカルでの早期検出が期待できる。
 - **リリース PR の CHANGELOG 更新を必須化**: `release/*` ブランチの PR は `CHANGELOG.md` にエントリを追加すること（`Specs Check` ワークフローで自動検出）。
 - **E2E スモークの運用方針**: E2E スモークテストは当面 `release/*` ブランチまたはスケジュール実行で走らせる。将来的に CI コストと効果を評価して PR 実行を拡張する。
+ - **E2E スモークの運用方針**: E2E スモークテストは当面 `release/*` ブランチまたはスケジュール実行で走らせる。将来的に CI コストと効果を評価して PR 実行を拡張する。
+
+## 推奨 CI ワークフロー（テンプレ）
+
+最低限、PR の CI は以下を実行してください:
+
+1. `pnpm install --frozen-lockfile`
+2. `pnpm lint --max-warnings=0`
+3. `pnpm typecheck`
+4. `pnpm test -- --run`
+
+このワークフローはブランチ保護ルールで必須化することを推奨します。R2/外部 E2E はオプトインのジョブとして切り分け、必要なシークレットがない場合はスキップされるようにしてください。
 - **アクセシビリティ自動テスト**: UI を修正する PR は `axe-core` を使った a11y テストを同一 PR に含めること。プロジェクトは `tests/a11y/*.a11y.spec.ts` の運用を始めた。
 

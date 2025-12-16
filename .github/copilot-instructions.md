@@ -27,6 +27,8 @@ These instructions define how GitHub Copilot should assist with this TypeScript 
 - Do not edit `package.json` manually to add dev dependencies; use `pnpm add -D <pkg>` so the lockfile (`pnpm-lock.yaml`) stays in sync and can be committed. The CI uses `pnpm install --frozen-lockfile` to ensure reproducibility.
 - Release PRs should update `CHANGELOG.md`. The repository enforces this for `release/*` branch PRs. Use the `release` workflow (or trigger `release.yml`) to create a GitHub release and tag.
 - When making code/API changes, update the appropriate `.agent/specs/` or `.agent/docs/tasks/` entries in the same PR. The `Specs Check` workflow will fail PRs that change code without corresponding spec/docs/task/CHANGELOG updates unless a `spec-exception` label is added with a QA entry.
+ - When making code/API changes, update the appropriate `.agent/specs/` or `.agent/docs/tasks/` entries in the same PR. The `Specs Check` workflow will fail PRs that change code without corresponding spec/docs/task/CHANGELOG updates unless a `spec-exception` label is added with a QA entry.
+ - Copilot-generated edits must follow `.github/copilot-coding-rules.md`. Generated code should not be committed unless it passes local `pnpm lint --fix` and `pnpm typecheck` checks and the accompanying `.agent/specs`/`CHANGELOG.md` updates are included when applicable.
 - Use the repository TODO list manager for larger tasks and mark progress (`manage_todo_list`) so agents and contributors can track completion.
 
 ## Recent Fixes / Common Mistakes (learned from recent releases)
@@ -164,6 +166,11 @@ These rules are mandatory for automated edits and are intended to prevent accide
   - `## Security`（認証情報や機密/危険な挙動があるなら）
   - `## i18n`
 - 仕様更新を伴う実装変更では、コードと `<spec>` を同じコミット/PRで更新する。
+
+## Copilot / Agent behavior additions
+
+- The repository now enforces a pre-commit check (`husky` + `lint-staged`). Copilot/agents should not produce code that violates lint/typecheck; if suggestions would introduce failures, provide a compliant alternative.
+- A human must approve any push that modifies more than one file under `.agent/` or `.github/` (see Agent File-Movement Rules). Agents must always record spec/docs changes in the same PR.
 
 # その他
 
