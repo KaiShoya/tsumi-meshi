@@ -43,8 +43,8 @@ class ApiClient {
         // so tests that assert exact args (e.g. logout) continue to pass.
         const $fetch = g.$fetch as unknown as (u: string, o?: Record<string, unknown>) => Promise<unknown>
         const optsFor$fetch: Record<string, unknown> = options.body == null
-          ? { method: options.method ?? 'GET' }
-          : ({ ...options } as Record<string, unknown>)
+          ? { method: options.method ?? 'GET', credentials: 'include' }
+          : ({ ...options, credentials: 'include' } as Record<string, unknown>)
 
         const parsed = await $fetch(url, optsFor$fetch)
         return parsed as unknown as T
@@ -52,7 +52,9 @@ class ApiClient {
       const fetchImpl = (g.fetch as unknown as typeof fetch) ?? fetch
       const response = await fetchImpl(url, {
         ...options,
-        headers
+        headers,
+        // Ensure cookies are sent for cookie-based auth (cross-origin dev server)
+        credentials: 'include'
       })
 
       if (!response.ok) {

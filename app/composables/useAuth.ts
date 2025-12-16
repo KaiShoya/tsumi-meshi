@@ -17,49 +17,50 @@ export interface AuthState {
 }
 
 export const useAuth = () => {
-  const state = reactive<AuthState>({
+  // Use Nuxt's `useState` to keep auth state shared across all callers
+  const state = useState<AuthState>('auth-state', () => ({
     user: null,
     loading: false
-  })
+  }))
 
   // Initialize auth state by asking server for current session
   const initAuth = async () => {
-    state.loading = true
+    state.value.loading = true
     try {
       // Use centralized apiClient (Cloudflare Workers) for auth calls.
       const res = await apiClient.getCurrentUser()
-      state.user = (res as { user?: User | null })?.user ?? null
+      state.value.user = (res as { user?: User | null })?.user ?? null
     } catch {
       // Not authenticated or error: clear local state
-      state.user = null
+      state.value.user = null
     } finally {
-      state.loading = false
+      state.value.loading = false
     }
   }
 
   // Login function
   const login = async (email: string, password: string) => {
-    state.loading = true
+    state.value.loading = true
     try {
       const response = await apiClient.login(email, password)
       const user = (response as { user?: User })?.user
-      state.user = (user ?? null) as User | null
+      state.value.user = (user ?? null) as User | null
       await navigateTo('/')
     } finally {
-      state.loading = false
+      state.value.loading = false
     }
   }
 
   // Register function
   const register = async (name: string, email: string, password: string) => {
-    state.loading = true
+    state.value.loading = true
     try {
       const response = await apiClient.register(name, email, password)
       const user = (response as { user?: User })?.user
-      state.user = (user ?? null) as User | null
+      state.value.user = (user ?? null) as User | null
       await navigateTo('/')
     } finally {
-      state.loading = false
+      state.value.loading = false
     }
   }
 
@@ -76,21 +77,21 @@ export const useAuth = () => {
 
   // Clear authentication data
   const clearAuth = () => {
-    state.user = null
+    state.value.user = null
   }
 
   // Check if user is authenticated
-  const isAuthenticated = computed(() => !!state.user)
+  const isAuthenticated = computed(() => !!state.value.user)
 
   // Get current user ID (for API calls)
   const getCurrentUserId = () => {
-    return state.user?.id || null
+    return state.value.user?.id || null
   }
 
   return {
     // State
-    user: computed(() => state.user),
-    loading: readonly(state).loading,
+    user: computed(() => state.value.user),
+    loading: computed(() => state.value.loading),
     isAuthenticated,
 
     // Methods

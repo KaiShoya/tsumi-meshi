@@ -15,7 +15,20 @@ import type { Bindings } from './types'
 const app = new Hono<{ Bindings: Bindings }>()
 
 // Middleware
-app.use('*', cors())
+// Use CORS with credentials support by echoing the request origin and allowing credentials.
+app.use('*', async (c, next) => {
+  const origin = c.req.header('Origin') || '*'
+  c.header('Access-Control-Allow-Origin', origin)
+  c.header('Access-Control-Allow-Credentials', 'true')
+  c.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
+  c.header('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+
+  if (c.req.method === 'OPTIONS') {
+    return c.text('', 204)
+  }
+
+  await next()
+})
 app.use('*', logger())
 
 // JWT middleware for protected routes (factory kept centralized)

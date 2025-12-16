@@ -53,6 +53,17 @@ export function registerAuthRoutes(
       const header = { alg: 'HS256', typ: 'JWT' }
       const jwtToken = await createJWT(header, payload, c.env.JWT_SECRET)
 
+      // Set HttpOnly cookie for session-based auth. Use SameSite=None and Secure when appropriate
+      // Note: in local dev (http) Secure cookies won't be set by browsers—tests/dev may rely on token in response.
+      const maxAge = 24 * 60 * 60
+      const cookieParts = [`tsumi_session=${jwtToken}`, `HttpOnly`, `Path=/`, `Max-Age=${maxAge}`]
+      // For cross-site contexts, SameSite=None and Secure are required; add SameSite=None for general compatibility
+      cookieParts.push('SameSite=None')
+      // Add Secure flag by default; in local http dev the browser may ignore Secure cookie, but production will require it.
+      cookieParts.push('Secure')
+
+      c.header('Set-Cookie', cookieParts.join('; '))
+
       return c.json({ user: { id: user.id, email: user.email, name: user.name }, token: jwtToken })
     } catch (error) {
       console.error('Login error:', error)
