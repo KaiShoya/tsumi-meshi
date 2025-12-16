@@ -152,9 +152,6 @@ const schema = z.object({
   email: z.string().email('有効なメールアドレスを入力してください'),
   password: z.string().min(6, 'パスワードは6文字以上で入力してください'),
   confirmPassword: z.string()
-}).refine(data => data.password === data.confirmPassword, {
-  message: 'パスワードが一致しません',
-  path: ['confirmPassword']
 })
 
 type Schema = z.output<typeof schema>
@@ -172,12 +169,30 @@ const error = ref('')
 const { register } = useAuth()
 
 const onSubmit = async (event: unknown) => {
-  const data = (event as { data: typeof schema._output }).data
   loading.value = true
   error.value = ''
 
+  // UForm emits { data } or nothing; support both
+  const payload = (event && (event as { data?: unknown }).data) ? (event as { data: unknown }).data : state
+
+  const result = schema.safeParse(payload)
+  if (!result.success) {
+    const first = result.error.errors?.[0]
+    error.value = first?.message ?? '入力が正しくありません'
+    loading.value = false
+    return
+  }
+
+  // manual cross-field validation for password match (UForm doesn't accept Zod effects)
+  const parsed = result.data as Schema
+  if (parsed.password !== parsed.confirmPassword) {
+    error.value = 'パスワードが一致しません'
+    loading.value = false
+    return
+  }
+
   try {
-    await register(data.name, data.email, data.password)
+    await register(parsed.name, parsed.email, parsed.password)
   } catch (err: unknown) {
     error.value = err instanceof Error ? err.message : '登録に失敗しました'
   } finally {
