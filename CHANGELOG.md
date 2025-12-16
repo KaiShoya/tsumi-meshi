@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Summary
+Planned changes for v0.1.5: dashboard & analytics, deploy/CI improvements, performance work, and Chrome extension scaffolding.
+
+### To be added
+- Dashboard: recipe counts, check history, and tag usage frequency UI
+- Backend aggregation APIs for dashboard (Workers)
+- CI / Deploy: Pages + Workers deployment verification and opt-in E2E for R2
+- Performance: Lighthouse improvements and related fixes
+
+
 ## [v0.1.1] - 2025-12-14
 
 ### Summary
