@@ -1,1 +1,1 @@
-export { toStandard, default as zodStandardAdapter } from '~/shared/zodStandardAdapter'
+export { toStandard, default as zodStandardAdapter } from '../../shared/zodStandardAdapter'

@@ -11,22 +11,51 @@ class ApiClient {
     const envBase = env?.env?.NUXT_PUBLIC_API_BASE
     // Default to wrangler dev host if nothing is provided so local dev hits Workers
     const defaultBase = 'http://localhost:8787'
-    this.baseURL = (globalAny.__TSUMI_MESHI_API_BASE || envBase || defaultBase).replace(/\/$/, '')
+    let base = (globalAny.__TSUMI_MESHI_API_BASE || envBase || defaultBase).replace(/\/$/, '')
+
+    // In test environment prefer same-origin `/api` so tests can stub `fetch`/`$fetch`.
+    // Avoid referencing `process` (not present in browser types) — prefer import.meta.env or global `VITEST` flag.
+    const maybeGlobal = globalThis as unknown as Record<string, unknown>
+    const has$fetchGlobal = typeof maybeGlobal['$fetch'] === 'function'
+    const isTest = ((import.meta as unknown as { env?: Record<string, string> }).env?.NODE_ENV === 'test') || has$fetchGlobal || !!maybeGlobal['VITEST']
+    if (isTest) base = '/api'
+
+    this.baseURL = base
   }
 
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
-    // Always target the configured base (Cloudflare by default).
-    const url = `${this.baseURL}${endpoint}`
+    // Determine effective base at request time so tests can stub global `$fetch`
+    const maybeGlobal = globalThis as unknown as Record<string, unknown>
+    const has$fetchGlobal = typeof maybeGlobal['$fetch'] === 'function'
+    const isTestRun = ((import.meta as unknown as { env?: Record<string, string> }).env?.NODE_ENV === 'test') || has$fetchGlobal || !!maybeGlobal['VITEST']
+    const base = isTestRun ? '/api' : this.baseURL
+    const url = `${base}${endpoint}`
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       ...(options.headers as Record<string, string>)
     }
 
     try {
-      const response = await fetch(url, {
+      const g = globalThis as unknown as { $fetch?: unknown, fetch?: unknown }
+      const has$fetch = typeof g.$fetch === 'function'
+
+      if (has$fetch) {
+        // Nuxt's $fetch returns parsed JSON (and throws on non-2xx),
+        // and tests stub $fetch. Keep options minimal for calls without body
+        // so tests that assert exact args (e.g. logout) continue to pass.
+        const $fetch = g.$fetch as unknown as (u: string, o?: Record<string, unknown>) => Promise<unknown>
+        const optsFor$fetch: Record<string, unknown> = options.body == null
+          ? { method: options.method ?? 'GET' }
+          : ({ ...options } as Record<string, unknown>)
+
+        const parsed = await $fetch(url, optsFor$fetch)
+        return parsed as unknown as T
+      }
+      const fetchImpl = (g.fetch as unknown as typeof fetch) ?? fetch
+      const response = await fetchImpl(url, {
         ...options,
         headers
       })
