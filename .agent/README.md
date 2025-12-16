@@ -13,19 +13,19 @@
 ├── specs/               # 仕様・設計の確定版（ソース・オブ・トゥルース）
 │   └── ci-and-dependencies.md  # CI・パッケージ管理に関する運用ルール
 ├── docs/
-│   ├── QA_AND_DECISIONS.md  # Q&A と設計決定ログ
+│   ├── qa.md                # Q&A と設計決定ログ
 │   ├── tasks.md             # リリース時のみ更新する統一インデックス
 │   ├── backlog-tasks.md     # バージョン未決定タスク & ロードマップ
 │   ├── tasks/               # マイナーバージョン別タスク（開発中に随時更新）
 │   ├── qa/                  # 開発中のQ&A / 決定事項（バージョン別）
 │   ├── qa-archive/          # 完了・アーカイブ済みのQ&A（参照用）
 │   └── task-archive/        # 完了済みバージョンの保管
-└── README.md            # この説明書
+└── README.md                # この説明書
 ```
 
 ## クイックスタート
 1. 仕様・設計を追加/変更する場合は `.agent/specs/` を編集。
-2. Q&A や設計決定は `.agent/docs/QA_AND_DECISIONS.md` に記録。
+2. Q&A や設計決定は `.agent/docs/qa.md` に記録。
 3. 開発タスクは `.agent/docs/tasks/vX.Y-tasks.md` で管理（X.Y はマイナーバージョン）。
 4. バージョン未決定のタスクは `.agent/docs/backlog-tasks.md` に記載。
 5. コード修正・追加・削除時は、関連する specs/docs を同一 PR で同期更新。
@@ -39,13 +39,13 @@
 
 ## PR チェックリスト
 - 仕様変更は `.agent/specs/` へ反映済みか。
-- Q&A や決定事項は `.agent/docs/QA_AND_DECISIONS.md` に記録済みか。
+- Q&A や決定事項は `.agent/docs/qa.md` に記録済みか。
 - タスクに Issue/PR/Commit のリンクを記載したか。
 - PR 本文に「ドキュメント更新」セクションを含めたか。
 
 ## 強制ルール（自動化）
 - **ルール**: コードの変更は必ず関連する `specs` / `docs` / `tasks` を同一 PR で更新すること。
-- もし更新できない場合は、PR に `spec-exception` ラベルを付け、`.agent/docs/QA_AND_DECISIONS.md` に理由と次のアクションを記載すること。
+- もし更新できない場合は、PR に `spec-exception` ラベルを付け、`.agent/docs/qa.md` に理由と次のアクションを記載すること。
 - CI ワークフローにより PR がコード変更を含むと自動検出された場合、対応する `specs`/`docs` の差分がなければ CI が失敗（または警告）します。
 
 ### アーカイブ注意事項

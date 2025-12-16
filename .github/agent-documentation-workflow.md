@@ -8,7 +8,7 @@ This project uses `.agent/` directory for agent-driven documentation management:
 .agent/
   ├── specs/                  # Source of truth for specifications
   ├── docs/
-  │   ├── qa-index.md         # QA index (updated at release)
+  │   ├── qa.md               # QA index (updated at release)
   │   ├── tasks.md            # Task list index (updated at release)
   │   ├── qa/                 # Version-based Q&A
   │   ├── tasks/              # Version-based task lists
@@ -35,7 +35,7 @@ This project uses `.agent/` directory for agent-driven documentation management:
 
 Use this directory for:
 
-#### **QA_AND_DECISIONS.md** - Questions & Decisions Log
+#### **qa.md** - Questions & Decisions Log
 - Format: `## [Category] Question Title`
   - Categories: `[API]`, `[UI]`, `[Architecture]`, `[Testing]`, `[Database]`, etc.
 - Recommended structure:
@@ -51,15 +51,14 @@ Use this directory for:
   ```
 - Purpose: Document design decisions and architectural discussions for future reference
 
-**QA File Division Rule (Adopted from v1.20)**:
+**QA File Division Rule**:
 
 QA lists are divided by version to prevent merge conflicts. Same structure as tasks.md.
 
 **Directory Structure**:
 ```
 .agent/docs/
-├── qa-index.md              ← Index (equivalent to tasks.md)
-├── QA_AND_DECISIONS.md      ← Legacy (for v1.19 and earlier)
+├── qa.md              ← Index (equivalent to tasks.md)
 └── qa/
     ├── v1.20-qa.md          ← v1.20 Q&A and decisions during development
     ├── v1.21-qa.md          ← v1.21 Q&A (planned)
@@ -182,134 +181,6 @@ feat: add drink filtering by date range
 
 ## 🏗️ Implementation Guidelines
 
-### Store Implementation Pattern
-
-**Responsibility Separation**: Strictly separate Data Stores and Page Stores
-
-#### Data Stores (`store/data/`)
-```ts
-// Simple CRUD + repository calls
-const fetchDrinks = async () => {
-  try {
-    drinks.value = await $drinksRepository.fetchAll()
-  } catch (error) {
-    // Simply rethrow (no toast message)
-    throw error
-  }
-}
-
-// Expose state as readonly
-return {
-  drinks: readonly(drinks),
-  fetchDrinks,
-}
-```
-
-**Rules**:
-- ✅ Call repositories directly
-- ✅ Rethrow errors as-is
-- ✅ Do not display toast messages
-- ✅ Expose state as `readonly()`
-- ❌ No combining multiple stores
-- ❌ No business logic or aggregation
-
-#### Page Stores (`store/pages/`)
-```ts
-// Combine multiple data stores + error handling + toast display
-const fetchData = async () => {
-  try {
-    showLoading()
-    await drinksStore.fetchDrinks()
-    // Data aggregation and transformation
-  } catch (error) {
-    if (error instanceof CustomError) {
-      showDangerToast(error.getMessage())
-    }
-    logger.error('Failed to fetch', { module: 'indexStore' }, error)
-  } finally {
-    hideLoading()
-  }
-}
-```
-
-**Rules**:
-- ✅ Combine multiple data stores
-- ✅ Catch errors and display toast
-- ✅ Implement aggregation and transformation logic
-- ✅ Record logging
-- ✅ Manage loading state
-- ❌ No direct repository calls
-- ❌ No rethrow without error handling
-
-### Error Handling Layer Diagram
-
-```
-Component
-    ↓ (call store action)
-Page Store ← Display toast, log errors
-    ↓ (call data store)
-Data Store ← Simply rethrow
-    ↓ (call repository)
-Repository ← Throw CustomError
-    ↓
-Cloudflare API
-```
-
-**Each Layer's Responsibility**:
-
-1. **Repository** (`app/repositories/`)
-   - Catch Cloudflare API errors
-   - Convert to `CustomError` and throw
-   - Messages for developers (English)
-
-2. **Data Store** (`store/data/`)
-   - Simply rethrow errors
-   - No processing (delegate to Page Store)
-
-3. **Page Store** (`store/pages/`)
-   - Catch errors
-   - Notify users with `showDangerToast()`
-   - Log errors with `logger.error()`
-   - Reset UI state if needed
-
-4. **Component** (`app/components/`)
-   - Call Page Store action
-   - Receive user notification via store
-   - No direct error handling needed
-
-**Toast Types**:
-```ts
-showSuccessToast('Operation successful')      // Green
-showInfoToast('Information message')          // Blue
-showWarningToast('Warning message')           // Yellow
-showDangerToast('Error occurred')             // Red
-```
-
-**Example**: Delete drink
-```ts
-// Page Store: deleteAction
-const deleteDrink = async (id: number, name: string) => {
-  try {
-    showLoading()
-    await drinksStore.deleteDrink(id)
-    showSuccessToast(
-      t(LOCALE_DRINKS_DELETE_SUCCESS, { name })
-    )
-    await fetchDrinks()  // Reload
-  } catch (error) {
-    if (error instanceof CustomError) {
-      showDangerToast(error.getMessage())
-    }
-    logger.error('Failed to delete drink', 
-      { module: 'drinksStore', drinkId: id }, 
-      error
-    )
-  } finally {
-    hideLoading()
-  }
-}
-```
-
 ### PR Review Checklist
 
 When creating or reviewing PRs, verify:
@@ -379,7 +250,6 @@ When code changes are ready for PR:
 - ❌ Creating specs without real implementation
 - ❌ Duplicating information across multiple files
 - ❌ Forgetting to link GitHub Issues
-- ❌ Leaving resolved questions in `.agent/docs/` indefinitely
 
 ---
 
