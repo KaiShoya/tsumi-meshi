@@ -76,7 +76,7 @@ const router = useRouter()
 const id = Number(route.params.id)
 const loaded = ref(false)
 const imageKey = ref<string | null>(null)
-type FormType = { title: string; url: string; description: string; folderId?: number | undefined }
+type FormType = { title: string, url: string, description: string, folderId?: number | undefined }
 const form = reactive<FormType>({ title: '', url: '', description: '', folderId: undefined })
 
 onMounted(async () => {
