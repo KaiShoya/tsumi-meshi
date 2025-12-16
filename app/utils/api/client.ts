@@ -4,14 +4,21 @@ class ApiClient {
   private baseURL: string
 
   constructor() {
-    // In production, this should be your Cloudflare Workers URL
-    this.baseURL = 'http://localhost:8787' // For local development
+    // Prefer an external API (Cloudflare Workers). Use the global override or
+    // `NUXT_PUBLIC_API_BASE` if provided; otherwise default to localhost wrangler.
+    const globalAny = globalThis as unknown as { __TSUMI_MESHI_API_BASE?: string }
+    const env = import.meta as unknown as { env?: Record<string, string> }
+    const envBase = env?.env?.NUXT_PUBLIC_API_BASE
+    // Default to wrangler dev host if nothing is provided so local dev hits Workers
+    const defaultBase = 'http://localhost:8787'
+    this.baseURL = (globalAny.__TSUMI_MESHI_API_BASE || envBase || defaultBase).replace(/\/$/, '')
   }
 
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
+    // Always target the configured base (Cloudflare by default).
     const url = `${this.baseURL}${endpoint}`
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -189,6 +196,24 @@ class ApiClient {
 
   async getCheckStats(period: 'month' | 'week' = 'month') {
     return this.request<{ totalChecks: number, periodChecks: number }>(`/checks/stats?period=${period}`)
+  }
+
+  // Dashboard / stats
+  async getDashboardStats(range = '30d') {
+    return this.request<{
+      summary: { totalRecipes: number, totalChecks: number, activeTags: number },
+      checksOverTime: Array<{ date: string, count: number }>,
+      topTags: Array<{ tag: string, count: number }>,
+      recentRecipes: Array<any>
+    }>(`/stats?range=${encodeURIComponent(range)}`)
+  }
+
+  // Upload helper (presign or server-side handling)
+  async requestUpload(name: string, size: number, type: string) {
+    return this.request<{ ok?: boolean, url?: string, key?: string, data?: unknown }>('/upload/image', {
+      method: 'POST',
+      body: JSON.stringify({ name, size, type })
+    })
   }
 }
 

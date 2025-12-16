@@ -82,7 +82,13 @@ async function handleSubmit() {
     }
     if (imageKey) payload.imageUrl = imageKey
 
-    await $fetch('/api/recipes', { method: 'POST', body: payload })
+    try {
+      // Use centralized apiClient (Cloudflare Workers)
+      await (await import('~/utils/api/client')).apiClient.createRecipe(payload)
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
     await router.push('/')
   } catch (err: unknown) {
     console.error(err)

@@ -58,7 +58,7 @@
       </div>
 
       <UForm
-        :schema="schema"
+        :schema="standardSchema"
         :state="state"
         class="space-y-6"
         @submit="onSubmit"
@@ -142,6 +142,7 @@
 <script setup lang="ts">
 import { z } from 'zod'
 import { useAuth } from '~/composables/useAuth'
+import { toStandard } from '../../../utils/zodStandardAdapter'
 
 definePageMeta({
   layout: false
@@ -162,6 +163,8 @@ const state = reactive<Schema>({
   password: '',
   confirmPassword: ''
 })
+
+const standardSchema = toStandard(schema)
 
 const loading = ref(false)
 const error = ref('')

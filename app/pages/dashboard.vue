@@ -81,7 +81,10 @@ import StatsChart from '~/components/StatsChart.vue'
 
 defineOptions({ name: 'DashboardPage' })
 
-const { data, error } = await useAsyncData('dashboard-stats', () => $fetch('/api/stats?range=30d'))
+const { data, error } = await useAsyncData('dashboard-stats', async () => {
+  const { apiClient } = await import('~/utils/api/client')
+  return apiClient.getDashboardStats('30d')
+})
 </script>
 
 <style scoped>

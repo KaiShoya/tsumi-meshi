@@ -26,14 +26,9 @@ export const useAuth = () => {
   const initAuth = async () => {
     state.loading = true
     try {
-      const globalAny = globalThis as unknown as { $fetch?: (...args: unknown[]) => Promise<unknown> }
-      if (typeof globalAny.$fetch === 'function') {
-        const res = await globalAny.$fetch('/api/auth/me')
-        state.user = (res as { user?: User | null })?.user ?? null
-      } else {
-        const res = await apiClient.getCurrentUser()
-        state.user = (res as { user?: User | null })?.user ?? null
-      }
+      // Use centralized apiClient (Cloudflare Workers) for auth calls.
+      const res = await apiClient.getCurrentUser()
+      state.user = (res as { user?: User | null })?.user ?? null
     } catch {
       // Not authenticated or error: clear local state
       state.user = null
@@ -46,16 +41,9 @@ export const useAuth = () => {
   const login = async (email: string, password: string) => {
     state.loading = true
     try {
-      const globalAny = globalThis as unknown as { $fetch?: (...args: unknown[]) => Promise<unknown> }
-      if (typeof globalAny.$fetch === 'function') {
-        const response = await globalAny.$fetch('/api/auth/login', { method: 'POST', body: { email, password } })
-        const user = (response as { user?: User })?.user
-        state.user = (user ?? null) as User | null
-      } else {
-        const response = await apiClient.login(email, password)
-        const user = (response as { user?: User })?.user
-        state.user = (user ?? null) as User | null
-      }
+      const response = await apiClient.login(email, password)
+      const user = (response as { user?: User })?.user
+      state.user = (user ?? null) as User | null
       await navigateTo('/')
     } finally {
       state.loading = false
@@ -66,16 +54,9 @@ export const useAuth = () => {
   const register = async (name: string, email: string, password: string) => {
     state.loading = true
     try {
-      const globalAny = globalThis as unknown as { $fetch?: (...args: unknown[]) => Promise<unknown> }
-      if (typeof globalAny.$fetch === 'function') {
-        const response = await globalAny.$fetch('/api/auth/register', { method: 'POST', body: { name, email, password } })
-        const user = (response as { user?: User })?.user
-        state.user = (user ?? null) as User | null
-      } else {
-        const response = await apiClient.register(name, email, password)
-        const user = (response as { user?: User })?.user
-        state.user = (user ?? null) as User | null
-      }
+      const response = await apiClient.register(name, email, password)
+      const user = (response as { user?: User })?.user
+      state.user = (user ?? null) as User | null
       await navigateTo('/')
     } finally {
       state.loading = false
@@ -85,12 +66,7 @@ export const useAuth = () => {
   // Logout function
   const logout = async () => {
     try {
-      const globalAny = globalThis as unknown as { $fetch?: (...args: unknown[]) => Promise<unknown> }
-      if (typeof globalAny.$fetch === 'function') {
-        await globalAny.$fetch('/api/auth/logout', { method: 'POST' })
-      } else {
-        await apiClient.logout()
-      }
+      await apiClient.logout()
     } catch {
       // ignore errors on logout
     }
