@@ -232,6 +232,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StatsResponse'
+  /stats:
+    get:
+      summary: Dashboard summary and recent activity
+      tags: [stats]
+      parameters:
+        - in: query
+          name: range
+          schema:
+            type: string
+            enum: [30d, 90d, 365d]
+          description: Time range for aggregated checks and trends
+      responses:
+        '200':
+          description: Aggregated dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsResponse'
   /upload/image:
     post:
       summary: Request presigned upload metadata for image
