@@ -32,7 +32,7 @@ describe('useAuth', () => {
     const auth = useAuth()
     await auth.login('b@c.com', 'password')
 
-    expect(fetchMock).toHaveBeenCalledWith('/api/auth/login', expect.any(Object))
+    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/auth/login'), expect.any(Object))
     expect(auth.user.value).toEqual(mockUser)
     expect(nav).toHaveBeenCalledWith('/')
   })
@@ -50,7 +50,7 @@ describe('useAuth', () => {
 
     await auth.logout()
 
-    expect(fetchMock).toHaveBeenCalledWith('/api/auth/logout', { method: 'POST' })
+    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/auth/logout'), { method: 'POST' })
     expect(auth.isAuthenticated.value).toBe(false)
     expect(nav).toHaveBeenCalledWith('/auth/login')
   })

@@ -19,15 +19,16 @@ describe('auth refresh integration (simulated)', () => {
     let cookiePresent = false
 
     const fetchStub = vi.fn(async (path: string, _opts?: unknown) => {
-      if (path === '/api/auth/me') {
+      // Accept either full base URL or bare path; match on suffix
+      if (String(path).endsWith('/auth/me')) {
         return { user: cookiePresent ? fakeUser : null }
       }
-      if (path === '/api/auth/login') {
+      if (String(path).endsWith('/auth/login')) {
         // login sets cookie on the server; simulate by flipping flag
         cookiePresent = true
         return { user: fakeUser }
       }
-      if (path === '/api/auth/logout') {
+      if (String(path).endsWith('/auth/logout')) {
         cookiePresent = false
         return {}
       }

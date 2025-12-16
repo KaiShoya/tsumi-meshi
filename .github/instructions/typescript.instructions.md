@@ -15,7 +15,7 @@
 - API レスポンスは具体型で返す: `apiClient` 等のメソッドの戻り型は `unknown[]` や `any` ではなく、可能な限り形状 (`{ id: number; title: string; createdAt: string }` 等) を明記する。
 - テスト互換性:
   - テスト環境では Nuxt の `$fetch` がスタブされることがあるため、テスト時に `$fetch` を優先利用するラッパー実装がある。生成するコードは `globalThis.$fetch` の存在を壊さないように呼び出すか、既存の `apiClient` を使うこと。
-  - 同一オリジンの API 呼び出しを期待するテスト (`/api/...`) があるため、`apiClient` の base URL は環境(テスト/開発/Cloudflare)に応じて正しく扱うこと。
+  - 同一オリジンの API 呼び出しを期待するテスト (`/api/v1/...`) があるため、`apiClient` の base URL は環境(テスト/開発/Cloudflare)に応じて正しく扱うこと。
 - 不要な try/catch は避ける: 内側で例外を単に再投げするだけの `try { ... } catch(e) { throw e }` は削除する。
 - ロガー呼び出しはガードする: `useLogger` 等の import が失敗してもフォールバックできるように `try` で囲むか存在チェックを行う。
 - タイプリテラルの区切りはプロジェクトの stylistic 設定に合わせる: メンバー区切り (comma/semicolon 等) は ESLint 設定に従う。生成コードは既存ファイルのスタイルに合わせてください。
@@ -40,7 +40,7 @@ interface DashboardStats {
 
 テストでの注意点
 - テストは `vi.stubGlobal('$fetch', ...)` を使って API 呼び出しをモックしている箇所がある。生成コードは `$fetch` の置き換えを阻害しないこと。
-- Node 環境の `fetch` 実装に依存する箇所（URL の構築など）は `new URL(...)` に渡される値が必ず有効な完全 URL か、テスト時には `/api/...` 等の同一オリジンパスになるように注意する。
+  - Node 環境の `fetch` 実装に依存する箇所（URL の構築など）は `new URL(...)` に渡される値が必ず有効な完全 URL か、テスト時には `/api/v1/...` 等の同一オリジンパスになるように注意する。
 
 チェック手順（開発者向け）
 1. `pnpm lint` で ESLint を実行

@@ -49,7 +49,7 @@ The Workers API exposes folder-related endpoints. All endpoints require authenti
 
 These endpoints support client-side uploads to Cloudflare R2 via server-generated presigned URLs.
 
-- `POST /api/upload/image`
+- `POST /api/v1/upload/image`
   - Purpose: Generate upload metadata or presigned URL for the client to upload an image file to R2.
   - Request body (JSON):
     - `name` (string, required): original filename
@@ -67,7 +67,7 @@ These endpoints support client-side uploads to Cloudflare R2 via server-generate
 
   #### Presign API — Detailed Spec
 
-  - Endpoint: `POST /api/upload/image`
+  - Endpoint: `POST /api/v1/upload/image`
   - Authentication: required (JWT)
   - Request (application/json):
     - `name` (string) — original filename, required
@@ -91,7 +91,7 @@ These endpoints support client-side uploads to Cloudflare R2 via server-generate
     - 500 PRESIGN_ERROR — underlying presign generation failed (e.g., missing optional SDK)
 
   - Client flow (recommended):
-    1. Client requests presign: POST `/api/upload/image` with `{ name, size, type }`.
+    1. Client requests presign: POST `/api/v1/upload/image` with `{ name, size, type }`.
     2. Server returns `{ url, key, expiresIn }`.
     3. Client issues `PUT` to `url` with headers: `Content-Type: <type>` and body = file bytes.
     4. On successful PUT (HTTP 200/201/204), client includes `imageKey` or `imageUrl` (constructed from `key`) in recipe create/update payload.
@@ -105,7 +105,7 @@ These endpoints support client-side uploads to Cloudflare R2 via server-generate
 
 
 Security and Billing:
-- Authenticate requests to `/api/upload/image` (user must be signed in).
+- Authenticate requests to `/api/v1/upload/image` (user must be signed in).
 - Enforce file size and type limits server-side.
 - Consider virus scanning or image sanitization if accepting uploads from untrusted sources.
 

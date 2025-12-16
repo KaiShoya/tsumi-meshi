@@ -27,7 +27,7 @@
 注: チャートは `Chart.js`（`vue-chartjs` ラッパー）を利用する。クライアントサイドで描画するが、サーバ側で集計したシンプルな JSON を返す API を用意する。
 
 ## API 仕様（案）
-エンドポイント: `GET /api/stats`
+エンドポイント: `GET /api/v1/stats`
 認証: 必須（ログインユーザーのスコープ）
 クエリパラメータ:
 - `range` (optional): `30d` (default) | `90d` | `365d`
@@ -65,7 +65,7 @@
 
 ## 受け入れ基準
 1. `pages/dashboard.vue` に遷移するとログイン済みユーザーのダッシュボードが表示される。
-2. `GET /api/stats?range=30d` を呼ぶと上記 JSON を返し、チャートが描画される。
+2. `GET /api/v1/stats?range=30d` を呼ぶと上記 JSON を返し、チャートが描画される。
 3. レスポンシブで表示が崩れないこと（モバイル: チャート縦積み）。
 4. a11y テストが追加されていること（`tests/a11y/dashboard.a11y.spec.ts`）。
 

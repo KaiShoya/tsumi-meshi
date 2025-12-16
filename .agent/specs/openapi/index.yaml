@@ -1,0 +1,454 @@
+openapi: 3.0.3
+info:
+  title: tsumi-meshi API
+  version: "0.1.0"
+  description: |-
+    OpenAPI specification for tsumi-meshi services (Workers-backed API).
+    This file is generated from repository specs in .agent/specs/*.md.
+servers:
+  - url: https://api.example.com/api/v1
+    description: Production server (replace with your Workers host)
+  - url: http://localhost:8787/api/v1
+    description: Wrangler dev server (default local)
+paths:
+  /auth/login:
+    post:
+      summary: Log in
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Authenticated user; sets refresh cookie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+  /auth/register:
+    post:
+      summary: Register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '200':
+          description: Created user; sets refresh cookie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+  /auth/logout:
+    post:
+      summary: Logout (clears refresh cookie)
+      responses:
+        '204':
+          description: Logged out
+  /auth/me:
+    get:
+      summary: Get current authenticated user
+      responses:
+        '200':
+          description: Current user or null
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  error:
+                    type: string
+  /auth/refresh:
+    post:
+      summary: Refresh session (internal)
+      responses:
+        '200':
+          description: Rotated refresh cookie and user info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+  /folders:
+    get:
+      summary: List folders (flat)
+      responses:
+        '200':
+          description: Folder list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  folders:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Folder'
+    post:
+      summary: Create folder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FolderCreate'
+      responses:
+        '200':
+          description: Created folder
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FolderResponse'
+  /folders/hierarchy:
+    get:
+      summary: Get folder hierarchy (nested)
+      responses:
+        '200':
+          description: Nested folder tree
+  /folders/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Get folder by id
+      responses:
+        '200':
+          description: Folder
+    put:
+      summary: Update folder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FolderUpdate'
+      responses:
+        '200':
+          description: Updated folder
+    delete:
+      summary: Delete folder
+      responses:
+        '200':
+          description: Deletion result
+  /recipes:
+    get:
+      summary: List or search recipes
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+        - in: query
+          name: folderId
+          schema:
+            type: integer
+        - in: query
+          name: tagIds
+          schema:
+            type: string
+          description: comma-separated tag ids
+      responses:
+        '200':
+          description: Recipe list
+    post:
+      summary: Create recipe
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeInput'
+      responses:
+        '201':
+          description: Created recipe
+  /recipes/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get recipe
+      responses:
+        '200':
+          description: Recipe
+    put:
+      summary: Update recipe
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeInput'
+      responses:
+        '200':
+          description: Updated recipe
+    delete:
+      summary: Delete recipe
+      responses:
+        '204':
+          description: Deleted
+  /recipes/{id}/checks:
+    post:
+      summary: Create a check entry for a recipe
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created check
+    get:
+      summary: Get checks for recipe
+      responses:
+        '200':
+          description: Checks list
+  /checks/stats:
+    get:
+      summary: Get checks stats
+      parameters:
+        - in: query
+          name: range
+          schema:
+            type: string
+            enum: [30d, 90d, 365d]
+      responses:
+        '200':
+          description: Stats response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsResponse'
+  /upload/image:
+    post:
+      summary: Request presigned upload metadata for image
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PresignRequest'
+      responses:
+        '200':
+          description: Presign metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PresignResponse'
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    RegisterRequest:
+      type: object
+      required: [name, email, password]
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+    Folder:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        name:
+          type: string
+        parentId:
+          type: integer
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+    FolderCreate:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        parentId:
+          type: integer
+          nullable: true
+    FolderUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        parentId:
+          type: integer
+          nullable: true
+    FolderResponse:
+      type: object
+      properties:
+        folder:
+          $ref: '#/components/schemas/Folder'
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    Recipe:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: integer
+        folderId:
+          type: integer
+          nullable: true
+        title:
+          type: string
+        url:
+          type: string
+        description:
+          type: string
+        imageUrl:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+        checks:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeCheck'
+        createdAt:
+          type: string
+          format: date-time
+    RecipeInput:
+      type: object
+      properties:
+        title:
+          type: string
+        url:
+          type: string
+        description:
+          type: string
+        imageKey:
+          type: string
+        tagIds:
+          type: array
+          items:
+            type: integer
+        folderId:
+          type: integer
+    RecipeCheck:
+      type: object
+      properties:
+        id:
+          type: integer
+        recipeId:
+          type: string
+        checkedAt:
+          type: string
+          format: date-time
+    StatsResponse:
+      type: object
+      properties:
+        summary:
+          type: object
+          properties:
+            totalRecipes:
+              type: integer
+            totalChecks:
+              type: integer
+            activeTags:
+              type: integer
+        checksOverTime:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+              count:
+                type: integer
+        topTags:
+          type: array
+          items:
+            type: object
+            properties:
+              tag:
+                type: string
+              count:
+                type: integer
+        recentRecipes:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              title:
+                type: string
+              createdAt:
+                type: string
+                format: date-time
+    PresignRequest:
+      type: object
+      required: [name, size]
+      properties:
+        name:
+          type: string
+        size:
+          type: integer
+        type:
+          type: string
+    PresignResponse:
+      type: object
+      properties:
+        url:
+          type: string
+        key:
+          type: string
+        expiresIn:
+          type: integer
+tags:
+  - name: auth
+  - name: folders
+  - name: recipes
+  - name: upload
+  - name: stats

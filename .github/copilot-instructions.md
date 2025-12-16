@@ -17,7 +17,7 @@ These instructions define how GitHub Copilot should assist with this TypeScript 
 - Prefer named functions, especially for reuse and testability.
 - Use `async/await` over raw Promises and avoid `.then().catch()` chains.
 - Keep files small, focused, and well-organized.
- - **Auth policy**: Prefer server-set HttpOnly refresh cookies + short-lived access tokens for improved security. Do not store tokens in localStorage; use `/api/auth/me` to initialize client session. When changing auth behavior update `.agent/specs/auth.md` and include tests (unit/integration/E2E for refresh flow).
+ - **Auth policy**: Prefer server-set HttpOnly refresh cookies + short-lived access tokens for improved security. Do not store tokens in localStorage; use `/api/v1/auth/me` to initialize client session. When changing auth behavior update `.agent/specs/auth.md` and include tests (unit/integration/E2E for refresh flow).
 
 ## 🧾 Additional Team Rules (from recent workflow updates)
 

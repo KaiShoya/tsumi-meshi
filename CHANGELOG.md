@@ -104,7 +104,7 @@ Minor completion of TODOs and API surface parity between client and server.
 ### Security / Auth
 - Implemented client-side authentication flows backed by Cloudflare Workers endpoints:
   - `app/composables/useAuth.ts` now integrates with `apiClient` and exposes `initAuth`, `login`, `register`, and `logout`.
-  - `apiClient.logout()` added to call `POST /api/auth/logout` and clear session state.
+  - `apiClient.logout()` added to call `POST /api/v1/auth/logout` and clear session state.
 - `useAuth` prefers Nuxt's global `$fetch` in test environments (Vitest stubs) and falls back to `apiClient` at runtime to keep tests stable while preserving runtime behavior.
 
 ### Observability
@@ -140,4 +140,3 @@ Minor completion of TODOs and API surface parity between client and server.
 
 ### Release metadata
 - PR: https://github.com/KaiShoya/tsumi-meshi/pull/26 (feat: folder UI + stores + tests + docs (v0.1.4))
-

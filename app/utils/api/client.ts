@@ -9,16 +9,14 @@ class ApiClient {
     const globalAny = globalThis as unknown as { __TSUMI_MESHI_API_BASE?: string }
     const env = import.meta as unknown as { env?: Record<string, string> }
     const envBase = env?.env?.NUXT_PUBLIC_API_BASE
-    // Default to wrangler dev host if nothing is provided so local dev hits Workers
-    const defaultBase = 'http://localhost:8787'
-    let base = (globalAny.__TSUMI_MESHI_API_BASE || envBase || defaultBase).replace(/\/$/, '')
+    // Default to wrangler dev host with API base path so local dev hits Workers v1
+    const defaultBase = 'http://localhost:8787/api/v1'
+    const base = (globalAny.__TSUMI_MESHI_API_BASE || envBase || defaultBase).replace(/\/$/, '')
 
-    // In test environment prefer same-origin `/api` so tests can stub `fetch`/`$fetch`.
     // Avoid referencing `process` (not present in browser types) — prefer import.meta.env or global `VITEST` flag.
-    const maybeGlobal = globalThis as unknown as Record<string, unknown>
-    const has$fetchGlobal = typeof maybeGlobal['$fetch'] === 'function'
-    const isTest = ((import.meta as unknown as { env?: Record<string, string> }).env?.NODE_ENV === 'test') || has$fetchGlobal || !!maybeGlobal['VITEST']
-    if (isTest) base = '/api'
+    // Use provided global override or `NUXT_PUBLIC_API_BASE` (from .env) otherwise default to wrangler dev host.
+    // Keep base as configured for both test and runtime so requests target the Workers host
+    // Tests that stub `fetch`/`$fetch` should intercept requests to the configured base.
 
     this.baseURL = base
   }
@@ -28,10 +26,7 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<T> {
     // Determine effective base at request time so tests can stub global `$fetch`
-    const maybeGlobal = globalThis as unknown as Record<string, unknown>
-    const has$fetchGlobal = typeof maybeGlobal['$fetch'] === 'function'
-    const isTestRun = ((import.meta as unknown as { env?: Record<string, string> }).env?.NODE_ENV === 'test') || has$fetchGlobal || !!maybeGlobal['VITEST']
-    const base = isTestRun ? '/api' : this.baseURL
+    const base = this.baseURL
     const url = `${base}${endpoint}`
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
