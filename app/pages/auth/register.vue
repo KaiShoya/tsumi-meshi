@@ -170,6 +170,7 @@ const loading = ref(false)
 const error = ref('')
 
 const { register } = useAuth()
+const route = useRoute()
 
 const onSubmit = async (event: unknown) => {
   loading.value = true
@@ -196,7 +197,6 @@ const onSubmit = async (event: unknown) => {
 
   try {
     await register(parsed.name, parsed.email, parsed.password)
-    const route = useRoute()
     const redirectTo = (route.query.redirectTo as string) || '/'
     await navigateTo(redirectTo)
   } catch (err: unknown) {

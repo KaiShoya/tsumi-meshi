@@ -18,15 +18,17 @@
       <template #right>
         <div class="flex items-center space-x-4">
           <LanguageSwitcher />
-          <span class="text-sm text-gray-600">{{ user?.name }}</span>
-          <UButton
-            icon="i-lucide-log-out"
-            variant="ghost"
-            size="sm"
-            @click="logout"
-          >
-            {{ t('auth.logout') }}
-          </UButton>
+          <template v-if="isAuthenticated">
+            <span class="text-sm text-gray-600">{{ user?.name }}</span>
+            <UButton
+              icon="i-lucide-log-out"
+              variant="ghost"
+              size="sm"
+              @click="logout"
+            >
+              {{ t('auth.logout') }}
+            </UButton>
+          </template>
         </div>
       </template>
     </UHeader>
@@ -39,6 +41,6 @@
 </template>
 
 <script setup lang="ts">
-const { user, logout } = useAuth()
+const { user, logout, isAuthenticated } = useAuth()
 const { t } = useI18n()
 </script>

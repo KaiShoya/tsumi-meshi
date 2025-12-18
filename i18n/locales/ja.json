@@ -61,4 +61,11 @@
   "auth": {
     "logout": "ログアウト"
   }
+  ,
+  "statsChart": {
+    "ariaLabel": "統計チャート",
+    "fallbackMessage": "チャート表示は利用できません。データ表を参照してください。",
+    "dateHeader": "日付",
+    "countHeader": "件数"
+  }
 }

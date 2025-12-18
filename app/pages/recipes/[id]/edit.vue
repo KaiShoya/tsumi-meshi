@@ -117,7 +117,7 @@ async function handleSubmit() {
       folderId: form.folderId,
       imageUrl: imageKey.value
     }
-    await (await import('~/utils/api/client')).apiClient.updateRecipe(id, payload)
+    await apiClient.updateRecipe(id, payload)
     await router.push('/')
   } catch (err) {
     console.error(err)

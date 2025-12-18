@@ -24,6 +24,15 @@
 - 中段右: `TopTags` 棒グラフ
 - 下段: `RecentRecipes` テーブル
 
+- ヘッダー: ページタイトル「ダッシュボード」と期間選択ドロップダウン
+- 上段: 3 個の `StatsCard`（数値＋増減）
+  - `総レシピ数` (`summary.totalRecipes`): ユーザーが所有する全レシピ数（期間に依存しない）
+  - `総チェック数` (`summary.totalChecks`): 選択した期間（`range`）内のチェック合計
+  - `アクティブタグ数` (`summary.activeTags`): 選択した期間内に少なくとも1回使用されたタグの数（＝期間フィルタ適用）
+- 中段左: `ChecksOverTime` ラインチャート（`StatsChart` コンポーネント）
+- 中段右: `TopTags` 棒グラフ
+- 下段: `RecentRecipes` テーブル
+
 注: チャートは `Chart.js`（`vue-chartjs` ラッパー）を利用する。クライアントサイドで描画するが、サーバ側で集計したシンプルな JSON を返す API を用意する。
 
 ## API 仕様（案）
@@ -31,6 +40,11 @@
 認証: 必須（ログインユーザーのスコープ）
 クエリパラメータ:
 - `range` (optional): `30d` (default) | `90d` | `365d`
+
+Summary フィールド定義:
+- `summary.totalRecipes`: ユーザーが所有する全レシピ数（期間非依存）
+- `summary.totalChecks`: 選択した `range` 内のチェック合計
+- `summary.activeTags`: 選択した `range` 内に少なくとも1回使用されたタグの数（= 期間フィルタ適用）
 
 レスポンス例 (200):
 ```

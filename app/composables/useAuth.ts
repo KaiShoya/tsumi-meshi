@@ -59,6 +59,9 @@ export const useAuth = () => {
       const user = (response as { user?: User })?.user
       state.value.user = (user ?? null) as User | null
       return state.value.user
+    } catch (error) {
+      state.value.user = null
+      throw error // Re-throw so pages can handle errors
     } finally {
       state.value.loading = false
     }

@@ -61,4 +61,11 @@
   "auth": {
     "logout": "Logout"
   }
+  ,
+  "statsChart": {
+    "ariaLabel": "Statistics chart",
+    "fallbackMessage": "Chart display is not available. Please refer to the data table.",
+    "dateHeader": "Date",
+    "countHeader": "Count"
+  }
 }

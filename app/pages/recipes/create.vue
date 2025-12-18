@@ -60,6 +60,7 @@
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import ImageUploader from '~/components/ImageUploader.vue'
+import { apiClient } from '~/utils/api/client'
 
 definePageMeta({ requiresAuth: true })
 
@@ -85,7 +86,7 @@ async function handleSubmit() {
 
     try {
       // Use centralized apiClient (Cloudflare Workers)
-      await (await import('~/utils/api/client')).apiClient.createRecipe(payload)
+      await apiClient.createRecipe(payload)
     } catch (err) {
       console.error(err)
       throw err
