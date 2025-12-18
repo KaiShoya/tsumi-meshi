@@ -247,10 +247,13 @@ const tagOptions = ref<Array<{ label: string, value: number }>>([])
 const recipesStore = useRecipesPageStore()
 const recipesStoreData = useRecipesStore()
 const { showDangerToast } = useAppToast()
-const recipes = computed(() => {
-  const r = (recipesStoreData as any).recipes
-  // `recipesStoreData.recipes` is a readonly Ref; unwrap safely to get the array value.
-  return (r && typeof r === 'object' && 'value' in r) ? r.value : (r ?? [])
+const recipes = computed<Recipe[]>(() => {
+  const r = (recipesStoreData as unknown as { recipes?: unknown }).recipes
+  // `recipesStoreData.recipes` may be a readonly Ref or an array; unwrap safely.
+  if (r && typeof r === 'object' && 'value' in (r as object)) {
+    return ((r as { value?: unknown }).value as Recipe[]) ?? []
+  }
+  return (r as Recipe[]) ?? []
 })
 
 // Confirmation modal state
@@ -317,7 +320,7 @@ const performDelete = async () => {
 
 // Helper to normalize tags from API (supports array, comma-separated string, or null)
 function tagList(recipe: Recipe | { tags: unknown }) {
-  const raw = (recipe as any).tags
+  const raw = (recipe as unknown as { tags?: unknown }).tags
   if (Array.isArray(raw)) return raw as Array<{ id?: number, name: string }>
   if (typeof raw === 'string') {
     return raw.length === 0 ? [] : raw.split(',').map((name, i) => ({ id: i, name: name.trim() }))

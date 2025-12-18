@@ -1,4 +1,3 @@
-/* eslint-disable @stylistic/member-delimiter-style */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 describe('auth.client middleware', () => {
