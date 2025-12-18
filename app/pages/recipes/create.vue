@@ -6,36 +6,24 @@
 
     <UCard>
       <UForm @submit="handleSubmit">
-        <UFormGroup
-          label="Title"
-          name="title"
-          class="mb-4"
-        >
-          <UInput v-model="form.title" />
+        <UFormGroup name="title" class="mb-4">
+          <label for="title" class="block text-sm font-medium mb-1">Title</label>
+          <UInput id="title" v-model="form.title" />
         </UFormGroup>
 
-        <UFormGroup
-          label="URL"
-          name="url"
-          class="mb-4"
-        >
-          <UInput v-model="form.url" />
+        <UFormGroup name="url" class="mb-4">
+          <label for="url" class="block text-sm font-medium mb-1">URL</label>
+          <UInput id="url" v-model="form.url" />
         </UFormGroup>
 
-        <UFormGroup
-          label="Description"
-          name="description"
-          class="mb-4"
-        >
-          <UTextarea v-model="form.description" />
+        <UFormGroup name="description" class="mb-4">
+          <label for="description" class="block text-sm font-medium mb-1">Description</label>
+          <UTextarea id="description" v-model="form.description" />
         </UFormGroup>
 
-        <UFormGroup
-          label="Image"
-          name="image"
-          class="mb-4"
-        >
-          <ImageUploader @uploaded="handleUploaded" />
+        <UFormGroup name="image" class="mb-4">
+          <label for="image" class="block text-sm font-medium mb-1">Image</label>
+          <ImageUploader id="image" @uploaded="handleUploaded" />
           <div
             v-if="imageKey"
             class="text-sm text-gray-600 mt-2"
