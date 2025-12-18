@@ -2,17 +2,15 @@
   <div class="page-dashboard">
     <h1>ダッシュボード</h1>
 
-    <div
-      v-if="error"
-      class="error"
-    >
-      データ取得エラー: {{ error.message || String(error) }}
+    <div v-if="pending && !auth.loading">
+      <p>読み込み中…</p>
     </div>
 
-    <div v-if="!data">
-      <p>
-        読み込み中…
-      </p>
+    <div
+      v-else-if="error && !pending && !auth.loading"
+      class="error"
+    >
+      データ取得エラー: {{ (error as Error).message || String(error) }}
     </div>
 
     <div v-else>
@@ -20,19 +18,19 @@
         <div class="card">
           <h3>総レシピ数</h3>
           <p class="num">
-            {{ data.summary.totalRecipes }}
+            {{ data?.summary?.totalRecipes ?? 0 }}
           </p>
         </div>
         <div class="card">
           <h3>総チェック数</h3>
           <p class="num">
-            {{ data.summary.totalChecks }}
+            {{ data?.summary?.totalChecks ?? 0 }}
           </p>
         </div>
         <div class="card">
           <h3>アクティブタグ数</h3>
           <p class="num">
-            {{ data.summary.activeTags }}
+            {{ data?.summary?.activeTags ?? 0 }}
           </p>
         </div>
       </div>
@@ -42,7 +40,7 @@
           <h2>日別チェック数（30日）</h2>
           <div class="chart-wrap">
             <StatsChart
-              :rows="data.checksOverTime"
+              :rows="data?.checksOverTime || []"
               aria-label="日別チェック数"
             />
           </div>
@@ -52,7 +50,7 @@
           <h2>上位タグ</h2>
           <ul>
             <li
-              v-for="t in data.topTags"
+              v-for="t in data?.topTags || []"
               :key="t.tag"
             >
               {{ t.tag }} — {{ t.count }}
@@ -65,7 +63,7 @@
         <h2>最近のレシピ</h2>
         <ul>
           <li
-            v-for="r in data.recentRecipes"
+            v-for="r in data?.recentRecipes || []"
             :key="r.id"
           >
             {{ r.title }} — {{ r.createdAt }}
@@ -84,9 +82,13 @@ definePageMeta({ requiresAuth: true })
 
 defineOptions({ name: 'DashboardPage' })
 
-const { data, error } = await useAsyncData('dashboard-stats', async () => {
-  return apiClient.getDashboardStats('30d')
-})
+const auth = useAuth()
+
+const { data, error, pending } = await useAsyncData(
+  'dashboard-stats',
+  async () => apiClient.getDashboardStats('30d'),
+  { server: false }
+)
 </script>
 
 <style scoped>
