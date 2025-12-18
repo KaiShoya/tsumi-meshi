@@ -47,7 +47,7 @@ app/
 │   ├── api/            # API clients
 │   └── locales/        # i18n files
 ├── assets/             # Static assets
-└── types/              # TypeScript types
+
 
 .agent/
 ├── specs/              # Specifications
