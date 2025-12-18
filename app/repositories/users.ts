@@ -15,6 +15,3 @@ export interface UserUpdate {
   name?: string
   email?: string
 }
-// Server-side repository implementations have been moved to `workers/routes`.
-// Keep type definitions here for frontend imports.
-

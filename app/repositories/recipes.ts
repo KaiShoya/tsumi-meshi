@@ -1,3 +1,6 @@
+import type { Tag } from './tags'
+import type { RecipeCheck } from './recipe-checks'
+
 export interface Recipe {
   id: number
   userId: number
@@ -27,21 +30,3 @@ export interface RecipeUpdate {
   description?: string
   imageUrl?: string
 }
-
-export interface Tag {
-  id: number
-  userId: number
-  name: string
-  createdAt: Date
-}
-
-export interface RecipeCheck {
-  id: number
-  recipeId: number
-  checkedAt: Date
-}
-// Server-side repository implementations have been moved to `workers/routes`.
-// Keep type definitions here so frontend code can import repository types.
-
-export { Tag } from './tags'
-export { RecipeCheck } from './recipe-checks'

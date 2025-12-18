@@ -12,6 +12,3 @@ export interface TagInput {
 export interface TagUpdate {
   name?: string
 }
-// Server-side repository implementations have been moved to `workers/routes`.
-// Keep type definitions here for frontend imports.
-

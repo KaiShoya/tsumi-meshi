@@ -21,6 +21,3 @@ export interface FolderUpdate {
 export interface FolderTree extends Folder {
   children: FolderTree[]
 }
-// Server-side repository implementations have been moved to `workers/routes`.
-// Keep type definitions here for frontend imports.
-
