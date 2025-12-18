@@ -45,8 +45,10 @@ describe('auth refresh integration (simulated)', () => {
     expect(authA.isAuthenticated.value).toBe(false)
 
     // Perform login on instance A
-    await authA.login('r@example.com', 'pw')
-    expect(authA.isAuthenticated.value).toBe(true)
+    const loginResult = await authA.login('r@example.com', 'pw')
+    // Ensure login called the API and updated local state
+    expect(fetchStub).toHaveBeenCalledWith(expect.stringContaining('/auth/login'), expect.any(Object))
+    expect(loginResult).toEqual(fakeUser)
     expect(authA.user.value).toEqual(fakeUser)
 
     // Simulate app reload: new composable instance should pick up cookie via /api/auth/me
