@@ -57,10 +57,11 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ requiresAuth: true })
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import ImageUploader from '~/components/ImageUploader.vue'
+
+definePageMeta({ requiresAuth: true })
 
 const { t } = useI18n()
 const router = useRouter()

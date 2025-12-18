@@ -72,7 +72,7 @@ export const useAuth = () => {
       // ignore errors on logout
     }
     clearAuth()
-    return true
+    // Intentionally return void to match event handler typing in templates
   }
 
   // Clear authentication data

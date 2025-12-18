@@ -1,3 +1,4 @@
+/* eslint-disable @stylistic/member-delimiter-style */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 describe('auth.client middleware', () => {
@@ -18,7 +19,8 @@ describe('auth.client middleware', () => {
     vi.stubGlobal('navigateTo', nav)
 
     const mod = await import('~/middleware/auth.client')
-    const mw = mod.default as (to: any) => Promise<any>
+    type ToRoute = { path: string, fullPath: string, query: Record<string, string> }
+    const mw = mod.default as (to: ToRoute) => Promise<unknown>
 
     const to = { path: '/recipes', fullPath: '/recipes?page=2', query: {} }
     await mw(to)
@@ -36,7 +38,8 @@ describe('auth.client middleware', () => {
     vi.stubGlobal('navigateTo', nav)
 
     const mod = await import('~/middleware/auth.client')
-    const mw = mod.default as (to: any) => Promise<any>
+    type ToRoute = { path: string, fullPath: string, query: Record<string, string> }
+    const mw = mod.default as (to: ToRoute) => Promise<unknown>
 
     const to = { path: '/auth/login', fullPath: '/auth/login?redirectTo=%2Frecipes%2F1', query: { redirectTo: '/recipes/1' } }
     await mw(to)
@@ -54,7 +57,8 @@ describe('auth.client middleware', () => {
     vi.stubGlobal('navigateTo', nav)
 
     const mod = await import('~/middleware/auth.client')
-    const mw = mod.default as (to: any) => Promise<any>
+    type ToRoute = { path: string, fullPath: string, query: Record<string, string> }
+    const mw = mod.default as (to: ToRoute) => Promise<unknown>
 
     const to = { path: '/auth/login', fullPath: '/auth/login', query: {} }
     await mw(to)

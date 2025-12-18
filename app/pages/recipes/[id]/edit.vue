@@ -64,10 +64,11 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ requiresAuth: true })
 import { reactive, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ImageUploader from '~/components/ImageUploader.vue'
+
+definePageMeta({ requiresAuth: true })
 
 const { t } = useI18n()
 const route = useRoute()

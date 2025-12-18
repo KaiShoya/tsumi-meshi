@@ -64,7 +64,6 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ requiresAuth: true })
 import { ref, onMounted, computed, unref, type Ref } from 'vue'
 import FolderSelector from '~/components/FolderSelector.vue'
 import FolderTree from '~/components/FolderTree.vue'
@@ -73,6 +72,8 @@ import FolderEditModal from './FolderEditModal.vue'
 import { useFoldersPageStore } from '~/stores/pages/folders'
 import { useFoldersStore } from '~/stores/data/folders'
 import type { Folder } from '~/repositories/folders'
+
+definePageMeta({ requiresAuth: true })
 
 const name = ref('')
 const parentId = ref<number | null>(null)

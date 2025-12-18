@@ -12,14 +12,30 @@ beforeEach(() => {
 })
 
 // Provide simple stubs for Nuxt auto-imports used by code under test
-;(global as any).useState = (key: string, factory: unknown) => {
-  const initial = typeof factory === 'function' ? (factory as () => unknown)() : factory
-  return { value: initial }
+type NuxtTestState = Map<string, { value: unknown }>
+interface TestGlobals {
+  __nuxt_test_state__?: NuxtTestState
+  useState?: (key: string, factory: unknown) => { value: unknown } | undefined
+  definePageMeta?: (meta: unknown) => void
+  defineNuxtRouteMiddleware?: (fn: (to: { path: string, fullPath: string, query: Record<string, unknown> }) => unknown) => unknown
 }
 
-;(global as any).definePageMeta = (meta: unknown) => {
-  // no-op for test environment
+const tg = globalThis as unknown as TestGlobals
+tg.__nuxt_test_state__ = tg.__nuxt_test_state__ || new Map<string, { value: unknown }>()
+tg.useState = (key: string, factory: unknown) => {
+  const map = tg.__nuxt_test_state__ as NuxtTestState
+  if (!map.has(key)) {
+    const initial = typeof factory === 'function' ? (factory as () => unknown)() : factory
+    map.set(key, { value: initial })
+  }
+  return map.get(key)
 }
+
+// No-op page meta helper for tests
+tg.definePageMeta = (_meta: unknown) => {}
+
+// Nuxt route middleware wrapper stub: return the provided handler so tests can import middleware modules
+tg.defineNuxtRouteMiddleware = (fn: (to: { path: string, fullPath: string, query: Record<string, unknown> }) => unknown) => fn
 
 // Register lightweight global stubs for Nuxt UI components used in templates
 const stubNames = [

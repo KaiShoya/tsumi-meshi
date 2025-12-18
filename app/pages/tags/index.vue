@@ -67,11 +67,12 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ requiresAuth: true })
 import { ref, onMounted } from 'vue'
 import { useTagsPageStore } from '~/stores/pages/tags'
 import { useTagsStore } from '~/stores/data/tags'
 import type { Tag } from '~/repositories/tags'
+
+definePageMeta({ requiresAuth: true })
 
 const name = ref('')
 const editing = ref<number | null>(null)

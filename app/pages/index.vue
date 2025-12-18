@@ -221,7 +221,6 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ requiresAuth: true })
 import { useRecipesPageStore } from '~/stores/pages/recipes'
 import type { Recipe } from '~/repositories/recipes'
 import type { SelectMenuItem } from '@nuxt/ui'
@@ -233,6 +232,8 @@ import { useLogger } from '~/composables/useLogger'
 import { useAuth } from '~/composables/useAuth'
 import { ref, computed, onMounted } from 'vue'
 import ConfirmModal from '~/components/ConfirmModal.vue'
+
+definePageMeta({ requiresAuth: true })
 
 // Data
 const searchQuery = ref('')

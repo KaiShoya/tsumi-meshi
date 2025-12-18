@@ -71,10 +71,11 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ requiresAuth: true })
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { Recipe } from '~/repositories/recipes'
+
+definePageMeta({ requiresAuth: true })
 
 const { t } = useI18n()
 const route = useRoute()
