@@ -33,17 +33,12 @@
 
     <!-- Main Content -->
     <UMain>
-      <NuxtLayout>
-        <NuxtPage />
-      </NuxtLayout>
+      <slot />
     </UMain>
   </div>
 </template>
 
 <script setup lang="ts">
-const { user, logout, initAuth } = useAuth()
+const { user, logout } = useAuth()
 const { t } = useI18n()
-
-// Ensure auth state is initialized before showing content.
-await initAuth()
 </script>
