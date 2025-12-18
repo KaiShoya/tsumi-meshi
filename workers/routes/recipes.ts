@@ -51,7 +51,16 @@ export function registerRecipesRoutes(app: Hono<{ Bindings: Bindings }>, jwtMidd
       const userId = payload.userId
       const { title, url, description, folderId, imageUrl } = await c.req.json()
 
-      const result = await c.env.DB.prepare('INSERT INTO recipes (user_id, folder_id, title, url, description, image_url) VALUES (?, ?, ?, ?, ?, ?)').bind(userId, folderId, title, url, description, imageUrl ?? null).run()
+      // D1 does not accept `undefined` as a bind value. Normalize optional fields to null or proper types.
+      const parsedFolderId = folderId != null ? Number(folderId) : null
+      const folderIdValue = (parsedFolderId != null && !Number.isNaN(parsedFolderId)) ? parsedFolderId : null
+      const descriptionValue = description ?? null
+      const imageUrlValue = imageUrl ?? null
+
+      const result = await c.env.DB.prepare(
+        'INSERT INTO recipes (user_id, folder_id, title, url, description, image_url) VALUES (?, ?, ?, ?, ?, ?)'
+      ).bind(userId, folderIdValue, title, url, descriptionValue, imageUrlValue).run()
+
       const recipeId = result.meta?.last_row_id
       const recipe = await c.env.DB.prepare('SELECT * FROM recipes WHERE id = ?').bind(recipeId).first()
       return c.json({ recipe })

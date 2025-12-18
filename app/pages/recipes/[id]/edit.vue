@@ -6,31 +6,31 @@
 
     <UCard v-if="loaded">
       <UForm @submit="handleSubmit">
-        <UFormGroup
+        <UFormField
           label="Title"
           name="title"
           class="mb-4"
         >
           <UInput v-model="form.title" />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup
+        <UFormField
           label="URL"
           name="url"
           class="mb-4"
         >
           <UInput v-model="form.url" />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup
+        <UFormField
           label="Description"
           name="description"
           class="mb-4"
         >
           <UTextarea v-model="form.description" />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup
+        <UFormField
           label="Image"
           name="image"
           class="mb-4"
@@ -42,7 +42,7 @@
           >
             {{ imageKey }}
           </div>
-        </UFormGroup>
+        </UFormField>
 
         <div
           class="flex justify-end gap-2 mt-4"
@@ -67,6 +67,9 @@
 import { reactive, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ImageUploader from '~/components/ImageUploader.vue'
+import { apiClient } from '~/utils/api/client'
+
+definePageMeta({ requiresAuth: true })
 
 const { t } = useI18n()
 const route = useRoute()
@@ -80,7 +83,7 @@ const form = reactive<FormType>({ title: '', url: '', description: '', folderId:
 
 onMounted(async () => {
   try {
-    const res = await $fetch(`/api/recipes/${id}`) as { recipe?: Record<string, unknown> | null }
+    const res = await apiClient.getRecipe(id) as { recipe?: Record<string, unknown> | null }
     const recipe = res.recipe
     if (recipe) {
       const r = recipe as Record<string, unknown>
@@ -114,7 +117,7 @@ async function handleSubmit() {
       folderId: form.folderId,
       imageUrl: imageKey.value
     }
-    await $fetch(`/api/recipes/${id}`, { method: 'PUT', body: payload })
+    await apiClient.updateRecipe(id, payload)
     await router.push('/')
   } catch (err) {
     console.error(err)

@@ -73,7 +73,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import type { Recipe } from '~/repositories/recipes'
+import type { Recipe } from '~/types/recipes'
+import { apiClient } from '~/utils/api/client'
+
+definePageMeta({ requiresAuth: true })
 
 const { t } = useI18n()
 const route = useRoute()
@@ -84,7 +87,7 @@ const recipe = ref<Recipe | null>(null)
 
 onMounted(async () => {
   try {
-    const res = await $fetch(`/api/recipes/${id}`) as { recipe?: Recipe | null }
+    const res = await apiClient.getRecipe(id) as { recipe?: Recipe | null }
     recipe.value = res.recipe ?? null
   } catch (err) {
     console.error(err)

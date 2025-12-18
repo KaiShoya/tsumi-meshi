@@ -71,7 +71,9 @@ import FolderCreateModal from './FolderCreateModal.vue'
 import FolderEditModal from './FolderEditModal.vue'
 import { useFoldersPageStore } from '~/stores/pages/folders'
 import { useFoldersStore } from '~/stores/data/folders'
-import type { Folder } from '~/repositories/folders'
+import type { Folder } from '~/types/folders'
+
+definePageMeta({ requiresAuth: true })
 
 const name = ref('')
 const parentId = ref<number | null>(null)

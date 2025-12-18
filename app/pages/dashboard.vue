@@ -78,11 +78,13 @@
 
 <script setup lang="ts">
 import StatsChart from '~/components/StatsChart.vue'
+import { apiClient } from '~/utils/api/client'
+
+definePageMeta({ requiresAuth: true })
 
 defineOptions({ name: 'DashboardPage' })
 
 const { data, error } = await useAsyncData('dashboard-stats', async () => {
-  const { apiClient } = await import('~/utils/api/client')
   return apiClient.getDashboardStats('30d')
 })
 </script>

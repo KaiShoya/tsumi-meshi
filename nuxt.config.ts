@@ -22,7 +22,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-01-15',
 
   i18n: {
-    vueI18n: './i18n.config.ts',
+    vueI18n: './i18n/i18n.config.ts',
     locales: [
       { code: 'ja', name: '日本語', file: 'ja.json' },
       { code: 'en', name: 'English(US)', file: 'en.json' }

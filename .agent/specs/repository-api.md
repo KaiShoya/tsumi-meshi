@@ -3,6 +3,8 @@
 ## Overview
 Repository pattern implementation for data access abstraction. All repositories handle Cloudflare D1 database operations.
 
+Note: Server-side repository implementations are provided alongside the Workers handlers (see `workers/`), and operate against Cloudflare D1. Frontend code must not import server-side implementation files directly; instead use the centralized frontend API client at `app/utils/api/client.ts` (exported as `apiClient`) to talk to the Workers endpoints. This keeps client bundles lean and avoids leaking server-side implementation into the browser.
+
 ## Repository Classes
 
 ### RecipesRepository
@@ -199,7 +201,7 @@ interface User {
 ```
 
 ## API Integration
-Repositories communicate with Cloudflare Workers API endpoints for data operations.
+Repositories implement server-side data access and may be used by Cloudflare Workers handlers. Frontend applications should call the Workers HTTP endpoints via `apiClient` (see `app/utils/api/client.ts`) rather than importing server-side repository files into client bundles.
 
 ### Notes
 - The `/recipes` endpoint supports optional query parameters for search and filtering: `q` (search in title/description/url), `folderId` (numeric), and `tagIds` (comma-separated tag ids). Repositories should provide corresponding methods (e.g., `search(query, userId)` and `filterByFolder`/`filterByTags`) that map to these query parameters.

@@ -24,8 +24,10 @@ Tsumi Meshi follows Clean Architecture principles with Nuxt 4, TypeScript, Pinia
 - **Data Stores** (`store/data/`): Data fetching, state management
 
 ### Domain Layer
-- **Repositories** (`app/repositories/`): Data access abstraction
+-- **Server-side data access / Repositories** (`workers/`): Data access abstraction implemented for Cloudflare Workers (server-side)
 - **Models**: TypeScript interfaces for data structures
+
+Note: For frontend code, network interactions should go through the API client located at `app/utils/api/client.ts` (or `apiClient`). Do not import server-side repository implementations from browser code — those files are intended for server-side use inside `workers/`.
 
 ### Infrastructure Layer
 - **API**: Cloudflare Workers for REST endpoints
@@ -45,7 +47,7 @@ app/
 │   ├── api/            # API clients
 │   └── locales/        # i18n files
 ├── assets/             # Static assets
-└── types/              # TypeScript types
+
 
 .agent/
 ├── specs/              # Specifications

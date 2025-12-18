@@ -40,6 +40,8 @@ import { ref } from 'vue'
 import type { SelectMenuItem } from '@nuxt/ui'
 import { useChecksPageStore } from '~/stores/pages/checks'
 
+definePageMeta({ requiresAuth: true })
+
 const period = ref<'month' | 'week'>('month')
 const stats = ref({ totalChecks: 0, periodChecks: 0 })
 

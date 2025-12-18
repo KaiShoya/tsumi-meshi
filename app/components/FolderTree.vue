@@ -15,7 +15,7 @@
 import { computed } from 'vue'
 import FolderNode from './FolderNode.vue'
 
-import type { Folder } from '~/repositories/folders'
+import type { Folder } from '~/types/folders'
 
 const props = defineProps<{ folders: Folder[] }>()
 const emit = defineEmits(['edit', 'delete', 'move'])

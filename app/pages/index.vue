@@ -53,6 +53,22 @@
         >
           {{ t('checks.title') }}
         </UButton>
+        <UButton
+          variant="outline"
+          size="sm"
+          icon="i-lucide-tag"
+          @click="navigateTo('/tags/create')"
+        >
+          {{ t('tags.add') }}
+        </UButton>
+        <UButton
+          variant="outline"
+          size="sm"
+          icon="i-lucide-folder-plus"
+          @click="navigateTo('/folders/create')"
+        >
+          {{ t('folders.create') }}
+        </UButton>
       </div>
 
       <UButton
@@ -129,26 +145,26 @@
           <div class="flex items-center justify-between">
             <div class="flex gap-1">
               <UBadge
-                v-for="tag in recipe.tags.slice(0, 3)"
-                :key="tag.id"
+                v-for="tag in tagList(recipe).slice(0, 3)"
+                :key="tag.id ?? tag.name"
                 variant="subtle"
                 size="sm"
               >
                 {{ tag.name }}
               </UBadge>
               <UBadge
-                v-if="recipe.tags.length > 3"
+                v-if="tagList(recipe).length > 3"
                 variant="subtle"
                 size="sm"
               >
-                +{{ recipe.tags.length - 3 }}
+                +{{ tagList(recipe).length - 3 }}
               </UBadge>
             </div>
 
             <div class="flex gap-2">
               <UButton
                 icon="i-lucide-check-circle"
-                :color="recipe.checks.length > 0 ? 'success' : 'neutral'"
+                :color="(recipe.checks?.length ?? 0) > 0 ? 'success' : 'neutral'"
                 variant="ghost"
                 size="sm"
                 @click.stop="toggleCheck(recipe)"
@@ -159,7 +175,7 @@
                 size="sm"
                 @click.stop="navigateTo(`/recipes/${recipe.id}/checks`)"
               />
-              <UDropdown
+              <UDropdownMenu
                 :items="[{
                   label: '編集',
                   icon: 'i-lucide-edit',
@@ -176,7 +192,7 @@
                   size="sm"
                   @click.stop
                 />
-              </UDropdown>
+              </UDropdownMenu>
             </div>
           </div>
         </div>
@@ -222,7 +238,7 @@
 
 <script setup lang="ts">
 import { useRecipesPageStore } from '~/stores/pages/recipes'
-import type { Recipe } from '~/repositories/recipes'
+import type { Recipe } from '~/types/recipes'
 import type { SelectMenuItem } from '@nuxt/ui'
 import { useDebounceFn } from '@vueuse/core'
 import { apiClient } from '~/utils/api/client'
@@ -232,6 +248,8 @@ import { useLogger } from '~/composables/useLogger'
 import { useAuth } from '~/composables/useAuth'
 import { ref, computed, onMounted } from 'vue'
 import ConfirmModal from '~/components/ConfirmModal.vue'
+
+definePageMeta({ requiresAuth: true })
 
 // Data
 const searchQuery = ref('')
@@ -245,7 +263,14 @@ const tagOptions = ref<Array<{ label: string, value: number }>>([])
 const recipesStore = useRecipesPageStore()
 const recipesStoreData = useRecipesStore()
 const { showDangerToast } = useAppToast()
-const recipes = computed(() => recipesStoreData.recipes)
+const recipes = computed<Recipe[]>(() => {
+  const r = (recipesStoreData as unknown as { recipes?: unknown }).recipes
+  // `recipesStoreData.recipes` may be a readonly Ref or an array; unwrap safely.
+  if (r && typeof r === 'object' && 'value' in (r as object)) {
+    return ((r as { value?: unknown }).value as Recipe[]) ?? []
+  }
+  return (r as Recipe[]) ?? []
+})
 
 // Confirmation modal state
 const showConfirmModal = ref(false)
@@ -309,13 +334,23 @@ const performDelete = async () => {
   }
 }
 
+// Helper to normalize tags from API (supports array, comma-separated string, or null)
+function tagList(recipe: Recipe | { tags: unknown }) {
+  const raw = (recipe as unknown as { tags?: unknown }).tags
+  if (Array.isArray(raw)) return raw as Array<{ id?: number, name: string }>
+  if (typeof raw === 'string') {
+    return raw.length === 0 ? [] : raw.split(',').map((name, i) => ({ id: i, name: name.trim() }))
+  }
+  return []
+}
+
 // Lifecycle
 onMounted(async () => {
   const { initAuth, isAuthenticated } = useAuth()
-  initAuth()
+  await initAuth()
 
   if (!isAuthenticated.value) {
-    await navigateTo('/auth/login')
+    // middleware will perform navigation; stop further page init
     return
   }
 

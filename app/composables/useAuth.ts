@@ -45,7 +45,7 @@ export const useAuth = () => {
       const response = await apiClient.login(email, password)
       const user = (response as { user?: User })?.user
       state.value.user = (user ?? null) as User | null
-      await navigateTo('/')
+      return state.value.user
     } finally {
       state.value.loading = false
     }
@@ -58,7 +58,10 @@ export const useAuth = () => {
       const response = await apiClient.register(name, email, password)
       const user = (response as { user?: User })?.user
       state.value.user = (user ?? null) as User | null
-      await navigateTo('/')
+      return state.value.user
+    } catch (error) {
+      state.value.user = null
+      throw error // Re-throw so pages can handle errors
     } finally {
       state.value.loading = false
     }
@@ -72,7 +75,7 @@ export const useAuth = () => {
       // ignore errors on logout
     }
     clearAuth()
-    await navigateTo('/auth/login')
+    // Intentionally return void to match event handler typing in templates
   }
 
   // Clear authentication data

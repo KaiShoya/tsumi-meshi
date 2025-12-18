@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { fetchStats, type StatsResponse } from '~/repositories/stats'
+import type { StatsResponse } from '~/types/stats'
+import { apiClient } from '~/utils/api/client'
 import { useAppToast } from '~/composables/useAppToast'
 import { useLogger } from '~/composables/useLogger'
 
@@ -18,7 +19,7 @@ export const useDashboardPageStore = defineStore('dashboardPage', () => {
   const fetchDashboard = async (r?: typeof range) => {
     loading = true
     try {
-      const res = await fetchStats(r ?? range)
+      const res = await apiClient.getDashboardStats(r ?? range)
       data = res
       return res
     } catch (error) {

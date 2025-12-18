@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { apiClient } from '~/utils/api/client'
-import type { Recipe, RecipeInput, RecipeUpdate } from '~/repositories/recipes'
+import type { Recipe, RecipeInput, RecipeUpdate } from '~/types/recipes'
 
 export const useRecipesStore = defineStore('recipes', () => {
   const recipes = ref<Recipe[]>([])

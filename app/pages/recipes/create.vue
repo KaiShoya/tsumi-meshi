@@ -6,31 +6,31 @@
 
     <UCard>
       <UForm @submit="handleSubmit">
-        <UFormGroup
+        <UFormField
           label="Title"
           name="title"
           class="mb-4"
         >
           <UInput v-model="form.title" />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup
+        <UFormField
           label="URL"
           name="url"
           class="mb-4"
         >
           <UInput v-model="form.url" />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup
+        <UFormField
           label="Description"
           name="description"
           class="mb-4"
         >
           <UTextarea v-model="form.description" />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup
+        <UFormField
           label="Image"
           name="image"
           class="mb-4"
@@ -42,7 +42,7 @@
           >
             {{ imageKey }}
           </div>
-        </UFormGroup>
+        </UFormField>
 
         <div
           class="flex justify-end gap-2 mt-4"
@@ -60,6 +60,9 @@
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import ImageUploader from '~/components/ImageUploader.vue'
+import { apiClient } from '~/utils/api/client'
+
+definePageMeta({ requiresAuth: true })
 
 const { t } = useI18n()
 const router = useRouter()
@@ -83,7 +86,7 @@ async function handleSubmit() {
 
     try {
       // Use centralized apiClient (Cloudflare Workers)
-      await (await import('~/utils/api/client')).apiClient.createRecipe(payload)
+      await apiClient.createRecipe(payload)
     } catch (err) {
       console.error(err)
       throw err

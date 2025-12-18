@@ -4,16 +4,18 @@ import { useUiStore } from '~/stores/ui'
 import { useAppToast } from '~/composables/useAppToast'
 import { useLogger } from '~/composables/useLogger'
 import { apiClient } from '~/utils/api/client'
-import type { RecipeInput, RecipeUpdate } from '~/repositories/recipes'
+import type { RecipeInput, RecipeUpdate } from '~/types/recipes'
 
 export const useRecipesPageStore = defineStore('recipesPage', () => {
   const recipesStore = useRecipesStore()
   const { showSuccessToast, showDangerToast } = useAppToast()
   const logger = useLogger()
 
+  const ui = useUiStore()
+
   const createRecipe = async (recipe: RecipeInput) => {
     try {
-      showLoading()
+      ui.showLoading()
       await recipesStore.createRecipe(recipe)
       showSuccessToast('レシピを作成しました')
       await fetchRecipes()
@@ -23,13 +25,13 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
       }
       logger.error('Failed to create recipe', { module: 'recipesPageStore' }, error instanceof Error ? error : new Error(String(error)))
     } finally {
-      hideLoading()
+      ui.hideLoading()
     }
   }
 
   const updateRecipe = async (id: number, recipe: RecipeUpdate) => {
     try {
-      showLoading()
+      ui.showLoading()
       await recipesStore.updateRecipe(id, recipe)
       showSuccessToast('レシピを更新しました')
       await fetchRecipes()
@@ -39,13 +41,13 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
       }
       logger.error('Failed to update recipe', { module: 'recipesPageStore', recipeId: id }, error instanceof Error ? error : undefined)
     } finally {
-      hideLoading()
+      ui.hideLoading()
     }
   }
 
   const deleteRecipe = async (id: number, title: string) => {
     try {
-      showLoading()
+      ui.showLoading()
       await recipesStore.deleteRecipe(id)
       showSuccessToast(`レシピ「${title}」を削除しました`)
       await fetchRecipes()
@@ -55,13 +57,13 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
       }
       logger.error('Failed to delete recipe', { module: 'recipesPageStore', recipeId: id }, error instanceof Error ? error : undefined)
     } finally {
-      hideLoading()
+      ui.hideLoading()
     }
   }
 
   const searchRecipes = async (query: string) => {
     try {
-      showLoading()
+      ui.showLoading()
       await recipesStore.searchRecipes(query)
     } catch (error) {
       if (error instanceof CustomError) {
@@ -69,13 +71,13 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
       }
       logger.error('Failed to search recipes', { module: 'recipesPageStore', query }, error instanceof Error ? error : undefined)
     } finally {
-      hideLoading()
+      ui.hideLoading()
     }
   }
 
   const toggleCheck = async (recipeId: number) => {
     try {
-      showLoading()
+      ui.showLoading()
       await apiClient.createCheck(recipeId)
       showSuccessToast('チェックを記録しました')
       await fetchRecipes()
@@ -83,7 +85,7 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
       logger.error('Failed to record check', { module: 'recipesPage', recipeId }, err instanceof Error ? err : new Error(String(err)))
       showDangerToast('チェックの登録に失敗しました')
     } finally {
-      hideLoading()
+      ui.hideLoading()
     }
   }
 
@@ -96,12 +98,6 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
       logger.error('Failed to fetch recipes', { module: 'recipesPageStore' }, error instanceof Error ? error : new Error(String(error)))
     }
   }
-
-  const ui = useUiStore()
-
-  const showLoading = () => ui.showLoading()
-
-  const hideLoading = () => ui.hideLoading()
 
   return {
     createRecipe,

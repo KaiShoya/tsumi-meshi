@@ -122,11 +122,12 @@ app/
 ├── components/          # Vueコンポーネント
 ├── composables/         # Vue composables
 ├── pages/              # ページコンポーネント
-├── repositories/       # データアクセス層
 ├── stores/             # Piniaストア
 │   ├── data/           # データストア
 │   └── pages/          # ページストア
 └── utils/              # ユーティリティ
+
+workers/                # Cloudflare Workers サーバー実装（API ハンドラ・サーバー側データアクセス）
 
 .agent/
 ├── specs/              # 仕様書
@@ -138,6 +139,8 @@ app/
 - **Repository Pattern**: データアクセス抽象化
 - **Composition API**: Vue 3リアクティブパターン
 - **Type Safety**: TypeScriptによる型安全
+
+Note: Frontend network requests should use the centralized API client at `app/utils/api/client.ts` (exported as `apiClient`). Server-side implementations live under `workers/` and must not be imported into browser bundles.
 
 ## 🤝 開発者向け情報
 

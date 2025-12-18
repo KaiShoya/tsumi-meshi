@@ -11,14 +11,14 @@
       class="chart-fallback"
     >
       <p>
-        チャート表示は利用できません。データ表を参照してください。
+        {{ $t('statsChart.fallbackMessage') }}
       </p>
 
       <table>
         <thead>
           <tr>
-            <th>日付</th>
-            <th>件数</th>
+            <th>{{ $t('statsChart.dateHeader') }}</th>
+            <th>{{ $t('statsChart.countHeader') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -37,7 +37,8 @@
 
 <script setup lang="ts">
 /* eslint-disable @stylistic/member-delimiter-style */
-import { ref, onMounted, watch, onBeforeUnmount } from 'vue'
+import { ref, onMounted, watch, onBeforeUnmount, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 interface Row { date: string, count: number }
 
@@ -56,7 +57,8 @@ type ChartInstance = {
 let chart: ChartInstance | null = null
 const chartSupported = ref(true)
 
-const ariaLabel = props.ariaLabel || '統計チャート'
+const { t } = useI18n()
+const ariaLabel = computed(() => props.ariaLabel || t('statsChart.ariaLabel'))
 
 onMounted(async () => {
   // dynamic import to keep dependency optional for PoC
@@ -78,7 +80,11 @@ onMounted(async () => {
       return
     }
 
-    const ctx = canvasRef.value.getContext('2d') as CanvasRenderingContext2D
+    const ctx = canvasRef.value.getContext('2d')
+    if (!ctx) {
+      chartSupported.value = false
+      return
+    }
     const labels = props.rows.map(r => r.date)
     const data = props.rows.map(r => r.count)
 

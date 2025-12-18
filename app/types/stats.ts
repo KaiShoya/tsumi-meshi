@@ -15,7 +15,7 @@ export interface TopTag {
 }
 
 export interface RecentRecipe {
-  id: string
+  id: number
   title: string
   createdAt: string
 }
@@ -25,12 +25,4 @@ export interface StatsResponse {
   checksOverTime: ChecksOverTimeRow[]
   topTags: TopTag[]
   recentRecipes: RecentRecipe[]
-}
-
-/**
- * Fetch stats from server API.
- * Uses Nuxt's `$fetch` which is preferred in tests and runtime.
- */
-export async function fetchStats(range: '30d' | '90d' | '365d' = '30d'): Promise<StatsResponse> {
-  return await $fetch<StatsResponse>(`/api/stats?range=${encodeURIComponent(range)}`)
 }

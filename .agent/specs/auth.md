@@ -61,3 +61,5 @@ Acceptance criteria (v0.1.3 additions)
 
 Security reminder
 - Continue to enforce HttpOnly refresh cookies and rotate refresh tokens on each refresh call. Any deviation from these controls requires updating this spec and adding a `spec-exception` entry in `.agent/docs/qa/`.
+
+See .agent/specs/auth-middleware-v0.1.5.md for migration notes and client-side routing changes.

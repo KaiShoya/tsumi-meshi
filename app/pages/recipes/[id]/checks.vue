@@ -45,6 +45,8 @@ import { useRoute } from 'vue-router'
 import { useChecksStore } from '~/stores/data/checks'
 import { useChecksPageStore } from '~/stores/pages/checks'
 
+definePageMeta({ requiresAuth: true })
+
 const route = useRoute()
 const recipeId = Number(route.params.id)
 

@@ -20,6 +20,8 @@
   "recipes": {
     "listTitle": "レシピ一覧",
     "new": "新規レシピ",
+    "edit": "編集",
+    "editTitle": "レシピ編集",
     "searchPlaceholder": "レシピを検索...",
     "folderPlaceholder": "フォルダを選択",
     "tagsPlaceholder": "タグを選択",
@@ -58,5 +60,12 @@
   ,
   "auth": {
     "logout": "ログアウト"
+  }
+  ,
+  "statsChart": {
+    "ariaLabel": "統計チャート",
+    "fallbackMessage": "チャート表示は利用できません。データ表を参照してください。",
+    "dateHeader": "日付",
+    "countHeader": "件数"
   }
 }

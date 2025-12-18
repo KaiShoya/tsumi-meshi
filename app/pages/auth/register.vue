@@ -63,7 +63,7 @@
         class="space-y-6"
         @submit="onSubmit"
       >
-        <UFormGroup
+        <UFormField
           label="名前"
           name="name"
         >
@@ -73,9 +73,9 @@
             size="lg"
             required
           />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup
+        <UFormField
           label="メールアドレス"
           name="email"
         >
@@ -86,9 +86,9 @@
             size="lg"
             required
           />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup
+        <UFormField
           label="パスワード"
           name="password"
         >
@@ -99,9 +99,9 @@
             size="lg"
             required
           />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup
+        <UFormField
           label="パスワード（確認）"
           name="confirmPassword"
         >
@@ -112,7 +112,7 @@
             size="lg"
             required
           />
-        </UFormGroup>
+        </UFormField>
 
         <div>
           <UButton
@@ -170,6 +170,7 @@ const loading = ref(false)
 const error = ref('')
 
 const { register } = useAuth()
+const route = useRoute()
 
 const onSubmit = async (event: unknown) => {
   loading.value = true
@@ -196,6 +197,8 @@ const onSubmit = async (event: unknown) => {
 
   try {
     await register(parsed.name, parsed.email, parsed.password)
+    const redirectTo = (route.query.redirectTo as string) || '/'
+    await navigateTo(redirectTo)
   } catch (err: unknown) {
     error.value = err instanceof Error ? err.message : '登録に失敗しました'
   } finally {
