@@ -11,6 +11,16 @@ beforeEach(() => {
   setActivePinia(createPinia())
 })
 
+// Provide simple stubs for Nuxt auto-imports used by code under test
+;(global as any).useState = (key: string, factory: unknown) => {
+  const initial = typeof factory === 'function' ? (factory as () => unknown)() : factory
+  return { value: initial }
+}
+
+;(global as any).definePageMeta = (meta: unknown) => {
+  // no-op for test environment
+}
+
 // Register lightweight global stubs for Nuxt UI components used in templates
 const stubNames = [
   'UForm',
