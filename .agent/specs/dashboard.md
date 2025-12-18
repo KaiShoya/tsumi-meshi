@@ -49,7 +49,7 @@
     {"tag": "時短", "count": 30}
   ],
   "recentRecipes": [
-    {"id": "r_abc", "title": "カレー", "createdAt": "2025-12-10"}
+    {"id": 123, "title": "カレー", "createdAt": "2025-12-10"}
   ]
 }
 ```
