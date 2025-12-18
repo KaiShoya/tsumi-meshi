@@ -159,7 +159,7 @@
                 size="sm"
                 @click.stop="navigateTo(`/recipes/${recipe.id}/checks`)"
               />
-              <UDropdown
+              <UDropdownMenu
                 :items="[{
                   label: '編集',
                   icon: 'i-lucide-edit',
@@ -176,7 +176,7 @@
                   size="sm"
                   @click.stop
                 />
-              </UDropdown>
+              </UDropdownMenu>
             </div>
           </div>
         </div>

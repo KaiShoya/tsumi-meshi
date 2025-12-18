@@ -46,7 +46,7 @@ const stubNames = [
   'USelectMenu',
   'UCard',
   'UBadge',
-  'UDropdown',
+  'UDropdownMenu',
   'UHeader',
   'UMain',
   'UIcon',
