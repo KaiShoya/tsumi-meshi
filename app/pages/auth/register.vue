@@ -63,7 +63,7 @@
         class="space-y-6"
         @submit="onSubmit"
       >
-        <UFormGroup
+        <UFormField
           label="名前"
           name="name"
         >
@@ -73,9 +73,9 @@
             size="lg"
             required
           />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup
+        <UFormField
           label="メールアドレス"
           name="email"
         >
@@ -86,9 +86,9 @@
             size="lg"
             required
           />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup
+        <UFormField
           label="パスワード"
           name="password"
         >
@@ -99,9 +99,9 @@
             size="lg"
             required
           />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup
+        <UFormField
           label="パスワード（確認）"
           name="confirmPassword"
         >
@@ -112,7 +112,7 @@
             size="lg"
             required
           />
-        </UFormGroup>
+        </UFormField>
 
         <div>
           <UButton

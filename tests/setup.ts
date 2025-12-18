@@ -40,7 +40,7 @@ tg.defineNuxtRouteMiddleware = (fn: (to: { path: string, fullPath: string, query
 // Register lightweight global stubs for Nuxt UI components used in templates
 const stubNames = [
   'UForm',
-  'UFormGroup',
+  'UFormField',
   'UInput',
   'UButton',
   'USelectMenu',

@@ -6,31 +6,31 @@
 
     <UCard v-if="loaded">
       <UForm @submit="handleSubmit">
-        <UFormGroup
+        <UFormField
           label="Title"
           name="title"
           class="mb-4"
         >
           <UInput v-model="form.title" />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup
+        <UFormField
           label="URL"
           name="url"
           class="mb-4"
         >
           <UInput v-model="form.url" />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup
+        <UFormField
           label="Description"
           name="description"
           class="mb-4"
         >
           <UTextarea v-model="form.description" />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup
+        <UFormField
           label="Image"
           name="image"
           class="mb-4"
@@ -42,7 +42,7 @@
           >
             {{ imageKey }}
           </div>
-        </UFormGroup>
+        </UFormField>
 
         <div
           class="flex justify-end gap-2 mt-4"

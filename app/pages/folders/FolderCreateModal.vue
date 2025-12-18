@@ -14,7 +14,7 @@
         :state="state"
         @submit="handleSubmit"
       >
-        <UFormGroup
+        <UFormField
           :label="t('folders.namePlaceholder')"
           name="name"
           class="mb-4"
@@ -23,13 +23,13 @@
             v-model="state.name"
             :placeholder="t('folders.namePlaceholder')"
           />
-        </UFormGroup>
-        <UFormGroup
+        </UFormField>
+        <UFormField
           :label="t('folders.parent')"
           name="parentId"
         >
           <FolderSelector v-model="state.parentId" />
-        </UFormGroup>
+        </UFormField>
 
         <div class="flex justify-end gap-2 mt-6">
           <UButton

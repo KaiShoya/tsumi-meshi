@@ -6,31 +6,43 @@
 
     <UCard>
       <UForm @submit="handleSubmit">
-        <UFormGroup name="title" class="mb-4">
-          <label for="title" class="block text-sm font-medium mb-1">Title</label>
-          <UInput id="title" v-model="form.title" />
-        </UFormGroup>
+        <UFormField
+          label="Title"
+          name="title"
+          class="mb-4"
+        >
+          <UInput v-model="form.title" />
+        </UFormField>
 
-        <UFormGroup name="url" class="mb-4">
-          <label for="url" class="block text-sm font-medium mb-1">URL</label>
-          <UInput id="url" v-model="form.url" />
-        </UFormGroup>
+        <UFormField
+          label="URL"
+          name="url"
+          class="mb-4"
+        >
+          <UInput v-model="form.url" />
+        </UFormField>
 
-        <UFormGroup name="description" class="mb-4">
-          <label for="description" class="block text-sm font-medium mb-1">Description</label>
-          <UTextarea id="description" v-model="form.description" />
-        </UFormGroup>
+        <UFormField
+          label="Description"
+          name="description"
+          class="mb-4"
+        >
+          <UTextarea v-model="form.description" />
+        </UFormField>
 
-        <UFormGroup name="image" class="mb-4">
-          <label for="image" class="block text-sm font-medium mb-1">Image</label>
-          <ImageUploader id="image" @uploaded="handleUploaded" />
+        <UFormField
+          label="Image"
+          name="image"
+          class="mb-4"
+        >
+          <ImageUploader @uploaded="handleUploaded" />
           <div
             v-if="imageKey"
             class="text-sm text-gray-600 mt-2"
           >
             {{ imageKey }}
           </div>
-        </UFormGroup>
+        </UFormField>
 
         <div
           class="flex justify-end gap-2 mt-4"

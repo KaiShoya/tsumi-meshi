@@ -4,9 +4,9 @@ Purpose
 - Explain why lightweight Nuxt UI component stubs were added.
 
 Background
-- During development and tests, the project uses `@nuxt/ui` components (UForm, UInput, UFormGroup, etc.).
+- During development and tests, the project uses `@nuxt/ui` components (UForm, UInput, UFormField, etc.).
 - Some environments (test runner / early plugin load order) produced Vue warnings:
-  - "Failed to resolve component: UFormGroup"
+  - "Failed to resolve component: UFormField"
   - "Extraneous non-props attributes ..." when stubs returned fragments
   - "NuxtLayout not used" when layout wrapper was missing
 
@@ -18,7 +18,7 @@ Design
 
 Behavior
 - The plugin is intentionally named with a numeric prefix (`00-`) so Nuxt loads it early.
-- The stubs register both PascalCase (`UFormGroup`) and kebab-case (`u-form-group`) component names.
+- The stubs register both PascalCase (`UFormField`) and kebab-case (`u-form-group`) component names.
 - The stubs use `inheritAttrs: true` and forward `attrs` as a `Record<string, unknown>` to avoid `any` in TypeScript and prevent extraneous-attribute warnings.
 
 - When to update
