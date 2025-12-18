@@ -139,6 +139,8 @@ app/
 - **Composition API**: Vue 3リアクティブパターン
 - **Type Safety**: TypeScriptによる型安全
 
+Note: Frontend network requests should use the centralized API client at `app/utils/api/client.ts` (exported as `apiClient`). `app/repositories/*` contain server-side implementations for Workers/D1 and must not be imported into browser bundles.
+
 ## 🤝 開発者向け情報
 
 ### 開発ワークフロー
