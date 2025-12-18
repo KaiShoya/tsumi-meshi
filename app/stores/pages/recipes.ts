@@ -7,14 +7,14 @@ import { apiClient } from '~/utils/api/client'
 import type { RecipeInput, RecipeUpdate } from '~/repositories/recipes'
 
 export const useRecipesPageStore = defineStore('recipesPage', () => {
-  const recipesStore = useRecipesStore()
+  const getRecipesStore = () => useRecipesStore()
   const { showSuccessToast, showDangerToast } = useAppToast()
   const logger = useLogger()
 
   const createRecipe = async (recipe: RecipeInput) => {
     try {
       showLoading()
-      await recipesStore.createRecipe(recipe)
+      await getRecipesStore().createRecipe(recipe)
       showSuccessToast('レシピを作成しました')
       await fetchRecipes()
     } catch (error) {
@@ -30,7 +30,7 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
   const updateRecipe = async (id: number, recipe: RecipeUpdate) => {
     try {
       showLoading()
-      await recipesStore.updateRecipe(id, recipe)
+      await getRecipesStore().updateRecipe(id, recipe)
       showSuccessToast('レシピを更新しました')
       await fetchRecipes()
     } catch (error) {
@@ -46,7 +46,7 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
   const deleteRecipe = async (id: number, title: string) => {
     try {
       showLoading()
-      await recipesStore.deleteRecipe(id)
+      await getRecipesStore().deleteRecipe(id)
       showSuccessToast(`レシピ「${title}」を削除しました`)
       await fetchRecipes()
     } catch (error) {
@@ -62,7 +62,7 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
   const searchRecipes = async (query: string) => {
     try {
       showLoading()
-      await recipesStore.searchRecipes(query)
+      await getRecipesStore().searchRecipes(query)
     } catch (error) {
       if (error instanceof CustomError) {
         showDangerToast(error.getMessage())
@@ -90,7 +90,7 @@ export const useRecipesPageStore = defineStore('recipesPage', () => {
   // Helper functions
   const fetchRecipes = async (opts?: { q?: string, folderId?: number | null, tagIds?: number[] }) => {
     try {
-      await recipesStore.fetchRecipes(opts)
+      await getRecipesStore().fetchRecipes(opts)
     } catch (error) {
       showDangerToast('レシピの読み込みに失敗しました')
       logger.error('Failed to fetch recipes', { module: 'recipesPageStore' }, error instanceof Error ? error : new Error(String(error)))
