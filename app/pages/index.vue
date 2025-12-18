@@ -56,6 +56,14 @@
         <UButton
           variant="outline"
           size="sm"
+          icon="i-lucide-tag"
+          @click="navigateTo('/tags/create')"
+        >
+          {{ t('tags.add') }}
+        </UButton>
+        <UButton
+          variant="outline"
+          size="sm"
           icon="i-lucide-folder-plus"
           @click="navigateTo('/folders/create')"
         >
