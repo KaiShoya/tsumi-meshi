@@ -90,15 +90,52 @@ const { data, error } = await useAsyncData('dashboard-stats', async () => {
 </script>
 
 <style scoped>
-.cards { display:flex; gap:12px; margin:12px 0 }
-.card { background: #fff; padding:12px; border-radius:8px; box-shadow:0 1px 2px rgba(0,0,0,0.04); flex:1 }
-.card .num { font-size: 1.4rem; margin-top:8px }
-.layout { display:flex; gap:16px; margin-top:18px }
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 12px 0;
+}
+.card {
+  background: #fff;
+  padding: 14px;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.card .num { font-size: 1.5rem; margin-top: 8px; font-weight: 600 }
+.layout { display: flex; gap: 16px; margin-top: 18px; align-items: flex-start }
 .left { flex: 2 }
-.right { flex: 1; background:#fff; padding:12px; border-radius:8px }
-.chart-wrap { background:#fff; padding:12px; border-radius:8px; min-height:240px }
-.recent { margin-top:18px; background:#fff; padding:12px; border-radius:8px }
+.right {
+  flex: 1;
+  background: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  max-height: 480px;
+  overflow: auto;
+}
+.chart-wrap {
+  background: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  min-height: 260px;
+  height: 100%;
+}
+.recent { margin-top: 18px; background: #fff; padding: 12px; border-radius: 8px }
+
+/* Small screens: stack layout and reduce paddings */
 @media (max-width: 800px) {
   .layout { flex-direction: column }
+  .card { padding: 10px }
+  .chart-wrap { min-height: 200px }
+  .right { max-height: none }
+}
+
+/* Improve readability on very large screens */
+@media (min-width: 1600px) {
+  .cards { gap: 18px }
+  .card .num { font-size: 1.8rem }
 }
 </style>
