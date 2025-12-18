@@ -84,7 +84,7 @@ defineOptions({ name: 'DashboardPage' })
 
 const auth = useAuth()
 
-const { data, error, pending } = await useAsyncData(
+const { data, error, pending } = useAsyncData(
   'dashboard-stats',
   async () => apiClient.getDashboardStats('30d'),
   { server: false }
