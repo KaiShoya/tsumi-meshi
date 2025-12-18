@@ -23,7 +23,8 @@ const useRecipesStore = defineStore('recipes', () => {
     loading.value = true
     try {
       // Support optional filters/search: fetchRecipes may accept `{ q?, folderId?, tagIds? }`
-      recipes.value = await $recipesRepository.fetchAll(getCurrentUserId())
+      // Frontend must use the centralized API client. Do not import server-side repositories.
+      recipes.value = await apiClient.getRecipes({ q: undefined, folderId: undefined, tagIds: undefined })
     } catch (error) {
       throw error // Simply rethrow
     } finally {
@@ -32,7 +33,7 @@ const useRecipesStore = defineStore('recipes', () => {
   }
 
   const createRecipe = async (recipe: RecipeInput) => {
-    const newRecipe = await $recipesRepository.create(recipe, getCurrentUserId())
+    const newRecipe = await apiClient.createRecipe(recipe)
     recipes.value.push(newRecipe)
   }
 
@@ -94,7 +95,7 @@ Page stores should call into `checksStore` and expose `fetchStats(period)` via A
 ## Store Usage Guidelines
 
 ### Data Stores
-- ✅ Call repositories directly
+- ✅ Use `apiClient` for network calls (do not call server-side `app/repositories` directly)
 - ✅ Expose state as `readonly()`
 - ✅ Throw errors as-is (no toast)
 - ❌ No user notifications
@@ -105,7 +106,7 @@ Page stores should call into `checksStore` and expose `fetchStats(period)` via A
 - ✅ Handle errors and show toasts
 - ✅ Implement loading states
 - ✅ Log errors
-- ❌ No direct repository calls
+- ❌ No direct server-side repository imports; call `apiClient` or data stores that wrap it
 - ❌ No rethrow without handling
 
 ## Global State
