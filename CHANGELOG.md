@@ -22,6 +22,27 @@ Planned changes for v0.1.5: dashboard & analytics, deploy/CI improvements, perfo
 - Update `vitest.config.ts` AutoImport to include `vue-i18n` so test auto-imports resolve `useI18n`.
 - Removed development `plugins/` stubs and migrated required UI stubs into test setup to avoid shipping dev-only runtime code.
 
+## [v0.1.5] - 2025-12-19
+
+### Summary
+Bugfix release addressing dashboard SSR/auth edgecases, E2E coverage and test/lint stability.
+
+### Added
+- E2E smoke test for dashboard statistics to verify `/api/v1/stats` response and payload shape.
+
+### Changed
+- Prevent dashboard stats API from being fetched during server-side module evaluation (use client-only `useAsyncData(..., { server: false })`) to avoid transient 401 logs on page reload.
+- Improve auth cookie handling in Workers for local development: avoid `Secure` flag and use `SameSite=Lax` on localhost so browsers accept session cookies over HTTP during local dev.
+- Dashboard UI: responsive layout and null-safe template access to avoid type errors and transient error states on reload.
+
+### Fixed
+- Fix transient 401 Unauthorized logs on page reload by ensuring client-side session initialization and avoiding SSR stats fetch.
+- Lint/typecheck and test-suite fixes; full local test run passing.
+
+### Release metadata
+- Commit: fix(dashboard,auth): avoid SSR stats fetch on reload; adjust auth cookie handling for local dev
+
+
 
 
 ## [v0.1.1] - 2025-12-14
