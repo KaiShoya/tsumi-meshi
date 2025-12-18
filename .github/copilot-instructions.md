@@ -97,7 +97,7 @@ Avoid inline styling; use NuxtUI / Tailwind CSS / styled-components
 - コミットは Conventional Commits（feat, fix, chore, docs, refactor など）に従う。
 - 型安全性を重視し、TypeScript の型定義を徹底する。
   - ルートや API 通信の定義は `app/utils/api/client.ts` で一元管理する（フロントエンドは `apiClient` を利用してください）。
-  - サーバー側のリポジトリ実装（Workers 側など）は `app/repositories/` に配置しますが、クライアント／フロントエンドの API 呼び出しは `apiClient` を使って統一してください。
+  - サーバー側のデータアクセス実装は `workers/` に配置します（Cloudflare Workers のハンドラや repository レイヤ）。クライアント／フロントエンドの API 呼び出しは `apiClient` を使って統一してください。
   - 共有型はプロジェクト内で一貫して管理してください。フロントエンド用の互換レイヤが必要な場合は `app/types/` を使ってください。
 - i18n のキーは utils/locales.ts で定数化し、直接文字列を使わない。
 

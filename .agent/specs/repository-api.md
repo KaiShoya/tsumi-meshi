@@ -3,7 +3,7 @@
 ## Overview
 Repository pattern implementation for data access abstraction. All repositories handle Cloudflare D1 database operations.
 
-Note: `app/repositories/*` are server-side implementations (Cloudflare Workers / D1). Frontend code must not import these files directly; instead use the centralized frontend API client at `app/utils/api/client.ts` (exported as `apiClient`) to talk to the Workers endpoints. This keeps client bundles lean and avoids leaking server-side implementation into the browser.
+Note: Server-side repository implementations are provided alongside the Workers handlers (see `workers/`), and operate against Cloudflare D1. Frontend code must not import server-side implementation files directly; instead use the centralized frontend API client at `app/utils/api/client.ts` (exported as `apiClient`) to talk to the Workers endpoints. This keeps client bundles lean and avoids leaking server-side implementation into the browser.
 
 ## Repository Classes
 

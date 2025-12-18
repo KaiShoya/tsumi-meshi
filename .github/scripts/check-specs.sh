@@ -16,7 +16,7 @@ CHANGED_FILES=$(git diff --name-only "$BASE" "$HEAD")
 echo "Changed files:\n$CHANGED_FILES"
 
 # Patterns that indicate code/API changes which require spec/docs updates
-CODE_PATTERNS=("^app/" "^src/" "^app/repositories/" "^app/stores/" "^workers/index.ts")
+CODE_PATTERNS=("^app/" "^src/" "^workers/" "^app/stores/" "^workers/index.ts")
 
 NEEDS_SPECS=false
 for p in "${CODE_PATTERNS[@]}"; do
