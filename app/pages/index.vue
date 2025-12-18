@@ -247,7 +247,11 @@ const tagOptions = ref<Array<{ label: string, value: number }>>([])
 const recipesStore = useRecipesPageStore()
 const recipesStoreData = useRecipesStore()
 const { showDangerToast } = useAppToast()
-const recipes = computed(() => recipesStoreData.recipes)
+const recipes = computed(() => {
+  const r = (recipesStoreData as any).recipes
+  // `recipesStoreData.recipes` is a readonly Ref; unwrap safely to get the array value.
+  return (r && typeof r === 'object' && 'value' in r) ? r.value : (r ?? [])
+})
 
 // Confirmation modal state
 const showConfirmModal = ref(false)
