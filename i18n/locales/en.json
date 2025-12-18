@@ -20,6 +20,8 @@
   "recipes": {
     "listTitle": "Recipes",
     "new": "New recipe",
+    "edit": "Edit",
+    "editTitle": "Edit recipe",
     "searchPlaceholder": "Search recipes...",
     "folderPlaceholder": "Select folder",
     "tagsPlaceholder": "Select tags",

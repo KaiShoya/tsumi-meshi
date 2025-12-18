@@ -20,6 +20,8 @@
   "recipes": {
     "listTitle": "レシピ一覧",
     "new": "新規レシピ",
+    "edit": "編集",
+    "editTitle": "レシピ編集",
     "searchPlaceholder": "レシピを検索...",
     "folderPlaceholder": "フォルダを選択",
     "tagsPlaceholder": "タグを選択",
