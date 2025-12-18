@@ -64,6 +64,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ requiresAuth: true })
 import { reactive, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ImageUploader from '~/components/ImageUploader.vue'

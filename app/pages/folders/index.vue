@@ -64,6 +64,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ requiresAuth: true })
 import { ref, onMounted, computed, unref, type Ref } from 'vue'
 import FolderSelector from '~/components/FolderSelector.vue'
 import FolderTree from '~/components/FolderTree.vue'

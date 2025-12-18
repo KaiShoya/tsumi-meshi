@@ -221,6 +221,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ requiresAuth: true })
 import { useRecipesPageStore } from '~/stores/pages/recipes'
 import type { Recipe } from '~/repositories/recipes'
 import type { SelectMenuItem } from '@nuxt/ui'
@@ -312,10 +313,10 @@ const performDelete = async () => {
 // Lifecycle
 onMounted(async () => {
   const { initAuth, isAuthenticated } = useAuth()
-  initAuth()
+  await initAuth()
 
   if (!isAuthenticated.value) {
-    await navigateTo('/auth/login')
+    // middleware will perform navigation; stop further page init
     return
   }
 

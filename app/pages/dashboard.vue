@@ -77,6 +77,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ requiresAuth: true })
 import StatsChart from '~/components/StatsChart.vue'
 
 defineOptions({ name: 'DashboardPage' })

@@ -41,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ requiresAuth: true })
 import { useRoute } from 'vue-router'
 import { useChecksStore } from '~/stores/data/checks'
 import { useChecksPageStore } from '~/stores/pages/checks'

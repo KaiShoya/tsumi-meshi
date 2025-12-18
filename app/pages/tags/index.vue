@@ -67,6 +67,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ requiresAuth: true })
 import { ref, onMounted } from 'vue'
 import { useTagsPageStore } from '~/stores/pages/tags'
 import { useTagsStore } from '~/stores/data/tags'

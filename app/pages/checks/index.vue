@@ -36,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ requiresAuth: true })
 import { ref } from 'vue'
 import type { SelectMenuItem } from '@nuxt/ui'
 import { useChecksPageStore } from '~/stores/pages/checks'
