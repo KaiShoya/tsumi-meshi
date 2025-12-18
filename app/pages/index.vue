@@ -129,19 +129,19 @@
           <div class="flex items-center justify-between">
             <div class="flex gap-1">
               <UBadge
-                v-for="tag in recipe.tags.slice(0, 3)"
-                :key="tag.id"
+                v-for="tag in tagList(recipe).slice(0, 3)"
+                :key="tag.id ?? tag.name"
                 variant="subtle"
                 size="sm"
               >
                 {{ tag.name }}
               </UBadge>
               <UBadge
-                v-if="recipe.tags.length > 3"
+                v-if="tagList(recipe).length > 3"
                 variant="subtle"
                 size="sm"
               >
-                +{{ recipe.tags.length - 3 }}
+                +{{ tagList(recipe).length - 3 }}
               </UBadge>
             </div>
 
@@ -309,6 +309,16 @@ const performDelete = async () => {
     confirmTargetId.value = null
     confirmTargetTitle.value = ''
   }
+}
+
+// Helper to normalize tags from API (supports array, comma-separated string, or null)
+function tagList(recipe: Recipe | { tags: unknown }) {
+  const raw = (recipe as any).tags
+  if (Array.isArray(raw)) return raw as Array<{ id?: number, name: string }>
+  if (typeof raw === 'string') {
+    return raw.length === 0 ? [] : raw.split(',').map((name, i) => ({ id: i, name: name.trim() }))
+  }
+  return []
 }
 
 // Lifecycle
