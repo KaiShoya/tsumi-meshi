@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { Tag, TagInput } from '~/repositories/tags'
+import type { Tag, TagInput } from '~/types/tags'
 import { apiClient } from '~/utils/api/client'
 
 export const useTagsStore = defineStore('tags', () => {

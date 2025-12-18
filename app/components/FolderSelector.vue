@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { computed, onMounted, unref, type Ref } from 'vue'
 import { useFoldersStore } from '~/stores/data/folders'
-import type { Folder } from '~/repositories/folders'
+import type { Folder } from '~/types/folders'
 
 type FoldersStoreLike = {
   fetchFolders?: () => Promise<void>

@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FolderInput } from '~/repositories/folders'
+import type { FolderInput } from '~/types/folders'
 
 defineProps<{ modelValue: boolean }>()
 const emit = defineEmits<{

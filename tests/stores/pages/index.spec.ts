@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { ref, nextTick, type Ref } from 'vue'
-import type { Folder } from '~/repositories/folders'
+import type { Folder } from '~/types/folders'
 import { createPinia, setActivePinia } from 'pinia'
 import { useFoldersStore } from '~/stores/data/folders'
 import { useFoldersPageStore } from '~/stores/pages/folders'

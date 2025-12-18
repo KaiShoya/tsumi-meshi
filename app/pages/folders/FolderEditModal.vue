@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import { watch, reactive } from 'vue'
-import type { FolderUpdate } from '~/repositories/folders'
+import type { FolderUpdate } from '~/types/folders'
 
 const props = defineProps<{
   modelValue: boolean

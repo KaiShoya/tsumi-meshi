@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { StatsResponse } from '~/repositories/stats'
+import type { StatsResponse } from '~/types/stats'
 import { apiClient } from '~/utils/api/client'
 import { useAppToast } from '~/composables/useAppToast'
 import { useLogger } from '~/composables/useLogger'

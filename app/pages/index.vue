@@ -222,7 +222,7 @@
 
 <script setup lang="ts">
 import { useRecipesPageStore } from '~/stores/pages/recipes'
-import type { Recipe } from '~/repositories/recipes'
+import type { Recipe } from '~/types/recipes'
 import type { SelectMenuItem } from '@nuxt/ui'
 import { useDebounceFn } from '@vueuse/core'
 import { apiClient } from '~/utils/api/client'

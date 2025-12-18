@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { useTagsStore } from '~/stores/data/tags'
 import { useAppToast } from '~/composables/useAppToast'
 import { useLogger } from '~/composables/useLogger'
-import type { TagInput } from '~/repositories/tags'
+import type { TagInput } from '~/types/tags'
 
 export const useTagsPageStore = defineStore('tagsPage', () => {
   const tagsStore = useTagsStore()

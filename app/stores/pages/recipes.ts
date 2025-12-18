@@ -4,7 +4,7 @@ import { useUiStore } from '~/stores/ui'
 import { useAppToast } from '~/composables/useAppToast'
 import { useLogger } from '~/composables/useLogger'
 import { apiClient } from '~/utils/api/client'
-import type { RecipeInput, RecipeUpdate } from '~/repositories/recipes'
+import type { RecipeInput, RecipeUpdate } from '~/types/recipes'
 
 export const useRecipesPageStore = defineStore('recipesPage', () => {
   const recipesStore = useRecipesStore()

@@ -73,7 +73,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import type { Recipe } from '~/repositories/recipes'
+import type { Recipe } from '~/types/recipes'
 import { apiClient } from '~/utils/api/client'
 
 definePageMeta({ requiresAuth: true })

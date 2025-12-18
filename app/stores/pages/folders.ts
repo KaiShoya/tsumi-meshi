@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { useFoldersStore } from '~/stores/data/folders'
 import { useAppToast } from '~/composables/useAppToast'
 import { useLogger } from '~/composables/useLogger'
-import type { FolderInput, FolderUpdate } from '~/repositories/folders'
+import type { FolderInput, FolderUpdate } from '~/types/folders'
 
 export const useFoldersPageStore = defineStore('foldersPage', () => {
   const foldersStore = useFoldersStore()

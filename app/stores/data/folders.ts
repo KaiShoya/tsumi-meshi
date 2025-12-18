@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { useRecipesStore } from './recipes'
 import { apiClient } from '~/utils/api/client'
-import type { Folder, FolderInput, FolderUpdate } from '~/repositories/folders'
+import type { Folder, FolderInput, FolderUpdate } from '~/types/folders'
 
 export const useFoldersStore = defineStore('folders', () => {
   const folders = ref<Folder[]>([])
