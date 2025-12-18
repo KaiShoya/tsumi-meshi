@@ -41,13 +41,9 @@
 </template>
 
 <script setup lang="ts">
-const { user, logout, isAuthenticated, initAuth } = useAuth()
+const { user, logout, initAuth } = useAuth()
 const { t } = useI18n()
-const route = useRoute()
 
-// Ensure auth state is initialized before making redirect decisions.
+// Ensure auth state is initialized before showing content.
 await initAuth()
-if (!isAuthenticated.value && route.path !== '/auth/login') {
-  await navigateTo('/auth/login')
-}
 </script>

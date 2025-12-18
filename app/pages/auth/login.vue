@@ -156,6 +156,9 @@ const onSubmit = async (event?: unknown) => {
 
   try {
     await login(result.data.email, result.data.password)
+    const route = useRoute()
+    const redirectTo = (route.query.redirectTo as string) || '/'
+    await navigateTo(redirectTo)
   } catch (err: unknown) {
     error.value = err instanceof Error ? err.message : 'ログインに失敗しました'
   } finally {
@@ -163,11 +166,7 @@ const onSubmit = async (event?: unknown) => {
   }
 }
 
-// Redirect if already logged in
-const { isAuthenticated } = useAuth()
-if (isAuthenticated.value) {
-  await navigateTo('/')
-}
+// No inline redirect: middleware handles protected-route redirects.
 
 // No local stubs required for native form elements
 </script>

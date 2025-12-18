@@ -196,6 +196,9 @@ const onSubmit = async (event: unknown) => {
 
   try {
     await register(parsed.name, parsed.email, parsed.password)
+    const route = useRoute()
+    const redirectTo = (route.query.redirectTo as string) || '/'
+    await navigateTo(redirectTo)
   } catch (err: unknown) {
     error.value = err instanceof Error ? err.message : '登録に失敗しました'
   } finally {
