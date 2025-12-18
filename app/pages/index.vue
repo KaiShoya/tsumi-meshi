@@ -53,6 +53,14 @@
         >
           {{ t('checks.title') }}
         </UButton>
+        <UButton
+          variant="outline"
+          size="sm"
+          icon="i-lucide-folder-plus"
+          @click="navigateTo('/folders/create')"
+        >
+          {{ t('folders.create') }}
+        </UButton>
       </div>
 
       <UButton
