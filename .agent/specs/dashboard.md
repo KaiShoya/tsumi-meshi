@@ -56,7 +56,8 @@
 
 ## 実装ノート
 - フロントエンド: `app/components/StatsChart.vue`, `StatsCard.vue`, `RecentRecipes.vue` を作成する。`vue-chartjs` を使い Chart.js のレスポンシブ設定を有効にする。
-- ストア/Repository: `repositories/stats.ts`（API 呼び出し）、`stores/pages/dashboard.ts`（UI 状態：期間選択・読み込み状態）
+ - ストア/Repository: フロントエンドは `stores/pages/dashboard.ts`（UI 状態：期間選択・読み込み状態）。
+   API 呼び出しは `apiClient.getDashboardStats()` 経由で行う（`repositories/stats.ts` は型定義のみを提供）。
 - バックエンド: 単純な集計クエリで上記 JSON を返す。負荷を考慮して Workers 側に定期集計バッチを用意する選択肢を残す。
 
 ## アクセシビリティ

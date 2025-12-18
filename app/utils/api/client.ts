@@ -141,6 +141,10 @@ class ApiClient {
     })
   }
 
+  async getRecipe(id: number) {
+    return this.request<{ recipe: unknown }>(`/recipes/${id}`)
+  }
+
   async deleteRecipe(id: number) {
     return this.request(`/recipes/${id}`, {
       method: 'DELETE'
