@@ -148,7 +148,7 @@
             <div class="flex gap-2">
               <UButton
                 icon="i-lucide-check-circle"
-                :color="recipe.checks.length > 0 ? 'success' : 'neutral'"
+                :color="(recipe.checks?.length ?? 0) > 0 ? 'success' : 'neutral'"
                 variant="ghost"
                 size="sm"
                 @click.stop="toggleCheck(recipe)"
