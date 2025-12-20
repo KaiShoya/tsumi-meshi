@@ -75,6 +75,8 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { Recipe } from '~/types/recipes'
 import { apiClient } from '~/utils/api/client'
+import { useLogger } from '~/composables/useLogger'
+import { useAppToast } from '~/composables/useAppToast'
 
 definePageMeta({ requiresAuth: true })
 
@@ -90,7 +92,10 @@ onMounted(async () => {
     const res = await apiClient.getRecipe(id) as { recipe?: Recipe | null }
     recipe.value = res.recipe ?? null
   } catch (err) {
-    console.error(err)
+    const logger = useLogger()
+    const { showDangerToast } = useAppToast()
+    logger.error('Failed to load recipe', { module: 'recipes.view', id }, err instanceof Error ? err : undefined)
+    showDangerToast('レシピの読み込みに失敗しました')
   } finally {
     loaded.value = true
   }

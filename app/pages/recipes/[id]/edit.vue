@@ -68,6 +68,8 @@ import { reactive, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ImageUploader from '~/components/ImageUploader.vue'
 import { apiClient } from '~/utils/api/client'
+import { useLogger } from '~/composables/useLogger'
+import { useAppToast } from '~/composables/useAppToast'
 
 definePageMeta({ requiresAuth: true })
 
@@ -98,7 +100,10 @@ onMounted(async () => {
         : (typeof r.image_url === 'string' ? (r.image_url as string) : null)
     }
   } catch (err) {
-    console.error(err)
+    const logger = useLogger()
+    const { showDangerToast } = useAppToast()
+    logger.error('Failed to load recipe for edit', { module: 'recipes.edit', id }, err instanceof Error ? err : undefined)
+    showDangerToast('レシピの読み込みに失敗しました')
   } finally {
     loaded.value = true
   }
@@ -120,7 +125,10 @@ async function handleSubmit() {
     await apiClient.updateRecipe(id, payload)
     await router.push('/')
   } catch (err) {
-    console.error(err)
+    const logger = useLogger()
+    const { showDangerToast } = useAppToast()
+    logger.error('Failed to update recipe', { module: 'recipes.edit', id }, err instanceof Error ? err : undefined)
+    showDangerToast('レシピの更新に失敗しました')
   }
 }
 </script>

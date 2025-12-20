@@ -1,4 +1,5 @@
 import { apiClient } from '~/utils/api/client'
+import { useLogger } from '~/composables/useLogger'
 
 export const useUpload = () => {
   const requestUpload = async (file: File) => {
@@ -30,7 +31,8 @@ export const useUpload = () => {
         // log and rethrow with context so callers can handle it
         // include key/url to help debugging
 
-        console.error('Upload error', { url: payload.url, key: payload.key, error: err })
+        const logger = useLogger()
+        logger.error('Upload error', { url: payload.url, key: payload.key }, err instanceof Error ? err : undefined)
         const message = err instanceof Error ? err.message : String(err)
         throw new Error(`Upload to ${payload.url} failed for key=${payload.key}: ${message}`)
       }

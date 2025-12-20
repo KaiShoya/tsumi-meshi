@@ -39,6 +39,7 @@
 /* eslint-disable @stylistic/member-delimiter-style */
 import { ref, onMounted, watch, onBeforeUnmount, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useLogger } from '~/composables/useLogger'
 
 interface Row { date: string, count: number }
 
@@ -118,7 +119,8 @@ onMounted(async () => {
       }
     })
   } catch (err) {
-    console.error('Chart.js not available', err)
+    const logger = useLogger()
+    logger.error('Chart.js not available', { module: 'StatsChart' }, err instanceof Error ? err : undefined)
     chartSupported.value = false
   }
 })
