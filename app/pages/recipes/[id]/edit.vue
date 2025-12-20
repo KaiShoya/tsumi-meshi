@@ -1,3 +1,28 @@
+<spec lang="md">
+# レシピ編集
+
+> 概要: 既存レシピの編集画面。画像差し替え、材料・手順の編集、タグの変更を行う。
+
+## Data
+- `recipe` のフィールドを編集可能なフォームにバインド（title, description, imageKey, ingredients[], instructions[], tags[]）
+
+## Interactions
+- 読み込み後にフォームを編集・送信して更新APIを呼び出す
+- 画像差し替えは ImageUploader を使う
+
+## Features
+- 既存データのプリロード、追加/削除/並び替えサポート
+
+## Error Handling
+- 保存失敗はトーストで通知し、フォームをロックしない
+
+## i18n
+- ラベル、エラーメッセージは翻訳キー化
+
+## Notes
+- 互換のため `image_url` スキーマを扱うコードが残っている可能性あり
+</spec>
+
 <template>
   <div class="p-4 max-w-2xl mx-auto">
     <h1 class="text-2xl font-semibold mb-4">

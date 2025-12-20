@@ -1,3 +1,29 @@
+<spec lang="md">
+# チェック一覧
+
+> 概要: レシピに対するチェック（やコメント）の一覧を表示・フィルタできる画面。
+
+## Data
+- `checks` 配列（各チェックに: id, recipeId, user, createdAt, note 等）
+- ページネーション/フィルタ状態
+
+## Interactions
+- レシピやユーザーでフィルタ
+- チェックの詳細表示へ遷移
+
+## Features
+- 日付/レシピ/ユーザーフィルタ、ページネーション
+
+## Error Handling
+- データ読み込み失敗時にリトライ案内
+
+## i18n
+- 各種ラベルはロケールキー化
+
+## Notes
+- 大量データ時はサーバーサイドでページネーションを推奨
+</spec>
+
 <template>
   <div class="space-y-6">
     <div class="flex items-center justify-between">

@@ -1,3 +1,27 @@
+<spec lang="md">
+# レシピ別チェック一覧
+
+> 概要: 特定レシピに紐づくチェック（ログ）を一覧表示するサブページ。
+
+## Data
+- `checks` 配列（user, note, createdAt など）
+
+## Interactions
+- チェックの詳細確認、フィードバック追加（必要に応じて）
+
+## Features
+- フィルタ、ソート、ページネーション
+
+## Error Handling
+- データ取得失敗時は画面領域でエラー表示
+
+## i18n
+- 文言は翻訳キーで管理
+
+## Notes
+- このページはレシピ詳細のタブ/サブルートとして扱われる
+</spec>
+
 <template>
   <div class="space-y-6">
     <div class="flex items-center justify-between">

@@ -1,3 +1,28 @@
+<spec lang="md">
+# レシピ詳細
+
+> 概要: 単一レシピの詳細表示。画像、材料、手順、タグ、メタ情報（作成者・日付）を表示する。
+
+## Data
+- `recipe`: { id, title, description, imageUrl, ingredients[], instructions[], tags[] }
+
+## Interactions
+- 編集ボタンで編集ページへ移動
+- タグ/作者をクリックでフィルタやプロフィールへ遷移
+
+## Features
+- 画像表示、材料リスト、手順リスト、サイドバーのメタ情報
+
+## Error Handling
+- データ取得エラーはトースト/エリア表示
+
+## i18n
+- 表示ラベルは翻訳管理下に置く
+
+## Notes
+- 印刷/共有のためのメタアクションを将来的に追加可能
+</spec>
+
 <template>
   <div class="p-4 max-w-3xl mx-auto">
     <div class="flex items-center justify-between mb-4">

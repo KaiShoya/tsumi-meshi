@@ -1,3 +1,28 @@
+<spec lang="md">
+# フォルダ一覧
+
+> 概要: ユーザーが作成したフォルダの一覧を表示し、フォルダ操作（作成・編集・削除）を行う画面。
+
+## Data
+- `folders` 配列（id, name, counts 等）
+
+## Interactions
+- フォルダ選択で中のレシピを表示
+- 作成/編集/削除のモーダルを開く
+
+## Features
+- フォルダツリー表示、選択ハイライト、操作ボタン
+
+## Error Handling
+- 操作失敗時はトーストかモーダルでフィードバック
+
+## i18n
+- `folders.*` キーで管理
+
+## Notes
+- ツリーは大きな階層でもスクロールで扱えるように制約をつける
+</spec>
+
 <template>
   <div class="max-w-3xl mx-auto py-8">
     <h1 class="text-2xl font-semibold mb-4">

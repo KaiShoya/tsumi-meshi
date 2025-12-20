@@ -1,3 +1,31 @@
+<spec lang="md">
+# レシピ作成
+
+> 概要: 新しいレシピを作成する画面。画像アップロード、材料・手順の入力、Magic Import のサポートを含む。
+
+## Data
+- `title`, `description`, `imageKey`, `tags`, `ingredients[]`, `instructions[]`, `importUrl`
+
+## Interactions
+- 画像アップロード（presign）
+- Magic Import: URLから材料/手順を自動抽出（サーバー/クライアントの解析）
+- 材料・手順の追加/削除/並び替え
+
+## Features
+- ImageUploader を使った画像アップロード
+- Ingredients / Instructions のエディタ（可変行）
+- Magic Import（外部URL入力による自動抽出）
+
+## Error Handling
+- バリデーション失敗は入力下に表示、APIエラーはトーストで通知
+
+## i18n
+- フィールドラベル・プレースホルダ・ボタンはロケールキーで管理
+
+## Notes
+- `imageKey` は `ref`（リアクティブ）で扱うこと
+</spec>
+
 <template>
   <div class="p-4 max-w-2xl mx-auto">
     <h1 class="text-2xl font-semibold mb-4">
@@ -31,36 +59,94 @@
         </UFormField>
 
         <div class="mb-6">
-          <h3 class="text-lg font-semibold mb-2">Magic Import</h3>
+          <h3 class="text-lg font-semibold mb-2">
+            Magic Import
+          </h3>
           <div class="flex gap-2 items-center">
-            <input v-model="importUrl" placeholder="https://..." class="flex-1 rounded border px-3 py-2" />
-            <UButton type="button" @click="handleAutoParse">Auto-Parse</UButton>
+            <input
+              v-model="importUrl"
+              placeholder="https://..."
+              class="flex-1 rounded border px-3 py-2"
+            >
+            <UButton
+              type="button"
+              @click="handleAutoParse"
+            >
+              Auto-Parse
+            </UButton>
           </div>
-          <p class="text-sm text-gray-500 mt-2">Paste a URL and click Auto-Parse to prefill ingredients and steps (stub).</p>
+          <p class="text-sm text-gray-500 mt-2">
+            Paste a URL and click Auto-Parse to prefill ingredients and steps (stub).
+          </p>
         </div>
 
         <div class="mb-4">
-          <h3 class="text-lg font-semibold mb-2">Ingredients</h3>
+          <h3 class="text-lg font-semibold mb-2">
+            Ingredients
+          </h3>
           <div class="flex flex-col gap-2">
-            <div v-for="(ing, i) in ingredients" :key="i" class="flex gap-2">
-              <input v-model="ingredients[i]" class="flex-1 rounded border px-3 py-2" />
-              <button type="button" class="text-red-500" @click="removeIngredient(i)">Remove</button>
+            <div
+              v-for="(ing, i) in ingredients"
+              :key="i"
+              class="flex gap-2"
+            >
+              <input
+                v-model="ingredients[i]"
+                class="flex-1 rounded border px-3 py-2"
+              >
+              <button
+                type="button"
+                class="text-red-500"
+                @click="removeIngredient(i)"
+              >
+                Remove
+              </button>
             </div>
-            <button type="button" class="text-sm text-primary mt-2" @click="addIngredient">+ Add Ingredient</button>
+            <button
+              type="button"
+              class="text-sm text-primary mt-2"
+              @click="addIngredient"
+            >
+              + Add Ingredient
+            </button>
           </div>
         </div>
 
         <div class="mb-4">
-          <h3 class="text-lg font-semibold mb-2">Instructions</h3>
+          <h3 class="text-lg font-semibold mb-2">
+            Instructions
+          </h3>
           <div class="flex flex-col gap-3">
-            <div v-for="(step, idx) in instructions" :key="idx" class="border rounded p-3">
+            <div
+              v-for="(step, idx) in instructions"
+              :key="idx"
+              class="border rounded p-3"
+            >
               <div class="flex justify-between items-start gap-2">
-                <div class="font-bold">Step {{ idx + 1 }}</div>
-                <button type="button" class="text-red-500" @click="removeStep(idx)">Remove</button>
+                <div class="font-bold">
+                  Step {{ idx + 1 }}
+                </div>
+                <button
+                  type="button"
+                  class="text-red-500"
+                  @click="removeStep(idx)"
+                >
+                  Remove
+                </button>
               </div>
-              <textarea v-model="instructions[idx].text" class="w-full mt-2 rounded border px-3 py-2" rows="3" />
+              <textarea
+                v-model="instructions[idx].text"
+                class="w-full mt-2 rounded border px-3 py-2"
+                rows="3"
+              />
             </div>
-            <button type="button" class="text-sm text-primary mt-2" @click="addStep">+ Add Step</button>
+            <button
+              type="button"
+              class="text-sm text-primary mt-2"
+              @click="addStep"
+            >
+              + Add Step
+            </button>
           </div>
         </div>
 

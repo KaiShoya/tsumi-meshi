@@ -1,3 +1,28 @@
+<spec lang="md">
+# タグ一覧
+
+> 概要: 作成済みのタグ一覧を表示・管理する画面。
+
+## Data
+- `tags` 配列（name, count, color など）
+
+## Interactions
+- タグ編集・削除・検索
+- タグクリックで該当レシピをフィルタ
+
+## Features
+- 一覧表示、編集・削除アクション、検索機能
+
+## Error Handling
+- 操作失敗時は確認ダイアログ・トーストで通知
+
+## i18n
+- `tags.*` キーで管理
+
+## Notes
+- タグの色はアクセシビリティを考慮すること
+</spec>
+
 <template>
   <div class="max-w-3xl mx-auto py-8">
     <h1

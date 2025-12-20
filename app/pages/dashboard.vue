@@ -1,3 +1,31 @@
+<spec lang="md">
+# ダッシュボード
+
+> 概要: ユーザーのサマリと最近の活動、日別のチェック統計を表示する画面。
+
+## Data
+- `summary`: { totalRecipes, totalChecks, activeTags }
+- `checksOverTime`: 日別チェック数の配列（チャート用）
+- `topTags`: 上位タグの配列
+- `recentRecipes`: 最近のレシピ一覧
+
+## Interactions
+- レンジ切替（将来的に対応）
+- レシピをクリックして詳細へ遷移
+
+## Features
+- サマリカード、日別チャート、上位タグ、最近のレシピ
+
+## Error Handling
+- データ取得失敗時は画面にエラーメッセージを表示
+
+## i18n
+- 見出しやラベルはロケールキー化を推奨
+
+## Notes
+- 認証必須 (`requiresAuth: true`)
+</spec>
+
 <template>
   <div class="page-dashboard">
     <h1>ダッシュボード</h1>
