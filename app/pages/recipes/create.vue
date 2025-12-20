@@ -57,10 +57,12 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ImageUploader from '~/components/ImageUploader.vue'
 import { apiClient } from '~/utils/api/client'
+import { useLogger } from '~/composables/useLogger'
+import { useAppToast } from '~/composables/useAppToast'
 
 definePageMeta({ requiresAuth: true })
 
@@ -68,10 +70,10 @@ const { t } = useI18n()
 const router = useRouter()
 
 const form = reactive({ title: '', url: '', description: '', folderId: undefined })
-let imageKey: string | null = null
+const imageKey = ref<string | null>(null)
 
 function handleUploaded(key: string | null) {
-  imageKey = key
+  imageKey.value = key
 }
 
 async function handleSubmit() {
@@ -82,18 +84,24 @@ async function handleSubmit() {
       description: form.description ? String(form.description) : undefined,
       folderId: form.folderId
     }
-    if (imageKey) payload.imageUrl = imageKey
+    if (imageKey.value) payload.imageUrl = imageKey.value
 
     try {
       // Use centralized apiClient (Cloudflare Workers)
       await apiClient.createRecipe(payload)
     } catch (err) {
-      console.error(err)
+      const logger = useLogger()
+      const { showDangerToast } = useAppToast()
+      logger.error('Failed to create recipe', { module: 'recipes.create' }, err instanceof Error ? err : undefined)
+      showDangerToast('レシピの作成に失敗しました')
       throw err
     }
     await router.push('/')
   } catch (err: unknown) {
-    console.error(err)
+    const logger = useLogger()
+    const { showDangerToast } = useAppToast()
+    logger.error('Unhandled error in create recipe', { module: 'recipes.create' }, err instanceof Error ? err : undefined)
+    showDangerToast('エラーが発生しました')
   }
 }
 </script>

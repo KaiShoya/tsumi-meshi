@@ -47,7 +47,7 @@ class ApiClient {
           : ({ ...options, credentials: 'include' } as Record<string, unknown>)
 
         const parsed = await $fetch(url, optsFor$fetch)
-        return parsed as unknown as T
+        return this.normalizeResponse(parsed) as unknown as T
       }
       const fetchImpl = (g.fetch as unknown as typeof fetch) ?? fetch
       const response = await fetchImpl(url, {
@@ -62,7 +62,8 @@ class ApiClient {
         throw new Error(errorData.error || `HTTP ${response.status}`)
       }
 
-      return await response.json()
+      const parsed = await response.json()
+      return this.normalizeResponse(parsed)
     } catch (error) {
       // Use logger for consistent logging; keep throwing so callers can handle
       try {
@@ -79,6 +80,34 @@ class ApiClient {
         console.error(`API request failed: ${endpoint}`, error)
       }
       throw error
+    }
+  }
+
+  // Normalize API responses: convert snake_case keys to camelCase recursively.
+  // Keeps arrays and primitive values intact.
+  private normalizeResponse<T>(data: unknown): T {
+    const isObject = (v: unknown) => v !== null && typeof v === 'object' && !Array.isArray(v)
+
+    const toCamel = (s: string) => s.replace(/_([a-z0-9])/g, (_, c: string) => c.toUpperCase())
+
+    const walk = (v: unknown): unknown => {
+      if (Array.isArray(v)) return v.map(walk)
+      if (isObject(v)) {
+        const obj = v as Record<string, unknown>
+        const out: Record<string, unknown> = {}
+        for (const [k, val] of Object.entries(obj)) {
+          const nk = toCamel(k)
+          out[nk] = walk(val)
+        }
+        return out
+      }
+      return v
+    }
+
+    try {
+      return walk(data) as T
+    } catch {
+      return data as T
     }
   }
 
