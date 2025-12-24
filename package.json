@@ -6,25 +6,13 @@
     "node": ">=24"
   },
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "prepare": "husky install",
-    "lint": "eslint .",
-    "typecheck": "nuxt typecheck",
-    "test": "vitest --run"
-  },
-  "dependencies": {
-    "@aws-sdk/client-s3": "^3.948.0",
-    "@aws-sdk/s3-request-presigner": "^3.948.0",
-    "@formkit/drag-and-drop": "^0.5.3",
-    "@iconify-json/lucide": "^1.2.74",
-    "@iconify-json/simple-icons": "^1.2.59",
-    "@nuxt/ui": "^4.2.1",
-    "@nuxtjs/i18n": "^10.2.1",
-    "@pinia/nuxt": "^0.11.3",
-    "nuxt": "^4.2.2"
+    "bootstrap": "pnpm -w -r install",
+    "typecheck": "pnpm --filter @tsumi-meshi/nuxt typecheck",
+    "lint": "pnpm --filter @tsumi-meshi/nuxt run lint",
+    "test": "pnpm --filter @tsumi-meshi/nuxt run test",
+    "build": "pnpm -w -r run build",
+    "dev:nuxt": "pnpm --filter @tsumi-meshi/nuxt dev",
+    "dev:workers": "pnpm --filter @tsumi-meshi/workers dev"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20251213.0",

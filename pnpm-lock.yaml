@@ -7,34 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@aws-sdk/client-s3':
-        specifier: ^3.948.0
-        version: 3.948.0
-      '@aws-sdk/s3-request-presigner':
-        specifier: ^3.948.0
-        version: 3.948.0
-      '@formkit/drag-and-drop':
-        specifier: ^0.5.3
-        version: 0.5.3
-      '@iconify-json/lucide':
-        specifier: ^1.2.74
-        version: 1.2.81
-      '@iconify-json/simple-icons':
-        specifier: ^1.2.59
-        version: 1.2.63
-      '@nuxt/ui':
-        specifier: ^4.2.1
-        version: 4.2.1(@babel/parser@7.28.5)(change-case@5.4.4)(db0@0.3.4)(embla-carousel@8.6.0)(ioredis@5.8.2)(magicast@0.5.1)(typescript@5.9.3)(vite@7.2.7(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.2))(vue-router@4.6.4(vue@3.5.25(typescript@5.9.3)))(vue@3.5.25(typescript@5.9.3))
-      '@nuxtjs/i18n':
-        specifier: ^10.2.1
-        version: 10.2.1(@vue/compiler-dom@3.5.25)(db0@0.3.4)(eslint@9.39.2(jiti@2.6.1))(ioredis@5.8.2)(magicast@0.5.1)(rollup@4.53.3)(vue@3.5.25(typescript@5.9.3))
-      '@pinia/nuxt':
-        specifier: ^0.11.3
-        version: 0.11.3(magicast@0.5.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.25(typescript@5.9.3)))
-      nuxt:
-        specifier: ^4.2.2
-        version: 4.2.2(@parcel/watcher@2.5.1)(@vue/compiler-sfc@3.5.25)(cac@6.7.14)(db0@0.3.4)(eslint@9.39.2(jiti@2.6.1))(ioredis@5.8.2)(lightningcss@1.30.2)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.53.3)(terser@5.44.1)(typescript@5.9.3)(vite@7.2.7(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.2))(vue-tsc@3.1.8(typescript@5.9.3))(yaml@2.8.2)
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20251213.0
@@ -93,6 +65,106 @@ importers:
       vue-tsc:
         specifier: ^3.1.5
         version: 3.1.8(typescript@5.9.3)
+      wrangler:
+        specifier: ^4.54.0
+        version: 4.54.0(@cloudflare/workers-types@4.20251213.0)
+
+  packages/nuxt:
+    dependencies:
+      '@formkit/drag-and-drop':
+        specifier: ^0.5.3
+        version: 0.5.3
+      '@iconify-json/lucide':
+        specifier: ^1.2.74
+        version: 1.2.81
+      '@iconify-json/simple-icons':
+        specifier: ^1.2.59
+        version: 1.2.63
+      '@nuxt/ui':
+        specifier: ^4.2.1
+        version: 4.2.1(@babel/parser@7.28.5)(change-case@5.4.4)(db0@0.3.4)(embla-carousel@8.6.0)(ioredis@5.8.2)(magicast@0.5.1)(typescript@5.9.3)(vite@7.2.7(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.2))(vue-router@4.6.4(vue@3.5.25(typescript@5.9.3)))(vue@3.5.25(typescript@5.9.3))
+      '@nuxtjs/i18n':
+        specifier: ^10.2.1
+        version: 10.2.1(@vue/compiler-dom@3.5.25)(db0@0.3.4)(eslint@9.39.2(jiti@2.6.1))(ioredis@5.8.2)(magicast@0.5.1)(rollup@4.53.3)(vue@3.5.25(typescript@5.9.3))
+      '@pinia/nuxt':
+        specifier: ^0.11.3
+        version: 0.11.3(magicast@0.5.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.25(typescript@5.9.3)))
+      '@tsumi-meshi/shared':
+        specifier: workspace:*
+        version: link:../shared
+      nuxt:
+        specifier: ^4.2.2
+        version: 4.2.2(@parcel/watcher@2.5.1)(@vue/compiler-sfc@3.5.25)(cac@6.7.14)(db0@0.3.4)(eslint@9.39.2(jiti@2.6.1))(ioredis@5.8.2)(lightningcss@1.30.2)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.53.3)(terser@5.44.1)(typescript@5.9.3)(vite@7.2.7(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.2))(vue-tsc@3.1.8(typescript@5.9.3))(yaml@2.8.2)
+    devDependencies:
+      '@nuxt/eslint':
+        specifier: ^1.10.0
+        version: 1.12.1(@typescript-eslint/utils@8.49.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(@vue/compiler-sfc@3.5.25)(eslint@9.39.2(jiti@2.6.1))(magicast@0.5.1)(typescript@5.9.3)(vite@7.2.7(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.2))
+      '@vitejs/plugin-vue':
+        specifier: ^6.0.3
+        version: 6.0.3(vite@7.2.7(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.2))(vue@3.5.25(typescript@5.9.3))
+      '@vue/test-utils':
+        specifier: ^2.4.6
+        version: 2.4.6
+      axe-core:
+        specifier: ^4.11.0
+        version: 4.11.0
+      chart.js:
+        specifier: ^4.5.1
+        version: 4.5.1
+      eslint:
+        specifier: ^9.39.1
+        version: 9.39.2(jiti@2.6.1)
+      husky:
+        specifier: ^9.1.7
+        version: 9.1.7
+      jsdom:
+        specifier: ^27.3.0
+        version: 27.3.0(postcss@8.5.6)
+      lint-staged:
+        specifier: ^16.2.7
+        version: 16.2.7
+      pinia:
+        specifier: ^3.0.4
+        version: 3.0.4(typescript@5.9.3)(vue@3.5.25(typescript@5.9.3))
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      unplugin-auto-import:
+        specifier: ^20.3.0
+        version: 20.3.0(@nuxt/kit@4.2.2(magicast@0.5.1))(@vueuse/core@13.9.0(vue@3.5.25(typescript@5.9.3)))
+      vitest:
+        specifier: ^4.0.15
+        version: 4.0.15(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.2)
+      vue-chartjs:
+        specifier: ^5.3.3
+        version: 5.3.3(chart.js@4.5.1)(vue@3.5.25(typescript@5.9.3))
+      vue-i18n:
+        specifier: ^11.2.2
+        version: 11.2.2(vue@3.5.25(typescript@5.9.3))
+      vue-tsc:
+        specifier: ^3.1.5
+        version: 3.1.8(typescript@5.9.3)
+
+  packages/shared: {}
+
+  packages/workers:
+    dependencies:
+      '@aws-sdk/client-s3':
+        specifier: ^3.948.0
+        version: 3.948.0
+      '@aws-sdk/s3-request-presigner':
+        specifier: ^3.948.0
+        version: 3.948.0
+      hono:
+        specifier: ^4.11.0
+        version: 4.11.0
+    devDependencies:
+      '@cloudflare/workers-types':
+        specifier: ^4.20251213.0
+        version: 4.20251213.0
+      miniflare:
+        specifier: ^4.20251210.0
+        version: 4.20251210.0
       wrangler:
         specifier: ^4.54.0
         version: 4.54.0(@cloudflare/workers-types@4.20251213.0)

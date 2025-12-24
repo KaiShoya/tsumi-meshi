@@ -1,0 +1,13 @@
+{
+  "name": "@tsumi-meshi/shared",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  }
+}

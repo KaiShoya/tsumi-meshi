@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import app from '../../workers/index'
+import app from '@tsumi-meshi/workers'
 import crypto from 'crypto'
 
 function base64url(input: Buffer) {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import app from '../../workers/index'
+import app from '@tsumi-meshi/workers'
 
 // Helper to create HS256 JWT (simple, for tests)
 import crypto from 'crypto'
