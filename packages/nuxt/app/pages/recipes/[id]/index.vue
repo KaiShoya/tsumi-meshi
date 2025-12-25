@@ -52,26 +52,61 @@
     >
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-4">
-          <div v-if="recipe?.imageUrl" class="rounded overflow-hidden">
-            <img :src="recipe.imageUrl" :alt="recipe.title" class="w-full object-contain" />
+          <div
+            v-if="recipe?.imageUrl"
+            class="rounded overflow-hidden"
+          >
+            <img
+              :src="recipe.imageUrl"
+              :alt="recipe.title"
+              class="w-full object-contain"
+            >
           </div>
 
           <div>
-            <p class="text-sm text-gray-600">{{ recipe?.description }}</p>
-            <a v-if="recipe?.url" :href="recipe.url" target="_blank" rel="noopener" class="text-blue-600 underline">Open source</a>
+            <p class="text-sm text-gray-600">
+              {{ recipe?.description }}
+            </p>
+            <a
+              v-if="recipe?.url"
+              :href="recipe.url"
+              target="_blank"
+              rel="noopener"
+              class="text-blue-600 underline"
+            >Open source</a>
           </div>
 
           <div>
-            <h3 class="font-semibold">Ingredients</h3>
+            <h3 class="font-semibold">
+              Ingredients
+            </h3>
             <ul class="list-disc pl-5 mt-2">
-              <li v-for="(ing, i) in recipe?.ingredients ?? []" :key="i">{{ ing }}</li>
+              <li
+                v-for="(ing, i) in recipe?.ingredients ?? []"
+                :key="i"
+              >
+                {{ ing }}
+              </li>
             </ul>
           </div>
 
           <div>
-            <h3 class="font-semibold mt-4">Instructions</h3>
+            <h3 class="font-semibold mt-4">
+              Instructions
+            </h3>
             <ol class="list-decimal pl-5 mt-2 space-y-2">
-              <li v-for="(s, i) in recipe?.instructions ?? []" :key="i">{{ s.text ?? s }}</li>
+              <li
+                v-for="(s, i) in recipe?.instructions ?? []"
+                :key="i"
+              >
+                <!--
+                  `s` は文字列（旧形式／簡易な手順）または `{ text: string }` のオブジェクト
+                  （拡張された手順表現）のいずれかです。
+                  テンプレート内で `.text` に安全にアクセスするためにガード処理を入れ、
+                  TypeScript の型チェックを満たしつつ両形式に対応しています。
+                -->
+                {{ typeof s === 'object' && s !== null && 'text' in s ? (s as { text: string }).text : s }}
+              </li>
             </ol>
           </div>
         </div>
@@ -79,23 +114,49 @@
         <aside class="space-y-4">
           <div class="bg-white dark:bg-surface-dark p-4 rounded shadow-sm border">
             <div class="flex items-center justify-between mb-2">
-              <h4 class="font-semibold">Details</h4>
-              <div class="text-sm text-gray-500">{ { /* placeholder */ } }</div>
+              <h4 class="font-semibold">
+                Details
+              </h4>
+              <div class="text-sm text-gray-500">
+                { { /* placeholder */ } }
+              </div>
             </div>
             <div class="text-sm text-gray-600">
-              <div v-if="recipe?.folderId">Folder: {{ recipe.folderId }}</div>
-              <div v-if="recipe?.createdAt">Added: {{ recipe.createdAt }}</div>
+              <div v-if="recipe?.folderId">
+                Folder: {{ recipe.folderId }}
+              </div>
+              <div v-if="recipe?.createdAt">
+                Added: {{ recipe.createdAt }}
+              </div>
             </div>
             <div class="mt-3 flex gap-2">
-              <UButton size="sm" @click="navigateTo(`/recipes/${id}/edit`)">Edit</UButton>
-              <UButton size="sm" variant="ghost" @click="navigateTo('/')">Back</UButton>
+              <UButton
+                size="sm"
+                @click="navigateTo(`/recipes/${id}/edit`)"
+              >
+                Edit
+              </UButton>
+              <UButton
+                size="sm"
+                variant="ghost"
+                @click="navigateTo('/')"
+              >
+                Back
+              </UButton>
             </div>
           </div>
 
           <div class="bg-white dark:bg-surface-dark p-4 rounded shadow-sm border">
-            <h4 class="font-semibold mb-2">Tags</h4>
+            <h4 class="font-semibold mb-2">
+              Tags
+            </h4>
             <div class="flex gap-2 flex-wrap">
-              <UBadge v-for="tag in recipe?.tags ?? []" :key="tag.id">{{ tag.name }}</UBadge>
+              <UBadge
+                v-for="tag in recipe?.tags ?? []"
+                :key="tag.id"
+              >
+                {{ tag.name }}
+              </UBadge>
             </div>
           </div>
         </aside>

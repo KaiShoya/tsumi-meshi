@@ -15,6 +15,7 @@ These instructions define how GitHub Copilot should assist with this TypeScript 
 - Use `interface` or `type` aliases to define data structures.
 - Always enable `strict` mode and follow the project's `tsconfig.json`.
 - Prefer named functions, especially for reuse and testability.
+ - Prefer arrow functions for inline callbacks and short local helpers; prefer named functions for exported public APIs or functions intended for reuse.
 - Use `async/await` over raw Promises and avoid `.then().catch()` chains.
 - Keep files small, focused, and well-organized.
  - **Auth policy**: Prefer server-set HttpOnly refresh cookies + short-lived access tokens for improved security. Do not store tokens in localStorage; use `/api/v1/auth/me` to initialize client session. When changing auth behavior update `.agent/specs/auth.md` and include tests (unit/integration/E2E for refresh flow).

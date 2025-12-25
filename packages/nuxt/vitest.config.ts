@@ -8,7 +8,7 @@ import type { Plugin } from 'vite'
 // may be requested as `?vue&type=spec&index=0&lang.md` and Vite/Rollup can
 // attempt to parse them as JS modules, causing parse errors. Add a small
 // Vite plugin for the test config that returns a no-op module for those ids.
-function ignoreVueSpecBlocks() {
+const ignoreVueSpecBlocks = () => {
   return {
     name: 'ignore-vue-spec-blocks' as const,
     enforce: 'pre',

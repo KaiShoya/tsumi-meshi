@@ -135,7 +135,7 @@
                 </button>
               </div>
               <textarea
-                v-model="instructions[idx].text"
+                v-model="step.text"
                 class="w-full mt-2 rounded border px-3 py-2"
                 rows="3"
               />
@@ -197,17 +197,17 @@ const importUrl = ref('')
 const ingredients = ref<string[]>([])
 const instructions = ref<Array<{ text: string }>>([])
 
-function handleUploaded(key: string | null) {
+const handleUploaded = (key: string | null) => {
   imageKey.value = key
 }
 
-function addIngredient() { ingredients.value.push('') }
-function removeIngredient(i: number) { ingredients.value.splice(i, 1) }
+const addIngredient = () => ingredients.value.push('')
+const removeIngredient = (i: number) => ingredients.value.splice(i, 1)
 
-function addStep() { instructions.value.push({ text: '' }) }
-function removeStep(i: number) { instructions.value.splice(i, 1) }
+const addStep = () => instructions.value.push({ text: '' })
+const removeStep = (i: number) => instructions.value.splice(i, 1)
 
-async function handleAutoParse() {
+const handleAutoParse = async () => {
   // Stub: pretend we parsed the URL and fill sample data
   if (!importUrl.value) {
     const { showInfoToast } = useAppToast()
@@ -225,7 +225,7 @@ async function handleAutoParse() {
   showSuccessToast('自動解析（スタブ）で材料と手順を入力しました')
 }
 
-async function handleSubmit() {
+const handleSubmit = async () => {
   try {
     const payload: { title: string, url: string, description?: string, folderId?: number, imageUrl?: string | null, ingredients?: string[], instructions?: Array<{ text: string }> } = {
       title: String(form.title),

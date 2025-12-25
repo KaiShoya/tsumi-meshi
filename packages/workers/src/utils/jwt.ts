@@ -1,4 +1,4 @@
-function base64UrlEncodeFromString(input: string) {
+const base64UrlEncodeFromString = (input: string) => {
   const bytes = new TextEncoder().encode(input)
   let binary = ''
   for (let i = 0; i < bytes.length; i++) {
@@ -8,7 +8,7 @@ function base64UrlEncodeFromString(input: string) {
   return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 }
 
-function base64UrlFromBytes(buffer: ArrayBuffer) {
+const base64UrlFromBytes = (buffer: ArrayBuffer) => {
   const bytes = new Uint8Array(buffer)
   let binary = ''
   for (let i = 0; i < bytes.length; i++) {
@@ -18,7 +18,7 @@ function base64UrlFromBytes(buffer: ArrayBuffer) {
   return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 }
 
-export async function createJWT(header: Record<string, unknown>, payload: Record<string, unknown>, secret: string): Promise<string> {
+export const createJWT = async (header: Record<string, unknown>, payload: Record<string, unknown>, secret: string): Promise<string> => {
   const headerB64 = base64UrlEncodeFromString(JSON.stringify(header))
   const payloadB64 = base64UrlEncodeFromString(JSON.stringify(payload))
 

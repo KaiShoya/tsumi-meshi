@@ -73,7 +73,7 @@ watch(() => props.folder, (f) => {
   }
 })
 
-function handleSubmit() {
+const handleSubmit = () => {
   if (!state.name || state.id == null) return
   emit('submit', { id: state.id, name: state.name, parentId: state.parentId })
   emit('update:modelValue', false)

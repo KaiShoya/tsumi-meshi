@@ -335,7 +335,7 @@ const performDelete = async () => {
 }
 
 // Helper to normalize tags from API (supports array, comma-separated string, or null)
-function tagList(recipe: Recipe | { tags: unknown }) {
+const tagList = (recipe: Recipe | { tags: unknown }) => {
   const raw = (recipe as unknown as { tags?: unknown }).tags
   if (Array.isArray(raw)) return raw as Array<{ id?: number, name: string }>
   if (typeof raw === 'string') {

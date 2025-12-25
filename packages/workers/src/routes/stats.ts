@@ -1,6 +1,6 @@
 import type { Bindings } from '../types'
 
-export function registerStatsRoutes(app: Hono<{ Bindings: Bindings }>, jwtMiddleware: MiddlewareHandler<{ Bindings: Bindings }>) {
+export const registerStatsRoutes = (app: Hono<{ Bindings: Bindings }>, jwtMiddleware: MiddlewareHandler<{ Bindings: Bindings }>) => {
   app.get('/stats', jwtMiddleware, async (c) => {
     try {
       const payload = c.get('jwtPayload')

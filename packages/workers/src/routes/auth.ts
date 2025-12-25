@@ -1,10 +1,10 @@
 import type { Bindings, UserPayload } from '../types'
 
-export function registerAuthRoutes(
+export const registerAuthRoutes = (
   app: Hono<{ Bindings: Bindings }>,
   jwtMiddleware: MiddlewareHandler<{ Bindings: Bindings }>,
   createJWT: (h: Record<string, unknown>, p: Record<string, unknown>, s: string) => Promise<string>
-) {
+) => {
   app.post('/auth/register', async (c) => {
     try {
       const { email, name, password } = await c.req.json()

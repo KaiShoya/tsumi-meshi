@@ -1,6 +1,6 @@
 import type { Context } from 'hono'
 
-function base64UrlToUint8Array(b64url: string) {
+const base64UrlToUint8Array = (b64url: string) => {
   const padded = b64url + '=='.slice((2 - b64url.length * 3) & 3)
   const b64 = padded.replace(/-/g, '+').replace(/_/g, '/')
   const binary = atob(b64)
@@ -10,7 +10,7 @@ function base64UrlToUint8Array(b64url: string) {
   return bytes
 }
 
-function base64UrlToString(b64url: string) {
+const base64UrlToString = (b64url: string) => {
   const bytes = base64UrlToUint8Array(b64url)
   let s = ''
   for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i])
@@ -23,7 +23,7 @@ function base64UrlToString(b64url: string) {
 }
 
 // Custom JWT middleware: accept token from Authorization header or cookie `tsumi_session`.
-export function createJwtMiddleware() {
+export const createJwtMiddleware = () => {
   return async (c: Context, next: () => Promise<void>) => {
     try {
       const authHeader = c.req.header('Authorization') || ''

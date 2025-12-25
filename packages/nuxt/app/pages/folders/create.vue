@@ -41,7 +41,7 @@ import { useLogger } from '~/composables/useLogger'
 const foldersStore = useFoldersStore()
 const { showSuccessToast, showDangerToast } = useAppToast()
 
-async function handleCreate(payload: { name: string, parentId?: number }) {
+const handleCreate = async (payload: { name: string, parentId?: number }) => {
   try {
     await foldersStore.createFolder(payload)
     showSuccessToast('フォルダを作成しました')

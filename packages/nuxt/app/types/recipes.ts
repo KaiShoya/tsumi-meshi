@@ -9,6 +9,8 @@ export interface Recipe {
   url: string
   description?: string
   imageUrl?: string
+  ingredients?: string[]
+  instructions?: Array<string | { text: string }>
   tags: readonly Tag[]
   checks: readonly RecipeCheck[]
   createdAt: Date

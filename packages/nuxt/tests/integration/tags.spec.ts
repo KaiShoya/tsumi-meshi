@@ -2,11 +2,11 @@ import { describe, it, expect } from 'vitest'
 import app from '@tsumi-meshi/workers'
 import crypto from 'crypto'
 
-function base64url(input: Buffer) {
+const base64url = (input: Buffer) => {
   return input.toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
 }
 
-function createJWT(payload: Record<string, unknown>, secret: string) {
+const createJWT = (payload: Record<string, unknown>, secret: string) => {
   const header = { alg: 'HS256', typ: 'JWT' }
   const encoded = `${base64url(Buffer.from(JSON.stringify(header)))}.${base64url(Buffer.from(JSON.stringify(payload)))}`
   const signature = crypto.createHmac('sha256', secret).update(encoded).digest()

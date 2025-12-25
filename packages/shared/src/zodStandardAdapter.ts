@@ -1,6 +1,6 @@
 import type { ZodTypeAny } from 'zod'
 
-export function toStandard(schema: ZodTypeAny) {
+export const toStandard = (schema: ZodTypeAny) => {
   return {
     '~standard': {
       validate(input: unknown) {

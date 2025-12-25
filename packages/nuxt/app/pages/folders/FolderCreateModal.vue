@@ -60,7 +60,7 @@ const state = reactive<FolderInput>({ name: '', parentId: undefined })
 
 const { t } = useI18n()
 
-function handleSubmit() {
+const handleSubmit = () => {
   if (!state.name) return
   emit('submit', { ...state })
   emit('update:modelValue', false)

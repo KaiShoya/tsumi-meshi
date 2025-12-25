@@ -134,11 +134,11 @@ onMounted(async () => {
   }
 })
 
-function handleUploaded(key: string | null) {
+const handleUploaded = (key: string | null) => {
   imageKey.value = key
 }
 
-async function handleSubmit() {
+const handleSubmit = async () => {
   try {
     const payload = {
       title: String(form.title),

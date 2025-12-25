@@ -1,6 +1,6 @@
 import type { Bindings } from '../types'
 
-export function registerFoldersRoutes(app: Hono<{ Bindings: Bindings }>, jwtMiddleware: MiddlewareHandler<{ Bindings: Bindings }>) {
+export const registerFoldersRoutes = (app: Hono<{ Bindings: Bindings }>, jwtMiddleware: MiddlewareHandler<{ Bindings: Bindings }>) => {
   app.get('/folders', jwtMiddleware, async (c) => {
     try {
       const payload = c.get('jwtPayload')
