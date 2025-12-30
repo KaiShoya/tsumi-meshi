@@ -1,0 +1,3 @@
+[submodule "packages/workers"]
+	path = packages/workers
+	url = git@github.com:KaiShoya/tsumi-meshi-api.git
